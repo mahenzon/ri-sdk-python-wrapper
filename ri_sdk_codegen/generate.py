@@ -15,7 +15,7 @@ class Codegen:
         sdk_template_path: Path,
         sdk_output_file_path: Path,
         sort_by_name: bool = True,
-    ):
+    ) -> None:
         self.sdk_template_path: Path = sdk_template_path
         self.sdk_output_file_path: Path = sdk_output_file_path
         self.sort_by_name: bool = sort_by_name
@@ -27,7 +27,6 @@ class Codegen:
         :param urls:
         :return:
         """
-
         methods = []
         for page in urls:
             if not (url := page.strip()):
@@ -46,7 +45,6 @@ class Codegen:
         :param sdk_methods:
         :return:
         """
-
         template = Template(filename=str(self.sdk_template_path))
 
         if self.sort_by_name:
@@ -68,7 +66,6 @@ class Codegen:
         :param urls:
         :return:
         """
-
         methods = self.get_method_params(urls)
         self.render_methods_to_sdk_script(sdk_methods=methods)
         return methods

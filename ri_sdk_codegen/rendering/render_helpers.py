@@ -42,7 +42,7 @@ def function_param(p: "MethodParamSDK") -> str:
     return line
 
 
-def function_param_doc(p: "MethodParamSDK", max_with=69) -> str:
+def function_param_doc(p: "MethodParamSDK", max_with: int = 69) -> str:
     return textwrap.fill(
         text=p.description,
         width=max_with,
@@ -52,7 +52,7 @@ def function_param_doc(p: "MethodParamSDK", max_with=69) -> str:
     )
 
 
-def sdk_call_param(p: "MethodParamSDK"):
+def sdk_call_param(p: "MethodParamSDK") -> str:
     return p.py_name
 
 
@@ -62,7 +62,7 @@ def sdk_call_param_convert(p: "MethodParamSDK") -> str:
     return ""
 
 
-def method_description(m: "MethodSDK", max_width=69) -> str:
+def method_description(m: "MethodSDK", max_width: int = 69) -> str:
     prepared_string_blocks = (
         # call its own method
         block.process(max_width)

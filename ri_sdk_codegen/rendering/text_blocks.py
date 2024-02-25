@@ -2,7 +2,7 @@ import textwrap
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from functools import partial
-from typing import Protocol, TypeVar
+from typing import Callable, Protocol, TypeVar
 
 from ri_sdk_codegen.rendering.render_configs import (
     FUNC_BODY_INDENT,
@@ -43,7 +43,7 @@ class DescriptionBlockBase(ABC):
     initial_indent = FUNC_BODY_INDENT
     subsequent_indent = FUNC_BODY_INDENT
 
-    def get_renderer(self, max_width: int):
+    def get_renderer(self, max_width: int) -> Callable:
         return partial(
             textwrap.fill,
             width=max_width,

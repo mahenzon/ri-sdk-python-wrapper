@@ -36,6 +36,8 @@ select = [
     "F",
     "I",
 #    "D",
+    "D201",
+    "D202",
     "A",
     "C4",
     "COM",
@@ -51,15 +53,15 @@ select = [
     "TID",
     "ARG",
     "PTH",
-#    "ERA",
+    "ERA",
     "PL",
     "PLE",
     "PLR",
     "PLW",
     "RUF",
     "ASYNC",
-#    "UP",
-#    "ANN",
+    "UP",
+    "ANN",
 ]
 
 # Exclude a variety of commonly ignored directories.
@@ -112,6 +114,8 @@ extend-ignore = [
 #    "D301",  # Use r""" if any backslashes in a docstring
 #    "D404",  #  First word of the docstring should not be "This"
     "PLR0913",  # Too many arguments to function call
+    "ANN101",  #  Missing type annotation for `self` in method
+    "ANN102",  #  Missing type annotation for `cls` in classmethod
 #    "A003",  # Class attribute `type` is shadowing a Python builtin
 #    "ARG001",  # Unused function argument: `{name}`
 #    "ARG002",  # Unused method argument: `{name}`

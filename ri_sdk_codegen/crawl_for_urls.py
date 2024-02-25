@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Generator
 from pathlib import Path
 
 import requests
@@ -8,11 +9,11 @@ log = logging.getLogger(__name__)
 
 
 class DocsUrlCrawler:
-    def __init__(self, base_url: str):
+    def __init__(self, base_url: str) -> None:
         self.base_url = base_url
         self.already_visited = set()
 
-    def fetch_sdk_url_pages(self, url):
+    def fetch_sdk_url_pages(self, url: str) -> Generator[str, None, None]:
         if url in self.already_visited:
             return
         self.already_visited.add(url)

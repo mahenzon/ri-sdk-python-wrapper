@@ -66,7 +66,7 @@ TYPES_TO_PYTHON_TYPE_MAP: dict[str, str] = {
 class BaseParam:
     py_ctype: str
 
-    def __init_subclass__(cls, **kwargs):
+    def __init_subclass__(cls, **kwargs: str) -> None:
         super().__init_subclass__()
         param_type = kwargs.get("type")
         if param_type is None:
@@ -127,5 +127,5 @@ class MethodSDK:
     params: list[MethodParamSDK]
 
     @property
-    def py_method_name(self):
+    def py_method_name(self) -> str:
         return method_name_to_snake_case(self.name).removeprefix("ri_sdk_")

@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 
 
 class DocPageCrawler:
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         self.url = url
         self.h1_method_name_regex = re.compile("^RI_SDK_")
         # lol cyrillic id
@@ -105,6 +105,7 @@ class DocPageCrawler:
         param_shared_object_type = table_row[
             self.param_shared_object_type_col_idx
         ].get_text()
+        # ruff: noqa: ERA001
         # golang_grpc_object_type = table_row[2].get_text()
         param_description = table_row[
             self.param_description_col_idx
