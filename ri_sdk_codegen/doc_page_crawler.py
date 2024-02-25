@@ -64,8 +64,16 @@ class DocPageCrawler:
             raise ValueError(f"unexpected list tag {tag.name}")
         return cls(values=values)
 
+    def _process_description_tag(self, tag: Tag) -> DescriptionBlockBase | None:
+        if tag.name == "p":
+            return DescriptionTextBlock(tag.text)
+        if tag.name in ("ol", "ul"):
+            return self._get_list_description_block(tag)
+        log.warning("Unexpected sibling tag %s", tag)
+
     def _get_description_blocks(
-        self, soup: BeautifulSoup
+        self,
+        soup: BeautifulSoup,
     ) -> list[DescriptionBlockBase]:
         description_h2 = self._get_description_tag(soup)
         # Closest "p" is description
@@ -73,14 +81,11 @@ class DocPageCrawler:
         description_blocks: list[DescriptionBlockBase] = []
         # probably "h2" is the where description ends
         while next_tag is not None and next_tag.name != "h2":
-            if next_tag.name == "p":
-                description_blocks.append(DescriptionTextBlock(next_tag.text))
-            elif next_tag.name in ("ol", "ul"):
-                description_blocks.append(self._get_list_description_block(next_tag))
-            else:
-                log.warning("Unexpected sibling tag %s", next_tag)
+            block = self._process_description_tag(next_tag)
+            if block:
+                description_blocks.append(block)
             next_tag = next_tag.next_sibling
-        log.debug("+ Description lines", description_blocks)
+        log.debug("+ Description lines %s", description_blocks)
         return description_blocks
 
     def _prepare_method_param_details(self, row: Tag) -> MethodParamSDK:

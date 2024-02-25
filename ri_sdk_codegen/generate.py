@@ -33,6 +33,7 @@ class Codegen:
         for page in urls:
             if not (url := page.strip()):
                 continue
+            log.info("Parse page %s", url)
             method = DocPageCrawler(url).prepare_method_sdk_info()
             methods.append(method)
 

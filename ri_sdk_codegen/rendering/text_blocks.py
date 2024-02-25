@@ -65,7 +65,7 @@ class DescriptionTextBlock(DescriptionBlockBase):
 
     def process(self, max_width: int) -> ReturnType:
         process_string: TextProcessorProtocol = self.get_renderer(max_width)
-        return process_string(self.value)
+        return "\n".join(map(process_string, self.value.split("\n")))
 
 
 @dataclass

@@ -44,6 +44,7 @@ class DocsUrlCrawler:
         docs_crawl_start_url: str,
         filepath: Path,
     ) -> None:
+        self.already_visited = set()
         urls = list(self.fetch_sdk_url_pages(docs_crawl_start_url))
         log.info("Found URLs: %s", urls)
         filepath.write_text("\n".join(urls))
