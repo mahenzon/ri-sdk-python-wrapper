@@ -13,7 +13,7 @@ ROBOINTELLECT_SDK_OUTPUT_FILEPATH = Path(
 )
 MAKO_TEMPLATE_FILENAME = "template.robointellect_base_sdk.py.mako"
 MAKO_TEMPLATE_FILEPATH = BASE_DIR / "ri_sdk_codegen" / MAKO_TEMPLATE_FILENAME
-
+DOCS_ENTRY_PATH = "/docs/category/ri-sdk-api"
 
 parser = argparse.ArgumentParser(
     description="Generate SDK for RI SDK based on docs.",
@@ -47,6 +47,12 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument(
+    "--docs-entry-path",
+    default=DOCS_ENTRY_PATH,
+    help=f"Where to start crawling from (default: {DOCS_ENTRY_PATH})",
+    type=str,
+)
+parser.add_argument(
     "--pages-urls-filepath",
     default=RI_SDK_PAGES_FILE_PATH,
     help=f"Where to store known urls (default: {RI_SDK_PAGES_FILE_PATH})",
@@ -73,9 +79,14 @@ class CodegenParams:
     verbose: bool = False
     sort_methods: bool = True
     base_url: str = URL_BASE
+    docs_entry_path: str = DOCS_ENTRY_PATH
     ri_sdk_pages_file_path: Path = RI_SDK_PAGES_FILE_PATH
     output_py_script: Path = ROBOINTELLECT_SDK_OUTPUT_FILEPATH
     sdk_template_filepath: Path = MAKO_TEMPLATE_FILEPATH
+
+    @property
+    def docs_crawl_start_url(self) -> str:
+        return self.base_url + self.docs_entry_path
 
 
 def get_params() -> CodegenParams:
