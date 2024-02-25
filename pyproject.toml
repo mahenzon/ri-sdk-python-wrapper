@@ -124,6 +124,16 @@ extend-ignore = [
 #    "RUF002",  # Docstring contains ambiguous unicode character {confusable} (did you mean {representant}?)
 #    "RUF003",  # Comment contains ambiguous unicode character {confusable} (did you mean {representant}?)
 #    "PT006",  # pytest parametrize tuple args
+
+    # warning: The following rules may cause conflicts when used with the formatter:
+    #    `COM812`, `ISC001`. To avoid unexpected behavior,
+    #    we recommend disabling these rules,
+    #    either by removing them from the `select`
+    #    or `extend-select` configuration,
+    #    or adding them to the `ignore` configuration.
+    #    16 files already formatted
+    # "ISC001",
+    # "COM812",
 ]
 
 [tool.ruff.lint.per-file-ignores]

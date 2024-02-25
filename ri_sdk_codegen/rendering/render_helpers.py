@@ -2,6 +2,8 @@ import textwrap
 from typing import TYPE_CHECKING
 
 from ri_sdk_codegen.rendering.render_configs import (
+    IN_FUNCTION_COMMENT,
+    IN_FUNCTION_SUBSEQUENT_COMMENT,
     PARAM_PREFIX_TEMPLATE,
     PARAM_SUBSEQUENT_INDENT,
 )
@@ -36,6 +38,7 @@ def lib_ctype_param(p: "MethodParamSDK") -> str:
 
 
 def function_param(p: "MethodParamSDK") -> str:
+    # TODO: Union[py_type, py_ctype]?
     line = f"{p.py_name}: {p.python_type}"
     if p.name == "async":
         line += " = False"
@@ -52,8 +55,14 @@ def function_param_doc(p: "MethodParamSDK", max_with: int = 69) -> str:
     )
 
 
-def sdk_call_param(p: "MethodParamSDK") -> str:
-    return p.py_name
+def receiver_var_comment(p: "MethodParamSDK", max_with: int = 69) -> str:
+    return textwrap.fill(
+        text=p.description,
+        width=max_with,
+        initial_indent=IN_FUNCTION_COMMENT.format(name=p.name),
+        subsequent_indent=IN_FUNCTION_SUBSEQUENT_COMMENT,
+        fix_sentence_endings=True,
+    )
 
 
 def sdk_call_param_convert(p: "MethodParamSDK") -> str:

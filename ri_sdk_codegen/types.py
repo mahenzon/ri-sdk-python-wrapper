@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import cached_property
 
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlockBase
@@ -61,6 +62,11 @@ TYPES_TO_PYTHON_TYPE_MAP: dict[str, str] = {
     "uint8_t (тип C)": "int",
 }
 
+SERVICE_PARAMS_NAMES = {
+    "errorCode",
+    "errorText",
+}
+
 
 @dataclass
 class BaseParam:
@@ -89,9 +95,13 @@ class MethodParamSDK(BaseParam, type="generic"):
     is_pointer: bool = False
     pointer_py_ctype: str = "POINTER"
 
-    @property
+    @cached_property
     def py_name(self) -> str:
         return create_param_python_name(self.name)
+
+    @cached_property
+    def is_receive_type(self) -> bool:
+        return self.is_pointer
 
     @classmethod
     def from_info(
@@ -126,6 +136,54 @@ class MethodSDK:
     description_blocks: list[DescriptionBlockBase]
     params: list[MethodParamSDK]
 
-    @property
+    @cached_property
+    def func_call_params(self) -> list[MethodParamSDK]:
+        # TODO: filter only args, not receive types
+        return [
+            param
+            for param in self.params
+            # skip service param
+            if (
+                param.name not in SERVICE_PARAMS_NAMES
+                # check if is not receive type
+                and not param.is_receive_type
+            )
+        ]
+
+    @cached_property
+    def func_sdk_receivers(self) -> list[MethodParamSDK]:
+        # TODO: return list of receivers inits
+        return [
+            param
+            for param in self.params
+            # skip service param
+            if (
+                param.name not in SERVICE_PARAMS_NAMES
+                # check if is of receive type
+                and param.is_receive_type
+            )
+        ]
+
+    @cached_property
+    def func_sdk_call_args(self) -> list[MethodParamSDK]:
+        # TODO: pass prepared values
+        return [
+            param
+            for param in self.params
+            # skip service param
+            if param.name not in SERVICE_PARAMS_NAMES
+        ]
+
+    @cached_property
     def py_method_name(self) -> str:
         return method_name_to_snake_case(self.name).removeprefix("ri_sdk_")
+
+    @cached_property
+    def py_method_return_type(self) -> str:
+        # TODO: if getter, set real type
+        return "None"
+
+    @cached_property
+    def py_method_return_value(self) -> str:
+        # TODO: if getter, set real return value
+        return "None"

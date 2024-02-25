@@ -5,7 +5,7 @@ from ri_sdk_codegen.rendering.render_helpers import (
     lib_ctype_param,
     function_param,
     function_param_doc,
-    sdk_call_param,
+    receiver_var_comment,
     sdk_call_param_convert,
     method_description,
     comment_ctype_param,
@@ -27,50 +27,61 @@ class RoboIntellectBaseSDK:
         raise ValueError(error_text_c.raw.decode())
 
     @classmethod
-    def process_result(cls, error_code: int, error_text_c: ctypes.Array) -> int:
+    def process_result(
+        cls,
+        error_code: int,
+        error_text_c: ctypes.Array,
+    ) -> None:
         """
         :param error_code:
         :param error_text_c:
         :return:
         """
-        if not error_code:
-            return error_code
-        cls.raise_on_error(error_text_c)
+        if error_code:
+            cls.raise_on_error(error_text_c)
 % for sdk_method in sdk_methods:
 
     def ${sdk_method.py_method_name}(
         self,
-    % for param in sdk_method.params:
-    % if param.name not in ('errorCode', 'errorText'):
+    % for param in sdk_method.func_call_params:
         ${function_param(param)},
-    % endif
     % endfor
-    ) -> int:
+    ) -> ${sdk_method.py_method_return_type}:
         ${'"""'}
 ${method_description(sdk_method)}
 
         ${sdk_method.url}
 
-    % for param in sdk_method.params:
-    % if param.name not in ('errorCode', 'errorText'):
+    % for param in sdk_method.func_call_params:
 ${function_param_doc(param)}
-    % endif
     % endfor
+        # TODO: describe return value
         ${'"""'}
+        # Инициализация получателей
+        % for param in sdk_method.func_sdk_receivers:
+% if loop.first:
+## empty line for spacing
 
+% endif
+${receiver_var_comment(param)}
+        ${param.py_name} = ctypes.${param.py_ctype}()
+% if loop.last:
+## empty line for spacing
+
+% endif
+        % endfor
         # Текст ошибки. Передается как параметр
         # если происходит ошибка, метод записывает текст в этот параметр
         error_text_c = ctypes.create_string_buffer(1000)
         # Код ошибки
         error_code = self.lib.${sdk_method.name}(
-        % for param in sdk_method.params:
-        % if param.name not in ('errorCode', 'errorText'):
-            ${sdk_call_param(param)}${sdk_call_param_convert(param)},
-        % endif
+        % for param in sdk_method.func_sdk_call_args:
+            ${param.py_name}${sdk_call_param_convert(param)},
         % endfor
             error_text_c,
         )
-        return self.process_result(error_code, error_text_c)
+        self.process_result(error_code, error_text_c)
+        return ${sdk_method.py_method_return_value}
 % endfor
 % for sdk_method in sdk_methods:
 
