@@ -106,6 +106,13 @@ class DocPageCrawler:
         ]
 
     def _get_params(self, soup: BeautifulSoup) -> list[MethodParamSDK]:
+        """
+        TODO: handle "read" actions like RI_SDK_connector_i2c_ReadByte
+            and return the value
+
+        :param soup:
+        :return:
+        """
         params_h2 = soup.find("h2", id=self.params_h2_tag_id)
         table_soup = params_h2.find_next_sibling("table")
         params = self._prepare_method_params(table_soup)
