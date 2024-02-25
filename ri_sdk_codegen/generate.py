@@ -66,6 +66,7 @@ class Codegen:
         :param urls:
         :return:
         """
+        # TODO: check for repeated method name params
         methods = self.get_method_params(urls)
         self.render_methods_to_sdk_script(sdk_methods=methods)
         return methods

@@ -81,7 +81,13 @@ ${receiver_var_comment(param)}
             error_text_c,
         )
         self.process_result(error_code, error_text_c)
-        return ${sdk_method.py_method_return_value}
+        ## return ${sdk_method.py_method_return_value}
+        return (
+            error_code,
+            % for param in sdk_method.func_sdk_receivers:
+            ${param.py_name},
+            % endfor
+        )
 % endfor
 % for sdk_method in sdk_methods:
 

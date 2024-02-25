@@ -181,7 +181,7 @@ class MethodSDK:
     @cached_property
     def py_method_return_type(self) -> str:
         # TODO: if getter, set real type
-        return "None"
+        return "tuple"
 
     @cached_property
     def py_method_return_value(self) -> str:
