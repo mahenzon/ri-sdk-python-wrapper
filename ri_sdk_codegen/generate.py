@@ -3,8 +3,8 @@ from pathlib import Path
 
 from mako.template import Template
 
-from ri_sdk_codegen.types import MethodSDK
 from ri_sdk_codegen.doc_page_crawler import DocPageCrawler
+from ri_sdk_codegen.types import MethodSDK
 
 log = logging.getLogger(__name__)
 
@@ -16,7 +16,6 @@ class Codegen:
         sdk_output_file_path: Path,
         sort_by_name: bool = True,
     ):
-
         self.sdk_template_path: Path = sdk_template_path
         self.sdk_output_file_path: Path = sdk_output_file_path
         self.sort_by_name: bool = sort_by_name
@@ -59,7 +58,10 @@ class Codegen:
         # Write the rendered content to a new Python script
         self.sdk_output_file_path.write_text(result)
 
-        log.info("New Python script generated at %s", self.sdk_output_file_path)
+        log.info(
+            "New Python script generated at %s",
+            self.sdk_output_file_path,
+        )
 
     def generate_sdk_script(self, urls: list[str]) -> list[MethodSDK]:
         """

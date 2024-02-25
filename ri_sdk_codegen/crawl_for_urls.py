@@ -4,7 +4,6 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
-
 log = logging.getLogger(__name__)
 
 
@@ -24,7 +23,9 @@ class DocsUrlCrawler:
         h1_tag = soup.find("h1")
         if h1_tag and h1_tag.text.startswith("RI_SDK"):
             log.info(
-                "! Found page where 'h1' tag text starts with 'RI_SDK'.\nUrl: %s", url
+                "! Found page where 'h1' tag text "
+                "starts with 'RI_SDK'.\nUrl: %s",
+                url,
             )
             yield url
 

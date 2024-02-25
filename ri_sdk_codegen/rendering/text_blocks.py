@@ -56,7 +56,7 @@ class DescriptionBlockBase(ABC):
 
     @abstractmethod
     def process(self, max_width: int) -> ReturnType:
-        raise NotImplemented
+        raise NotImplementedError
 
 
 @dataclass

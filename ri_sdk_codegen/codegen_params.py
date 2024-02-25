@@ -9,7 +9,7 @@ URL_BASE = "https://docs.robointellect.ru"
 
 ROBOINTELLECT_BASE_SDK_FILENAME = "robointellect_base_sdk.py"
 ROBOINTELLECT_SDK_OUTPUT_FILEPATH = Path(
-    BASE_DIR / "src" / ROBOINTELLECT_BASE_SDK_FILENAME
+    BASE_DIR / "src" / ROBOINTELLECT_BASE_SDK_FILENAME,
 )
 MAKO_TEMPLATE_FILENAME = "template.robointellect_base_sdk.py.mako"
 MAKO_TEMPLATE_FILEPATH = BASE_DIR / "ri_sdk_codegen" / MAKO_TEMPLATE_FILENAME
@@ -21,7 +21,8 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "--update-links",
     action="store_true",
-    help="Update links (default: False). Crawls RI SDK docs for all RI_SDK_ pages.",
+    help="Update links (default: False). "
+    "Crawls RI SDK docs for all RI_SDK_ pages.",
 )
 parser.add_argument(
     "--generate-sdk",
@@ -61,13 +62,15 @@ parser.add_argument(
 parser.add_argument(
     "--output-py-script",
     default=ROBOINTELLECT_SDK_OUTPUT_FILEPATH,
-    help=f"File path for the output file script (default: {ROBOINTELLECT_SDK_OUTPUT_FILEPATH})",
+    help="File path for the output file script "
+    f"(default: {ROBOINTELLECT_SDK_OUTPUT_FILEPATH})",
     type=Path,
 )
 parser.add_argument(
     "--sdk-template-filepath",
     default=MAKO_TEMPLATE_FILEPATH,
-    help=f"File path for the Mako template (default: {MAKO_TEMPLATE_FILEPATH})",
+    help="File path for the Mako template "
+    f"(default: {MAKO_TEMPLATE_FILEPATH})",
     type=Path,
 )
 

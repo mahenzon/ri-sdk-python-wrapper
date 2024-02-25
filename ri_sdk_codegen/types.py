@@ -70,7 +70,8 @@ class BaseParam:
         super().__init_subclass__()
         param_type = kwargs.get("type")
         if param_type is None:
-            raise ValueError("Parameter type should not be None")
+            msg = "Parameter type should not be None"
+            raise ValueError(msg)
         cls.__param_type__ = param_type
 
     @property
@@ -105,6 +106,7 @@ class MethodParamSDK(BaseParam, type="generic"):
         py_ctype = TYPES_TO_C_TYPE_MAP[shared_object_type]
         python_type = TYPES_TO_PYTHON_TYPE_MAP[shared_object_type]
         # lol
+        # ruff: noqa: RUF003
         # replace cyrillic "с" with latin "c"
         name = name.replace(chr(1089), chr(99))
         return cls(

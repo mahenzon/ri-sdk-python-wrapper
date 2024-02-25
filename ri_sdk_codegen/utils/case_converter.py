@@ -38,6 +38,8 @@ def method_name_to_snake_case(input_str: str) -> str:
     """
     parts = input_str.split("_")
     for idx, part in enumerate(parts):
-        parts[idx] = part.lower() if part.isupper() else camel_case_to_snake_case(part)
+        parts[idx] = (
+            part.lower() if part.isupper() else camel_case_to_snake_case(part)
+        )
 
     return "_".join(parts)

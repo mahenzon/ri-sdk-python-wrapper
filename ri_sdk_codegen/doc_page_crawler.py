@@ -5,11 +5,11 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 from ri_sdk_codegen.rendering.text_blocks import (
+    DescriptionBlockBase,
     DescriptionListBlockBase,
     DescriptionOrderedListBlock,
-    DescriptionUnorderedListBlock,
-    DescriptionBlockBase,
     DescriptionTextBlock,
+    DescriptionUnorderedListBlock,
 )
 from ri_sdk_codegen.types import MethodParamSDK, MethodSDK
 
@@ -36,8 +36,12 @@ class DocPageCrawler:
         """
         h1_tag: Tag = soup.find("h1", string=self.h1_method_name_regex)
         if not h1_tag:
-            log.warning("error for url, no header with RI SDK. URL: %s", self.url)
-            raise ValueError(f"No header with RI_SDK_. URL: {self.url}")
+            log.warning(
+                "error for url, no header with RI SDK. URL: %s",
+                self.url,
+            )
+            msg = f"No header with RI_SDK_. URL: {self.url}"
+            raise ValueError(msg)
         return h1_tag.string
 
     def _get_description_tag(self, soup: BeautifulSoup) -> Tag:
@@ -48,12 +52,15 @@ class DocPageCrawler:
                 self.description_h2_tag_id,
                 self.url,
             )
-            raise ValueError(f"No h2 with id={self.description_h2_tag_id}")
+            msg = f"No h2 with id={self.description_h2_tag_id}"
+            raise ValueError(msg)
 
         return description_h2
 
-    def _get_list_description_block(self, tag: Tag) -> DescriptionListBlockBase:
-
+    def _get_list_description_block(
+        self,
+        tag: Tag,
+    ) -> DescriptionListBlockBase:
         all_lis = tag.find_all("li")
         values = [li.text for li in all_lis]
         if tag.name == "ol":
@@ -61,10 +68,14 @@ class DocPageCrawler:
         elif tag.name == "ul":
             cls = DescriptionUnorderedListBlock
         else:
-            raise ValueError(f"unexpected list tag {tag.name}")
+            msg = f"unexpected list tag {tag.name}"
+            raise ValueError(msg)
         return cls(values=values)
 
-    def _process_description_tag(self, tag: Tag) -> DescriptionBlockBase | None:
+    def _process_description_tag(
+        self,
+        tag: Tag,
+    ) -> DescriptionBlockBase | None:
         if tag.name == "p":
             return DescriptionTextBlock(tag.text)
         if tag.name in ("ol", "ul"):
@@ -95,7 +106,9 @@ class DocPageCrawler:
             self.param_shared_object_type_col_idx
         ].get_text()
         # golang_grpc_object_type = table_row[2].get_text()
-        param_description = table_row[self.param_description_col_idx].get_text()
+        param_description = table_row[
+            self.param_description_col_idx
+        ].get_text()
         return MethodParamSDK.from_info(
             name=param_name,
             shared_object_type=param_shared_object_type,
