@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from ri_sdk_codegen.render_helpers import create_param_python_name
+from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
+from ri_sdk_codegen.rendering.text_blocks import DescriptionBlockBase
 from utils.case_converter import method_name_to_snake_case
 
 KNOWN_TYPES: set[str] = {
@@ -120,7 +121,7 @@ class MethodParamSDK(BaseParam, type="generic"):
 class MethodSDK:
     name: str
     url: str
-    description_blocks: list[str]
+    description_blocks: list[DescriptionBlockBase]
     params: list[MethodParamSDK]
 
     @property

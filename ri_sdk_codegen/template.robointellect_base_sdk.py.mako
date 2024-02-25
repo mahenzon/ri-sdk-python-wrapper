@@ -1,7 +1,7 @@
 import ctypes
 from typing import NoReturn
 <%! 
-from ri_sdk_codegen.render_helpers import (
+from ri_sdk_codegen.rendering.render_helpers import (
     lib_ctype_param,
     function_param,
     function_param_doc,

@@ -1,7 +1,10 @@
 import textwrap
-from functools import partial
 from typing import TYPE_CHECKING
 
+from ri_sdk_codegen.rendering.render_configs import (
+    PARAM_PREFIX_TEMPLATE,
+    PARAM_SUBSEQUENT_INDENT,
+)
 from utils.case_converter import camel_case_to_snake_case
 
 if TYPE_CHECKING:
@@ -9,10 +12,6 @@ if TYPE_CHECKING:
         MethodParamSDK,
         MethodSDK,
     )
-
-FUNC_BODY_INDENT = " " * 2 * 4
-PARAM_PREFIX_TEMPLATE = f"{FUNC_BODY_INDENT}:param {{name}}: "
-PARAM_SUBSEQUENT_INDENT = " " * 3 * 4
 
 
 def create_param_python_name(name: str) -> str:
@@ -63,15 +62,11 @@ def sdk_call_param_convert(p: "MethodParamSDK") -> str:
     return ""
 
 
-def method_description(m: "MethodSDK", max_with=69) -> str:
-    fill = partial(
-        textwrap.fill,
-        width=max_with,
-        initial_indent=FUNC_BODY_INDENT,
-        subsequent_indent=FUNC_BODY_INDENT,
-        fix_sentence_endings=True,
-        drop_whitespace=True,
-        replace_whitespace=False,
+def method_description(m: "MethodSDK", max_width=69) -> str:
+    prepared_string_blocks = (
+        # call its own method
+        block.process(max_width)
+        # for each separate block
+        for block in m.description_blocks
     )
-    filled_paragraphs = list(map(fill, m.description_blocks))
-    return "\n\n".join(filled_paragraphs)
+    return "\n\n".join(prepared_string_blocks)
