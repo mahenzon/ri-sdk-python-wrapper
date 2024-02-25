@@ -29,6 +29,18 @@ parser.add_argument(
     help="Generate SDK (default: False). Rewrites existing code.",
 )
 parser.add_argument(
+    "-v",
+    "--verbose",
+    action="store_true",
+    help="Show verbose output (debug logs).",
+)
+parser.add_argument(
+    "--sort-methods",
+    action="store_true",
+    default=True,
+    help="Generate SDK with sorted methods.",
+)
+parser.add_argument(
     "--base-url",
     default=URL_BASE,
     help=f"Base URL (default: {URL_BASE})",
@@ -58,6 +70,8 @@ parser.add_argument(
 class CodegenParams:
     update_links: bool = False
     generate_sdk: bool = False
+    verbose: bool = False
+    sort_methods: bool = True
     base_url: str = URL_BASE
     ri_sdk_pages_file_path: Path = RI_SDK_PAGES_FILE_PATH
     output_py_script: Path = ROBOINTELLECT_SDK_OUTPUT_FILEPATH
@@ -69,6 +83,8 @@ def get_params() -> CodegenParams:
     return CodegenParams(
         update_links=args.update_links,
         generate_sdk=args.generate_sdk,
+        verbose=args.verbose,
+        sort_methods=args.sort_methods,
         base_url=args.base_url,
         ri_sdk_pages_file_path=args.pages_urls_filepath,
         output_py_script=args.output_py_script,
