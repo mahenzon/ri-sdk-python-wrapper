@@ -5,7 +5,7 @@ from ri_sdk_codegen.rendering.render_configs import (
     PARAM_PREFIX_TEMPLATE,
     PARAM_SUBSEQUENT_INDENT,
 )
-from utils.case_converter import camel_case_to_snake_case
+from ri_sdk_codegen.utils.case_converter import camel_case_to_snake_case
 
 if TYPE_CHECKING:
     from ri_sdk_codegen.types import (

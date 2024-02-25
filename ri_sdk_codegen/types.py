@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlockBase
-from utils.case_converter import method_name_to_snake_case
+from ri_sdk_codegen.utils import method_name_to_snake_case
 
 KNOWN_TYPES: set[str] = {
     "*int (тип C",

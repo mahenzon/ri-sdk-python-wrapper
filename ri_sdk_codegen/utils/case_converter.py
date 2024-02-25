@@ -33,6 +33,8 @@ def method_name_to_snake_case(input_str: str) -> str:
     'check_init_some_sdk'
     >>> method_name_to_snake_case("exec_RServoDrive")
     'exec_r_servo_drive'
+    >>> method_name_to_snake_case("RI_SDK_exec_RGB_LED_GetState")
+    'ri_sdk_exec_rgb_led_get_state'
     """
     parts = input_str.split("_")
     for idx, part in enumerate(parts):
