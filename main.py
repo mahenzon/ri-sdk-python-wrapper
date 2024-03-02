@@ -42,7 +42,7 @@ def main() -> None:
         codegen.generate_sdk_script()
 
     log.warning("Almost done.. formatting")
-    run_pre_commit(["run", "--all-files"])
+    run_pre_commit(["run", "--files", "./src/*", "./.ri_sdk_codegen/*"])
     log.warning("Done!")
 
 
