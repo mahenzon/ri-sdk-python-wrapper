@@ -77,7 +77,7 @@ class DocPageCrawler:
         tag: Tag,
     ) -> DescriptionBlockBase | None:
         if tag.name == "p":
-            return DescriptionTextBlock(tag.text)
+            return DescriptionTextBlock(tag.text.split("\n"))
         if tag.name in ("ol", "ul"):
             return self._get_list_description_block(tag)
         log.warning("Unexpected sibling tag %s", tag)

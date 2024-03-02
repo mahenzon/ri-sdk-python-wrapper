@@ -40,6 +40,8 @@ class TextProcessorProtocol(Protocol):
 
 @dataclass
 class DescriptionBlockBase(ABC):
+    values: list[str]
+    separator: str = "\n"
     initial_indent = FUNC_BODY_INDENT
     subsequent_indent = FUNC_BODY_INDENT
 
@@ -61,17 +63,13 @@ class DescriptionBlockBase(ABC):
 
 @dataclass
 class DescriptionTextBlock(DescriptionBlockBase):
-    value: str
-
     def process(self, max_width: int) -> ReturnType:
         process_string: TextProcessorProtocol = self.get_renderer(max_width)
-        return "\n".join(map(process_string, self.value.split("\n")))
+        return self.separator.join(map(process_string, self.values))
 
 
 @dataclass
 class DescriptionListBlockBase(DescriptionBlockBase):
-    values: list[str]
-    separator: str = "\n"
     subsequent_indent = PARAM_SUBSEQUENT_INDENT
 
     def process(self, max_width: int) -> ReturnType:
