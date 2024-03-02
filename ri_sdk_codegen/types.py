@@ -1,6 +1,7 @@
 from functools import cached_property
+from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
@@ -78,10 +79,6 @@ class MethodParamSDK(BaseParam):
     def py_name(self) -> str:
         return create_param_python_name(self.name)
 
-    @cached_property
-    def is_receive_type(self) -> bool:
-        return self.is_pointer
-
     @classmethod
     def from_info(
         cls,
@@ -108,11 +105,31 @@ class MethodParamSDK(BaseParam):
         )
 
 
+class ParamOptions(BaseModel):
+    direction: Literal["input", "output"] | None = None
+
+
+class MethodOptions(BaseModel):
+    params: dict[str, ParamOptions] = {}
+
+
 class MethodSDK(BaseModel):
     name: str
     url: str
     description_blocks: list[DescriptionBlock]
     params: list[MethodParamSDK]
+
+    # service info, not method info
+    options: MethodOptions = Field(
+        default_factory=MethodOptions,
+        exclude=True,
+    )
+
+    def is_receive_type(self, param: MethodParamSDK) -> bool:
+        if param.name not in self.options.params:
+            return param.is_pointer
+        opt: ParamOptions = self.options.params[param.name]
+        return opt.direction == "output"
 
     @cached_property
     def func_call_params(self) -> list[MethodParamSDK]:
@@ -124,7 +141,7 @@ class MethodSDK(BaseModel):
             if (
                 param.name not in SERVICE_PARAMS_NAMES
                 # check if is not receive type
-                and not param.is_receive_type
+                and not self.is_receive_type(param)
             )
         ]
 
@@ -138,7 +155,7 @@ class MethodSDK(BaseModel):
             if (
                 param.name not in SERVICE_PARAMS_NAMES
                 # check if is of receive type
-                and param.is_receive_type
+                and self.is_receive_type(param)
             )
         ]
 

@@ -1,7 +1,9 @@
+import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
 
+import yaml
 from mako.template import Template
 
 from ri_sdk_codegen.doc_page_crawler import DocPageCrawler
@@ -26,6 +28,7 @@ class Codegen:
         sort_by_name: bool = True,
         json_dump_params: JsonDumpParams | None = None,
         method_file_name: str = "method.json",
+        method_options_file_name: str = "options.yaml",
     ) -> None:
         self.codegen_base_dir: Path = codegen_base_dir
         self.sdk_template_path: Path = sdk_template_path
@@ -35,6 +38,7 @@ class Codegen:
             json_dump_params or JsonDumpParams()
         )
         self.method_file_name: str = method_file_name
+        self.method_options_file_name: str = method_options_file_name
 
     @classmethod
     def parse_methods_from_doc(cls, urls: list[str]) -> list[MethodSDK]:
@@ -55,8 +59,19 @@ class Codegen:
         return methods
 
     @classmethod
-    def make_method_sdk_from_json_file(cls, file_path: Path) -> MethodSDK:
-        return MethodSDK.model_validate_json(file_path.read_text())
+    def make_method_sdk_from_json_file(
+        cls,
+        method_file_path: Path,
+        method_options_file_path: Path,
+    ) -> MethodSDK:
+        with method_file_path.open() as f:
+            method_data = json.load(f)
+
+        if method_options_file_path.is_file():
+            with method_options_file_path.open() as f:
+                method_data.update(options=yaml.safe_load(f))
+
+        return MethodSDK(**method_data)
 
     def read_methods_from_json(self) -> list[MethodSDK]:
         methods = []
@@ -67,7 +82,13 @@ class Codegen:
             if not method_file.is_file():
                 log.warning("Skipping %s because is not file!", method_file)
                 continue
-            methods.append(self.make_method_sdk_from_json_file(method_file))
+            method_options_file = method_dir / self.method_options_file_name
+            methods.append(
+                self.make_method_sdk_from_json_file(
+                    method_file,
+                    method_options_file,
+                ),
+            )
         return methods
 
     def render_methods_to_sdk_script(
