@@ -3,11 +3,37 @@ import logging
 from pre_commit.main import main as run_pre_commit
 
 from ri_sdk_codegen import config
-from ri_sdk_codegen.codegen_params import get_params
+from ri_sdk_codegen.codegen_params import CodegenParams, get_params
 from ri_sdk_codegen.crawl_for_urls import DocsUrlCrawler
 from ri_sdk_codegen.generate import Codegen
 
 log = logging.getLogger(__name__)
+
+
+def post_run_formatting(codegen_params: CodegenParams) -> None:
+    run_pre_commit(
+        [
+            "run",
+            "--files",
+            *(
+                str(f)
+                for f in codegen_params.ri_sdk_python_code_src_dir.glob(
+                    "**/*.py",
+                )
+                if f.is_file()
+            ),
+            *(
+                str(f)
+                for f in codegen_params.ri_sdk_codegen_dir.glob("**/*.json")
+                if f.is_file()
+            ),
+            *(
+                str(f)
+                for f in codegen_params.ri_sdk_codegen_dir.glob("**/*.yaml")
+                if f.is_file()
+            ),
+        ],
+    )
 
 
 def main() -> None:
@@ -42,7 +68,7 @@ def main() -> None:
         codegen.generate_sdk_script()
 
     log.warning("Almost done.. formatting")
-    run_pre_commit(["run", "--files", "./src/*", "./.ri_sdk_codegen/*"])
+    post_run_formatting(codegen_params)
     log.warning("Done!")
 
 

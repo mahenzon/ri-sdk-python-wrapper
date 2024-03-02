@@ -4,6 +4,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 RI_SDK_CODEGEN_DIR = BASE_DIR / ".ri_sdk_codegen"
+RI_SDK_PYTHON_CODE_SRC_DIR = BASE_DIR / "src"
 
 ALL_RI_SDK_PAGES_FILE_NAME = "ri_sdk_pages.txt"
 RI_SDK_PAGES_FILE_PATH = RI_SDK_CODEGEN_DIR / ALL_RI_SDK_PAGES_FILE_NAME
@@ -11,7 +12,7 @@ URL_BASE = "https://docs.robointellect.ru"
 
 ROBOINTELLECT_BASE_SDK_FILENAME = "robointellect_base_sdk.py"
 ROBOINTELLECT_SDK_OUTPUT_FILEPATH = Path(
-    BASE_DIR / "src" / ROBOINTELLECT_BASE_SDK_FILENAME,
+    RI_SDK_PYTHON_CODE_SRC_DIR / ROBOINTELLECT_BASE_SDK_FILENAME,
 )
 MAKO_TEMPLATE_FILENAME = "template.robointellect_base_sdk.py.mako"
 MAKO_TEMPLATE_FILEPATH = BASE_DIR / "ri_sdk_codegen" / MAKO_TEMPLATE_FILENAME
@@ -96,6 +97,7 @@ class CodegenParams:
     output_py_script: Path = ROBOINTELLECT_SDK_OUTPUT_FILEPATH
     sdk_template_filepath: Path = MAKO_TEMPLATE_FILEPATH
     ri_sdk_codegen_dir: Path = RI_SDK_CODEGEN_DIR
+    ri_sdk_python_code_src_dir: Path = RI_SDK_PYTHON_CODE_SRC_DIR
 
     @property
     def docs_crawl_start_url(self) -> str:
