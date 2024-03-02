@@ -115,10 +115,6 @@ class MethodParamSDK(BaseParam, type="generic"):
             is_pointer = True
         py_ctype = TYPES_TO_C_TYPE_MAP[shared_object_type]
         python_type = TYPES_TO_PYTHON_TYPE_MAP[shared_object_type]
-        # lol
-        # ruff: noqa: RUF003
-        # replace cyrillic "с" with latin "c"
-        name = name.replace(chr(1089), chr(99))
         return cls(
             name=name,
             py_ctype=py_ctype,
