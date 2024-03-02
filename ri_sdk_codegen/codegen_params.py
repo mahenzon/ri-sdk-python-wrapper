@@ -3,8 +3,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+RI_SDK_CODEGEN_DIR = BASE_DIR / ".ri_sdk_codegen"
+
 ALL_RI_SDK_PAGES_FILE_NAME = "ri_sdk_pages.txt"
-RI_SDK_PAGES_FILE_PATH = BASE_DIR / ALL_RI_SDK_PAGES_FILE_NAME
+RI_SDK_PAGES_FILE_PATH = RI_SDK_CODEGEN_DIR / ALL_RI_SDK_PAGES_FILE_NAME
 URL_BASE = "https://docs.robointellect.ru"
 
 ROBOINTELLECT_BASE_SDK_FILENAME = "robointellect_base_sdk.py"
@@ -23,6 +25,12 @@ parser.add_argument(
     action="store_true",
     help="Update links (default: False). "
     "Crawls RI SDK docs for all RI_SDK_ pages.",
+)
+parser.add_argument(
+    "--parse-docs",
+    action="store_true",
+    help="Pars SDK docs and create json files w/ info (default: False). "
+    "Rewrites existing json files.",
 )
 parser.add_argument(
     "--generate-sdk",
@@ -78,6 +86,7 @@ parser.add_argument(
 @dataclass
 class CodegenParams:
     update_links: bool = False
+    parse_docs: bool = False
     generate_sdk: bool = False
     verbose: bool = False
     sort_methods: bool = True
@@ -86,6 +95,7 @@ class CodegenParams:
     ri_sdk_pages_file_path: Path = RI_SDK_PAGES_FILE_PATH
     output_py_script: Path = ROBOINTELLECT_SDK_OUTPUT_FILEPATH
     sdk_template_filepath: Path = MAKO_TEMPLATE_FILEPATH
+    ri_sdk_codegen_dir: Path = RI_SDK_CODEGEN_DIR
 
     @property
     def docs_crawl_start_url(self) -> str:
@@ -96,6 +106,7 @@ def get_params() -> CodegenParams:
     args = parser.parse_args()
     return CodegenParams(
         update_links=args.update_links,
+        parse_docs=args.parse_docs,
         generate_sdk=args.generate_sdk,
         verbose=args.verbose,
         sort_methods=args.sort_methods,
