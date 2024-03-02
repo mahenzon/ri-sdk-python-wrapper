@@ -66,7 +66,7 @@ class DocPageCrawler:
 
     def _process_description_tag(self, tag: Tag) -> DescriptionBlock | None:
         if tag.name == "p":
-            return DescriptionBlock(tag.text.split("\n"))
+            return DescriptionBlock(values=tag.text.split("\n"))
         if tag.name in ("ol", "ul"):
             return self._get_list_description_block(tag)
         log.warning("Unexpected sibling tag %s", tag)

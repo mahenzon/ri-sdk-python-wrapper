@@ -1,6 +1,5 @@
-import json
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 
 from mako.template import Template
@@ -88,9 +87,8 @@ class Codegen:
         )
         method_filepath.parent.mkdir(parents=True, exist_ok=True)
         method_filepath.write_text(
-            json.dumps(
-                asdict(method),
-                **asdict(self.json_dump_params),
+            method.model_dump_json(
+                indent=self.json_dump_params.indent,
             ),
         )
 

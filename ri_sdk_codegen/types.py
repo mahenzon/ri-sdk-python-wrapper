@@ -1,5 +1,6 @@
-from dataclasses import dataclass
 from functools import cached_property
+
+from pydantic import BaseModel
 
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
@@ -60,12 +61,10 @@ SERVICE_PARAMS_NAMES = {
 }
 
 
-@dataclass
-class BaseParam:
+class BaseParam(BaseModel):
     py_ctype: str
 
 
-@dataclass
 class MethodParamSDK(BaseParam):
     name: str
     python_type: str
@@ -109,8 +108,7 @@ class MethodParamSDK(BaseParam):
         )
 
 
-@dataclass
-class MethodSDK:
+class MethodSDK(BaseModel):
     name: str
     url: str
     description_blocks: list[DescriptionBlock]
