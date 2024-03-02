@@ -139,9 +139,10 @@ extend-ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"examples/api_for_sqlalchemy/*" = [
-    "E402",
-    "D105",
+"src/robointellect_base_sdk.py" = [
+    "E501",
+    "ERA001",
+    "RUF002",
 ]
 
 [tool.ruff.lint.mccabe]
