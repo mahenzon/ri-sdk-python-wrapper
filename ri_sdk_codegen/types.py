@@ -47,6 +47,13 @@ TYPES_TO_PYTHON_TYPE_MAP: dict[str, str] = {
     "*long long unsigned[len] (тип C)": "bytes",
 }
 
+# TODO: assert KNOWN_TYPES contains all known
+#  and other maps contain all from KNOWN_TYPES
+
+# TODO: tests
+assert set(TYPES_TO_C_TYPE_MAP) == KNOWN_TYPES
+assert set(TYPES_TO_PYTHON_TYPE_MAP) == KNOWN_TYPES
+
 SERVICE_PARAMS_NAMES = {
     "errorCode",
     "errorText",
