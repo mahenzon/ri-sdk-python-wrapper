@@ -103,8 +103,12 @@ class MethodParamSDK(BaseParam, type="generic"):
         description: str,
     ) -> "MethodParamSDK":
         is_pointer = False
-        if shared_object_type.strip().startswith("*"):
+        if shared_object_type.startswith("*"):
             is_pointer = True
+        if shared_object_type not in KNOWN_TYPES:
+            msg = f"Unrecognized shared_object_type: {shared_object_type!r}"
+            raise ValueError(msg)
+
         py_ctype = TYPES_TO_C_TYPE_MAP[shared_object_type]
         python_type = TYPES_TO_PYTHON_TYPE_MAP[shared_object_type]
         return cls(
