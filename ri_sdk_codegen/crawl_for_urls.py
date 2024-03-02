@@ -49,5 +49,6 @@ class DocsUrlCrawler:
         self.already_visited = set()
         urls = list(self.fetch_sdk_url_pages(docs_crawl_start_url))
         log.info("Found URLs: %s", urls)
+        filepath.parent.mkdir(parents=True, exist_ok=True)
         filepath.write_text("\n".join(urls))
         log.warning("All URLs written to %s", filepath)
