@@ -54,8 +54,21 @@ class Codegen:
 
         return methods
 
+    @classmethod
+    def make_method_sdk_from_json_file(cls, file_path: Path) -> MethodSDK:
+        return MethodSDK.model_validate_json(file_path.read_text())
+
     def read_methods_from_json(self) -> list[MethodSDK]:
-        pass
+        methods = []
+        for method_dir in self.codegen_base_dir.iterdir():
+            if not method_dir.is_dir():
+                continue
+            method_file = method_dir / self.method_file_name
+            if not method_file.is_file():
+                log.warning("Skipping %s because is not file!", method_file)
+                continue
+            methods.append(self.make_method_sdk_from_json_file(method_file))
+        return methods
 
     def render_methods_to_sdk_script(
         self,
@@ -106,6 +119,6 @@ class Codegen:
     def generate_sdk_script(self) -> list[MethodSDK]:
         # TODO: check for repeated method name params
         #   (is there even a chance?)
-        methods = self.read_methods_from_json()
+        methods: list[MethodSDK] = self.read_methods_from_json()
         self.render_methods_to_sdk_script(sdk_methods=methods)
         return methods
