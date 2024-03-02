@@ -1,5 +1,7 @@
 import logging
 
+from pre_commit.main import main as run_pre_commit
+
 from ri_sdk_codegen import config
 from ri_sdk_codegen.codegen_params import get_params
 from ri_sdk_codegen.crawl_for_urls import DocsUrlCrawler
@@ -39,6 +41,8 @@ def main() -> None:
     if codegen_params.generate_sdk:
         codegen.generate_sdk_script()
 
+    log.warning("Almost done.. formatting")
+    run_pre_commit(["run", "--all-files"])
     log.warning("Done!")
 
 
