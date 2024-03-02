@@ -1,0 +1,53 @@
+{
+  "name": "RI_SDK_connector_i2c_CloseAll",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll",
+  "description_blocks": [
+    {
+      "values": [
+        "Закрывает все открытые соединения для i2c адаптера с дескриптором descriptor"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "После закрытия соединения по данному адресу, функции чтения/записи для всех адресов  будут возвращать ошибку."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Для того, чтобы продолжить использовать функции чтения/записи необходимо вновь открыть соединение по нужному адресу"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента, у которого будут закрыты все соединения",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

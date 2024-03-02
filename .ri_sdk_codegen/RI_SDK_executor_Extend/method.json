@@ -1,0 +1,50 @@
+{
+  "name": "RI_SDK_executor_Extend",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_Extend",
+  "description_blocks": [
+    {
+      "values": [
+        "Расширяет базовый компонент с дескриптором  basic.  Записывает в параметр descriptor дескриптор нового компонента"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "basic",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Базовый компонент",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на компонент, который будет создан",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

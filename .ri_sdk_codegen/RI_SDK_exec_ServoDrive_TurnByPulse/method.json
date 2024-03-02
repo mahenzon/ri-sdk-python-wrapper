@@ -1,0 +1,63 @@
+{
+  "name": "RI_SDK_exec_ServoDrive_TurnByPulse",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse",
+  "description_blocks": [
+    {
+      "values": [
+        "Абсолютный поворот к углу, определенному значением импульса."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду сервоприводу  дескриптором descriptor встать в положение, соответствующее переданному значению управляющего импульса. "
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Размер рабочего  диапазона для mg90s - 2444 мкс () ~ 219 градусов (от 0 до 219)",
+        "Максимальный импульс - 2711 мкс"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента сервопривода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "pulse",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение импульса (микросекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

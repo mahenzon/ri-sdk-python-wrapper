@@ -1,0 +1,47 @@
+{
+  "name": "RI_SDK_exec_RGB_LED_Stop",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop",
+  "description_blocks": [
+    {
+      "values": [
+        "Прекращение выполнения команды светодиодом"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду светодиоду с дескриптором descriptor остановить выполнение выполняемой в данный момент  команды. Светодиод прекращает свечение и затухает."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента светодиода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "name": "RI_SDK_connector_i2c_Open",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open",
+  "description_blocks": [
+    {
+      "values": [
+        "Сообщает i2c адаптеру с дескриптором descriptor, что необходимо открыть соединение по адресу addr"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Создание нового подключения по какому-либо адресу необходимо делать перед тем, как производить чтение/запись по этому адресу"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента, у которого будет открыто соединение",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_uint8",
+      "name": "addr",
+      "python_type": "int",
+      "shared_object_type": "uint8_t (тип C)",
+      "description": "Адрес, по которому будет открыто соединение",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

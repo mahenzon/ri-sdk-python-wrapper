@@ -1,0 +1,104 @@
+{
+  "name": "RI_SDK_exec_RGB_LED_SinglePulse",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse",
+  "description_blocks": [
+    {
+      "values": [
+        "Непрерывное свечение."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду непрерывного свечения для светодиода с дескриптором descriptor. Параметры r, g, b устанавливают яркость свечения для красного, зеленого и синего цвета соответственно.  Параметр duration задает продолжительность свечения.Параметр async устанавливает режим выполнения команды - асинхронный или синхронный."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "При синхронном режиме, программа, которая вызвала данную функцию, ожидает завершение выполнения команды. При асинхронном режиме этого ожидания не происходит, и выполнение команды осуществляется параллельно дальнейшей работе программы, вызвавшей данную функцию."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "*При значении duration = 0 операция выполняется до тех пор, пока не придет другая команда или команда остановки"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента светодиода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "r",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение яркости для красного цвета (0 -255)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "g",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение яркости для зеленого цвета (0 -255)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "b",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение яркости для синего цвета (0 -255)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "duration",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Продолжительность импульса (миллисекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_bool",
+      "name": "async",
+      "python_type": "bool",
+      "shared_object_type": "bool (тип C)",
+      "description": "Признак асинхронного выполнения команды",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "name": "RI_SDK_LinkVoltageSensorToController",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController",
+  "description_blocks": [
+    {
+      "values": [
+        "Сообщает библиотеке, что необходимо программно связать датчик тока, напряжения и мощности с дескриптором descriptor с i2c адаптером с дескриптором  to по адресу addr"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Эту функцию необходимо вызывать перед вызовом функций управления соответствующим датчиком тока, напряжения и мощности."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор датчика тока, напряжения и мощности, который будет подключаться к i2c адаптеру",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "to",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор i2c адаптера, к которому будет подключаться датчик тока, напряжения и мощности",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_uint8",
+      "name": "addr",
+      "python_type": "int",
+      "shared_object_type": "uint8_t (тип C)",
+      "description": "Адрес подключения",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

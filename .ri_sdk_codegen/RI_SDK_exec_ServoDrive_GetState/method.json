@@ -1,0 +1,69 @@
+{
+  "name": "RI_SDK_exec_ServoDrive_GetState",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState",
+  "description_blocks": [
+    {
+      "values": [
+        "Чтение состояния сервопривода."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Получает значение константы состояния  сервопривода с дескриптором descriptor и записывает его в state"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Коды состояния: "
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "0 - Сервопривод ожидает вызова действий. Сервопривод ничего не делает и готов к работе.",
+        "1 - Компонент выполняет действие. Сервопривод в данный момент осуществляет движение."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента сервопривода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "state",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на код состояния сервопривода",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

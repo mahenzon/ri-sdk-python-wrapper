@@ -1,0 +1,50 @@
+{
+  "name": "RI_SDK_connector_i2c_Extend",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend",
+  "description_blocks": [
+    {
+      "values": [
+        "Расширяет компонент группы коннекторов с дескриптором  connectorDescriptor,  записывает в параметр descriptor дескриптор нового компонента (i2c адаптера)"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "connectorDescriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента группы коннекторов",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на компонент, который будет создан",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "name": "RI_SDK_connector_i2c_SetBus",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus",
+  "description_blocks": [
+    {
+      "values": [
+        "Позволяет программисту в коде своей программы определить номер шины, на которой в дальнейшем будет открыто соединение с компонентом при вызове функции связывания RI_SDK_LinkPWMToController."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Если не вызывать эту функцию, то номер шины будет определён автоматически, причем для Linux на архитектуре aarch64 номер шины всегда будет равен 1. "
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Функцию RI_SDK_connector_i2c_SetBus необходимо вызывать ДО связывания (вызов RI_SDK_LinkPWMToController), так как если на заданной шине уже открыто соединение, RI_SDK_connector_i2c_SetBus вернёт ошибку."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Если номер шины необходимо изменить, нужно сперва закрыть все открытые с помощью заданного I2C адаптера соединения с помощью функции RI_SDK_connector_i2c_CloseAll или функции RI_SDK_connector_i2c_Close, вызванной для каждого открытого соединения."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Внимание! Вызов RI_SDK_connector_i2c_SetBus определяет номер шины только на ОС Linux. На ОС Windows номер шины определяется автоматически независимо от результатов выполнения RI_SDK_connector_i2c_SetBus."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента, у которого будет открыто соединение",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "bus",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Номер шины, на котором должно быть открыто соединение",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "nextBus",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на установленный номер шины",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "prevBus",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на предыдущий номер шины",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

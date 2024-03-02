@@ -1,0 +1,56 @@
+{
+  "name": "RI_SDK_sensor_VoltageSensor_Shunt",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt",
+  "description_blocks": [
+    {
+      "values": [
+        "Получение значения напряжения на шунте."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду датчику тока, напряжения и мощности с дескриптором descriptor измерить напряжение на шунте. Записывает полученное значение в переменную voltageShunt"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента датчика тока, напряжения и мощности",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_float",
+      "name": "voltageShunt",
+      "python_type": "float",
+      "shared_object_type": "*float (тип C)",
+      "description": "Указатель на значение напряжения на шунте (Вольт)",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

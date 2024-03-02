@@ -1,0 +1,95 @@
+{
+  "name": "RI_SDK_exec_ServoDrive_CustomDeviceInit",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit",
+  "description_blocks": [
+    {
+      "values": [
+        "Инициализация собственного компонента."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Инициализирует собственный компонент сервопривода. Альтернатива функции RI_SDK_exec_ServoDrive_ExtendToModel."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Устанавливает значения минимального и максимального импульса (мкс), максимальной скорости вращения (градусов в секунду), размера рабочего диапазона в мкс. Эти значение устанавливаются для сервопривода с дескриптором descriptor."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Данная функция используется для получения возможности работы с сервоприводом, модель которого не поддерживается библиотекой."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента сервопривода, который будет инициализирован",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "maxImpulse",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Максимальное значение импульса (микросекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "minImpulse",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Минимальное  значение импульса (микросекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "maxSpeed",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Максимальная угловая скорость (градус / секунда)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "rangeAngle",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Диапазон вращения сервопривода (микросекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

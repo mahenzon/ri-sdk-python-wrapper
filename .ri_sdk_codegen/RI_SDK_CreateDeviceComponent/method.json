@@ -1,0 +1,82 @@
+{
+  "name": "RI_SDK_CreateDeviceComponent",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent",
+  "description_blocks": [
+    {
+      "values": [
+        "Создает и записывает в реестр библиотеки компонент уровня устройства. Это третий уровень абстракции. Такие компоненты реализуют методы управления своими устройствами. Компонент уровня устройства можно расширить до конкретной модели соответствующего устройства."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Без этого расширения, использование методов управления устройством невозможно, так как именно модель содержит значения параметров, необходимых для управления"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Доступные устройства:"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "i2c_adapter - i2c адаптер ",
+        "pwm - ШИМ модулятор",
+        "servodrive - сервопривод",
+        "servodrive_rotate - сервопривод вращения",
+        "led - светодиод",
+        "voltage_sensor - датчик тока, напряжения и мощности"
+      ],
+      "type": "ordered-list-block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_char_p",
+      "name": "group",
+      "python_type": "str",
+      "shared_object_type": "char[] (тип C)",
+      "description": "Тип компонента (\"executor\", \"connector\", \"sensor\")",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "deviceName",
+      "python_type": "str",
+      "shared_object_type": "char[] (тип C)",
+      "description": "Устройство компонента (\"i2c\", \"pwm\", \"servodrive\", \"led\", \"voltage_sensor\", \"servodrive_rotate\")",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на компонент, который будет создан",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

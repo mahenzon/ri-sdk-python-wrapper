@@ -1,0 +1,83 @@
+{
+  "name": "RI_SDK_LinkLedToController",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController",
+  "description_blocks": [
+    {
+      "values": [
+        "Сообщает библиотеке, что необходимо программно связать компонент светодиода с дескриптором descriptor и ШИМ модулятором  с дескриптором  pwm по порту port."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Эту функцию необходимо вызывать перед вызовом функций управления соответствующим светодиодом."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор светодиода, который будет подключаться к ШИМ",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "pwm",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор ШИМ, к которому будет подключаться светодиод",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "rport",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Порт подключения красного цвета",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "gport",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Порт подключения зеленого цвета",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "bport",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Порт подключения синего  цвета",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

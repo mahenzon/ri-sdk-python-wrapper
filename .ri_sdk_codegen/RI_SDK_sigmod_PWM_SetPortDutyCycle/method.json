@@ -1,0 +1,82 @@
+{
+  "name": "RI_SDK_sigmod_PWM_SetPortDutyCycle",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle",
+  "description_blocks": [
+    {
+      "values": [
+        "Установка скважности."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Устанавливает новое значение скважности на порту port для ШИМ модулятора с дескриптором descriptor. Скважность задается с помощью параметров on и off, в которых передаются соответственно  количества тактов до перевода выхода в состояние логической «1» и логического «0»."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Значение on и off зависит от спецификаций конкретного ШИМ контроллера,",
+        "например для  PCA9685 разрешение ШИМ: 12 бит = 4096 тактов (рабочий цикл от 0 до 100%). Этот параметр показывает, с какой",
+        "точностью мы можем менять коэффициент заполнения. Чем больше разрешение,тем плавнее будет меняться мощность на управляемом устройстве."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента ШИМ",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "port",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Порт, для которого читается частота",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "on",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Количество тактов до перевода выхода в состояние логической «1»",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "off",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Количество тактов до перевода выхода в состояние логического «0»",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "name": "RI_SDK_exec_RServoDrive_ExtendToModel",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel",
+  "description_blocks": [
+    {
+      "values": [
+        "Расширение сервопривода вращения до модели."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Расширяет компонент устройства сервопривода вращения с дескриптором  base.",
+        "Записывает в параметр descriptor дескриптор нового компонента (компонент конкретной модели сервопривода вращения)"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Доступные модели сервопривода: mg996r"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "baseDescriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента сервопривода вращения, который будет расширятся",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "modelName",
+      "python_type": "str",
+      "shared_object_type": "char[] (тип C)",
+      "description": "Модель компонента (\"mg996r\")",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на компонент сервопривода вращения конкретной модели, который получится в результате расширения",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

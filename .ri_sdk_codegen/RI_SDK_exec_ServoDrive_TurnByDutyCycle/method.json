@@ -1,0 +1,86 @@
+{
+  "name": "RI_SDK_exec_ServoDrive_TurnByDutyCycle",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle",
+  "description_blocks": [
+    {
+      "values": [
+        "Абсолютный поворот. Угол задается через",
+        "кол-во шагов сервопривода."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду сервоприводу  дескриптором descriptor встать в положение, соответствующее переданному значению скважности. "
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Значение скважности не может быть больше значения разрешения ШИМ, к которому подключен сервопривод."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Также значение скважности должно быть больше или равным  ((minPulse * freq)/1000000 * 0xFFFF)+1) >> 4",
+        "и меньше или равным",
+        "((maxPulse * freq)/1000000 * 0xFFFF)+1) >> 4"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Где:",
+        "minPulse - минимальное значение импульса для данного сервопривода (maxPulse - pulseRange);",
+        "maxPulse- максимальное значение импульса для данного сервопривода;",
+        "freq - значение частоты ШИМ модулятора, к которому подключен сервопривод."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Для модели mg90s, у которой размер рабочего диапазона равен 2444 мкс, максимальное значение импульса равно 2771 мкс, при подключении к ШИМ модулятору pca9586, у которого частота равна 50 Гц, значение скважности должно попадать в промежуток от 55 до 554 шагов включительно."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента сервопривода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "steps",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Количество шагов для шим преобразователя",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

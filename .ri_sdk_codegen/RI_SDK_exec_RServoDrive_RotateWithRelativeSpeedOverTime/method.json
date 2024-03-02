@@ -1,0 +1,112 @@
+{
+  "name": "RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime",
+  "description_blocks": [
+    {
+      "values": [
+        "Вращение в заданном направлении с заданной относительной скоростью.",
+        "Вращение выполняется до тех пор, пока не сработает заданный таймаут или не будет вызвана команда остановки."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду сервоприводу с дескриптором descriptor вращаться до тех пор, пока не сработает заданный таймаут или не",
+        "будет вызвана функция остановки.",
+        "Направление поворота задается параметром direction, а скорость поворота параметром speed.",
+        "При этом скорость поворота задается в процентах от максимальной скорости вращения.",
+        "Параметр async устанавливает режим выполнения команды - асинхронный или синхронный."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Направления движения:",
+        "0 - по часовой стрелке",
+        "1 - против часовой стрелки  "
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "При синхронном режиме, программа, которая вызвала данную функцию, ожидает завершение выполнения команды. Вращение",
+        "выполняется до истечения таймаута, т.к. функцию остановки невозможно (в том же потоке) вызвать раньше завершения текущей команды.",
+        "При асинхронном режиме ожидания не происходит, и выполнение команды осуществляется параллельно дальнейшей работе программы, вызвавшей данную функцию.",
+        "И если после функции вращения для используемого сервопривода будет вызвана следующая команда, то вращение будет прервано до истечения таймаута."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Если таймаут задан равным нулю, то будет вызвана функция",
+        "вращения с заданным процентом от максимальной скорости, а таймаут меньше нуля вызовет ошибку."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор сервопривода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "direction",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Направление движения",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "speed",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Угловая скорость поворота (процент от максимальной скорости)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "timeout",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение таймаут (микросекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_bool",
+      "name": "async",
+      "python_type": "bool",
+      "shared_object_type": "bool (тип C)",
+      "description": "Признак асинхронного выполнения команды",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

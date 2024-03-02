@@ -1,0 +1,57 @@
+{
+  "name": "RI_SDK_exec_RServoDrive_Extend",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend",
+  "description_blocks": [
+    {
+      "values": [
+        "Расширение исполнителя до сервопривода вращения."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Расширяет компонент группы исполнителей с дескриптором  exec.",
+        "Записывает в параметр descriptor дескриптор нового компонента (Сервопривода вращения)"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "exec",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Компонент группы, который будет расширятся",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на компонент сервопривода вращения, который получится в результате расширения",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

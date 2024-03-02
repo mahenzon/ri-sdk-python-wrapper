@@ -1,0 +1,95 @@
+{
+  "name": "RI_SDK_exec_ServoDrive_MinStepRotate",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate",
+  "description_blocks": [
+    {
+      "values": [
+        "Поворот на минимальный шаг."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду сервоприводу с дескриптором descriptor повернуть на 1 градус. Направление поворота задается параметром direction, а скорость поворота параметром speed.",
+        "Параметр async устанавливает режим выполнения команды - асинхронный или синхронный."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "При синхронном режиме, программа, которая вызвала данную функцию, ожидает завершение выполнения команды. При асинхронном режиме этого ожидания не происходит, и выполнение команды осуществляется параллельно дальнейшей работе программы, вызвавшей данную функцию. "
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Направления движения:",
+        "0 - по часовой стрелке",
+        "1 - против часовой стрелки"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "*Изначально у серопривода положение 0 градусов.  Поэтому первое движение он может совершить только на положительный угол."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор сервопривода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "direction",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Направление движения",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "speed",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Угловая скорость поворота (градус / секунда)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_bool",
+      "name": "async",
+      "python_type": "bool",
+      "shared_object_type": "bool (тип C)",
+      "description": "Признак асинхронного выполнения команды",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

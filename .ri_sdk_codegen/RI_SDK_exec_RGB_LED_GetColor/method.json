@@ -1,0 +1,74 @@
+{
+  "name": "RI_SDK_exec_RGB_LED_GetColor",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor",
+  "description_blocks": [
+    {
+      "values": [
+        "Чтение текущего свечения цвета светодиода"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Получает значения текущих яркостей красного, зеленого и синего цветов у сервопривода с дескриптором descriptor и записывает эти значения в  r, g, b."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента светодиода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "r",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на значение яркости для красного цвета (0 -255)",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "g",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на значение яркости для зеленого цвета (0 -255)",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "b",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на значение яркости для синего цвета (0 -255)",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

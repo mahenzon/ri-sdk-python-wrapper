@@ -1,0 +1,114 @@
+{
+  "name": "RI_SDK_exec_RGB_LED_Flicker",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker",
+  "description_blocks": [
+    {
+      "values": [
+        "Мерцание."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Дает команду светодиоду с дескриптором descriptor мерцать (постепенно изменять яркость цвета от 0 до значений r, g, b для красного, зеленого и синего цвета соответственно и обратно). Параметр  duration устанавливает время, за которое яркость света изменяется от 0 до значения установленного параметрами r, g, b и за которое яркость уменьшается обратно до 0.",
+        "Количество мерцаний задается параметром qty. Параметр async устанавливает режим выполнения команды - асинхронный или синхронный."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "При синхронном режиме, программа, которая вызвала данную функцию, ожидает завершение выполнения команды. При асинхронном режиме этого ожидания не происходит, и выполнение команды осуществляется параллельно дальнейшей работе программы, вызвавшей данную функцию."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "*При значении qty = 0 операция выполняется до тех пор, пока не придет другая команда или команда остановки"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента светодиода",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "r",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение максимальной яркости для красного цвета (0 -255)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "g",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение максимальной яркости для зеленого цвета (0 -255)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "b",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Значение максимальной яркости для синего цвета (0 -255)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "duration",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Продолжительность изменения яркости от 0 до максимальной(миллисекунды)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "qty",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Количество итераций (мерцаний)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_bool",
+      "name": "async",
+      "python_type": "bool",
+      "shared_object_type": "bool (тип C)",
+      "description": "Признак асинхронного выполнения команды",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

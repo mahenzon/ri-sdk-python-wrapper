@@ -1,0 +1,65 @@
+{
+  "name": "RI_SDK_LinkRServodriveToController",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController",
+  "description_blocks": [
+    {
+      "values": [
+        "Сообщает библиотеке, что необходимо программно связать компонент сервопривода вращения с дескриптором descriptor с ШИМ модулятором с дескриптором pwm по порту port."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Эту функцию необходимо вызывать перед вызовом функций управления соответствующим сервоприводом вращения."
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор сервопривода вращения, который будет подключаться к ШИМ",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "pwm",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор ШИМ, к которому будет подключаться привод",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "port",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Порт подключения",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

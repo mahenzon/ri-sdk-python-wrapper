@@ -1,0 +1,75 @@
+{
+  "name": "RI_SDK_connector_i2c_State",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State",
+  "description_blocks": [
+    {
+      "values": [
+        "Чтение состояния адаптера."
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Записывает константу состояния i2c адаптера с дескриптором descriptor в параметр state"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "Состояние I2C соединения:"
+      ],
+      "type": "block"
+    },
+    {
+      "values": [
+        "0 - Линия свободна - означает, что в данный момент времени не выполняется никакая функция чтения/записи с данного i2c адаптера.",
+        "1 - Линия занята. Означает, что уже выполняется какая-либо функция чтения/записи для данного i2c адаптера. "
+      ],
+      "type": "unordered-list-block"
+    },
+    {
+      "values": [
+        "Если линия у какого-либо i2c адаптера занята, то при выполнении функций чтения/записи для данного i2c адаптера программа будет ожидать, пока линия освободится. "
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Дескриптор компонента",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "state",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на код состояния i2c адаптера",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "RI_SDK_CreateBasic",
+  "url": "https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic",
+  "description_blocks": [
+    {
+      "values": [
+        "Функция создает базовый компонент, который является абстракцией первого уровня над всеми остальными компонентами.",
+        "Этот компонент не имеет своих собственных методов. Его можно расширить до компонента уровня группы"
+      ],
+      "type": "block"
+    }
+  ],
+  "params": [
+    {
+      "py_ctype": "c_int",
+      "name": "descriptor",
+      "python_type": "int",
+      "shared_object_type": "*int (тип C)",
+      "description": "Указатель на компонент, который будет создан",
+      "is_pointer": true,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_char_p",
+      "name": "errorText",
+      "python_type": "str",
+      "shared_object_type": "char[1000] (тип C)",
+      "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    },
+    {
+      "py_ctype": "c_int",
+      "name": "errorCode",
+      "python_type": "int",
+      "shared_object_type": "int (тип C)",
+      "description": "Код ошибки",
+      "is_pointer": false,
+      "pointer_py_ctype": "POINTER"
+    }
+  ]
+}
