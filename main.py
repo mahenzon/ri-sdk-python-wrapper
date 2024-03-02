@@ -25,14 +25,19 @@ def main() -> None:
             filepath=codegen_params.ri_sdk_pages_file_path,
         )
 
-    if codegen_params.generate_sdk:
+    codegen = Codegen(
+        codegen_base_dir=codegen_params.ri_sdk_codegen_dir,
+        sdk_template_path=codegen_params.sdk_template_filepath,
+        sdk_output_file_path=codegen_params.output_py_script,
+        sort_by_name=codegen_params.sort_methods,
+    )
+
+    if codegen_params.parse_docs:
         urls = codegen_params.ri_sdk_pages_file_path.read_text().splitlines()
-        codegen = Codegen(
-            sdk_template_path=codegen_params.sdk_template_filepath,
-            sdk_output_file_path=codegen_params.output_py_script,
-            sort_by_name=codegen_params.sort_methods,
-        )
-        codegen.generate_sdk_script(urls)
+        codegen.parse_docs_and_save_methods_to_json_cache(urls)
+
+    if codegen_params.generate_sdk:
+        codegen.generate_sdk_script()
 
     log.warning("Done!")
 

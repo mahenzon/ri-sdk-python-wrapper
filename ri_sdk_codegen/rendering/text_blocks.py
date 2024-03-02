@@ -1,8 +1,7 @@
 import textwrap
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from functools import partial
-from typing import Callable, Protocol, TypeVar
+from functools import cached_property, partial
+from typing import Callable, Literal, Protocol, TypeVar
 
 from ri_sdk_codegen.rendering.render_configs import (
     FUNC_BODY_INDENT,
@@ -38,58 +37,69 @@ class TextProcessorProtocol(Protocol):
         pass
 
 
+DescriptionBlockType = Literal[
+    "block",
+    "list-block",
+    "unordered-list-block",
+    "ordered-list-block",
+]
+
+
 @dataclass
-class DescriptionBlockBase(ABC):
+class DescriptionBlock:
     values: list[str]
-    separator: str = "\n"
-    initial_indent = FUNC_BODY_INDENT
-    subsequent_indent = FUNC_BODY_INDENT
+    type: DescriptionBlockType = "block"
+    separator = "\n"
+
+    @classmethod
+    def get_initial_indent(cls) -> str:
+        return FUNC_BODY_INDENT
+
+    def get_subsequent_indent(self) -> str:
+        if self.type.endswith("list-block"):
+            return PARAM_SUBSEQUENT_INDENT
+        return FUNC_BODY_INDENT
 
     def get_renderer(self, max_width: int) -> Callable:
         return partial(
             textwrap.fill,
             width=max_width,
-            initial_indent=self.initial_indent,
-            subsequent_indent=self.subsequent_indent,
+            initial_indent=self.get_initial_indent(),
+            subsequent_indent=self.get_subsequent_indent(),
             fix_sentence_endings=True,
             drop_whitespace=True,
             replace_whitespace=True,
         )
 
-    @abstractmethod
     def process(self, max_width: int) -> ReturnType:
-        raise NotImplementedError
+        return self.processors[self.type](max_width)
 
-
-@dataclass
-class DescriptionTextBlock(DescriptionBlockBase):
-    def process(self, max_width: int) -> ReturnType:
+    def process_text_block(self, max_width: int) -> ReturnType:
         process_string: TextProcessorProtocol = self.get_renderer(max_width)
         return self.separator.join(map(process_string, self.values))
 
-
-@dataclass
-class DescriptionListBlockBase(DescriptionBlockBase):
-    subsequent_indent = PARAM_SUBSEQUENT_INDENT
-
-    def process(self, max_width: int) -> ReturnType:
+    def process_list_block(self, max_width: int) -> ReturnType:
         process_string: TextProcessorProtocol = self.get_renderer(max_width)
         return self.separator.join(map(process_string, self.values))
 
-
-@dataclass
-class DescriptionUnorderedListBlock(DescriptionListBlockBase):
-    def process(self, max_width: int) -> ReturnType:
+    def process_unordered_list_block(self, max_width: int) -> ReturnType:
         process_string: TextProcessorProtocol = self.get_renderer(max_width)
         bullet_elems = (f"- {value}" for value in self.values)
         return self.separator.join(map(process_string, bullet_elems))
 
-
-@dataclass
-class DescriptionOrderedListBlock(DescriptionListBlockBase):
-    def process(self, max_width: int) -> ReturnType:
+    def process_ordered_list_block(self, max_width: int) -> ReturnType:
         process_string: TextProcessorProtocol = self.get_renderer(max_width)
         numbered_elems = (
             f"{idx}. {value}" for idx, value in enumerate(self.values, start=1)
         )
         return self.separator.join(map(process_string, numbered_elems))
+
+    # TODO: cover in tests that all keys are used
+    @cached_property
+    def processors(self) -> dict[DescriptionBlockType, Callable]:
+        return {
+            "block": self.process_text_block,
+            "list-block": self.process_list_block,
+            "unordered-list-block": self.process_unordered_list_block,
+            "ordered-list-block": self.process_ordered_list_block,
+        }

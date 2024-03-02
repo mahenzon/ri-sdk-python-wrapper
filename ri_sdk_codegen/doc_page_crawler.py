@@ -4,13 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup, Tag
 
-from ri_sdk_codegen.rendering.text_blocks import (
-    DescriptionBlockBase,
-    DescriptionListBlockBase,
-    DescriptionOrderedListBlock,
-    DescriptionTextBlock,
-    DescriptionUnorderedListBlock,
-)
+from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
 from ri_sdk_codegen.types import MethodParamSDK, MethodSDK
 
 log = logging.getLogger(__name__)
@@ -57,27 +51,22 @@ class DocPageCrawler:
 
         return description_h2
 
-    def _get_list_description_block(
-        self,
-        tag: Tag,
-    ) -> DescriptionListBlockBase:
+    @classmethod
+    def _get_list_description_block(cls, tag: Tag) -> DescriptionBlock:
         all_lis = tag.find_all("li")
         values = [li.text for li in all_lis]
         if tag.name == "ol":
-            cls = DescriptionOrderedListBlock
+            block_type = "ordered-list-block"
         elif tag.name == "ul":
-            cls = DescriptionUnorderedListBlock
+            block_type = "unordered-list-block"
         else:
             msg = f"unexpected list tag {tag.name}"
             raise ValueError(msg)
-        return cls(values=values)
+        return DescriptionBlock(values=values, type=block_type)
 
-    def _process_description_tag(
-        self,
-        tag: Tag,
-    ) -> DescriptionBlockBase | None:
+    def _process_description_tag(self, tag: Tag) -> DescriptionBlock | None:
         if tag.name == "p":
-            return DescriptionTextBlock(tag.text.split("\n"))
+            return DescriptionBlock(tag.text.split("\n"))
         if tag.name in ("ol", "ul"):
             return self._get_list_description_block(tag)
         log.warning("Unexpected sibling tag %s", tag)
@@ -85,11 +74,11 @@ class DocPageCrawler:
     def _get_description_blocks(
         self,
         soup: BeautifulSoup,
-    ) -> list[DescriptionBlockBase]:
+    ) -> list[DescriptionBlock]:
         description_h2 = self._get_description_tag(soup)
         # Closest "p" is description
         next_tag = description_h2.find_next("p")
-        description_blocks: list[DescriptionBlockBase] = []
+        description_blocks: list[DescriptionBlock] = []
         # probably "h2" is the where description ends
         while next_tag is not None and next_tag.name != "h2":
             block = self._process_description_tag(next_tag)

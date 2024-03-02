@@ -1,4 +1,6 @@
+import json
 import logging
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from mako.template import Template
@@ -9,18 +11,34 @@ from ri_sdk_codegen.types import MethodSDK
 log = logging.getLogger(__name__)
 
 
+@dataclass
+class JsonDumpParams:
+    indent: int = 2
+    sort_keys: bool = False
+    ensure_ascii: bool = False
+
+
 class Codegen:
     def __init__(
         self,
+        codegen_base_dir: Path,
         sdk_template_path: Path,
         sdk_output_file_path: Path,
         sort_by_name: bool = True,
+        json_dump_params: JsonDumpParams | None = None,
+        method_file_name: str = "method.json",
     ) -> None:
+        self.codegen_base_dir: Path = codegen_base_dir
         self.sdk_template_path: Path = sdk_template_path
         self.sdk_output_file_path: Path = sdk_output_file_path
         self.sort_by_name: bool = sort_by_name
+        self.json_dump_params: JsonDumpParams = (
+            json_dump_params or JsonDumpParams()
+        )
+        self.method_file_name: str = method_file_name
 
-    def get_method_params(self, urls: list[str]) -> list[MethodSDK]:
+    @classmethod
+    def parse_methods_from_doc(cls, urls: list[str]) -> list[MethodSDK]:
         """
         Fetch every doc url and parse params
 
@@ -36,6 +54,9 @@ class Codegen:
             methods.append(method)
 
         return methods
+
+    def read_methods_from_json(self) -> list[MethodSDK]:
+        pass
 
     def render_methods_to_sdk_script(
         self,
@@ -61,12 +82,32 @@ class Codegen:
             self.sdk_output_file_path,
         )
 
-    def generate_sdk_script(self, urls: list[str]) -> list[MethodSDK]:
-        """
-        :param urls:
-        :return:
-        """
+    def save_method_to_file(self, method: MethodSDK) -> None:
+        method_filepath = (
+            self.codegen_base_dir / method.name / self.method_file_name
+        )
+        method_filepath.parent.mkdir(parents=True, exist_ok=True)
+        method_filepath.write_text(
+            json.dumps(
+                asdict(method),
+                **asdict(self.json_dump_params),
+            ),
+        )
+
+    def save_methods_to_json_cache(self, methods: list[MethodSDK]) -> None:
+        for method in methods:
+            self.save_method_to_file(method)
+
+    def parse_docs_and_save_methods_to_json_cache(
+        self,
+        urls: list[str],
+    ) -> None:
+        methods = self.parse_methods_from_doc(urls)
+        self.save_methods_to_json_cache(methods)
+
+    def generate_sdk_script(self) -> list[MethodSDK]:
         # TODO: check for repeated method name params
-        methods = self.get_method_params(urls)
+        #   (is there even a chance?)
+        methods = self.read_methods_from_json()
         self.render_methods_to_sdk_script(sdk_methods=methods)
         return methods

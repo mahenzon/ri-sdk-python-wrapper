@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
-from ri_sdk_codegen.rendering.text_blocks import DescriptionBlockBase
+from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
 from ri_sdk_codegen.utils import method_name_to_snake_case
 
 KNOWN_TYPES: set[str] = {
@@ -113,7 +113,7 @@ class MethodParamSDK(BaseParam):
 class MethodSDK:
     name: str
     url: str
-    description_blocks: list[DescriptionBlockBase]
+    description_blocks: list[DescriptionBlock]
     params: list[MethodParamSDK]
 
     @cached_property
