@@ -64,21 +64,9 @@ SERVICE_PARAMS_NAMES = {
 class BaseParam:
     py_ctype: str
 
-    def __init_subclass__(cls, **kwargs: str) -> None:
-        super().__init_subclass__()
-        param_type = kwargs.get("type")
-        if param_type is None:
-            msg = "Parameter type should not be None"
-            raise ValueError(msg)
-        cls.__param_type__ = param_type
-
-    @property
-    def type(self) -> str:
-        return self.__param_type__
-
 
 @dataclass
-class MethodParamSDK(BaseParam, type="generic"):
+class MethodParamSDK(BaseParam):
     name: str
     python_type: str
     shared_object_type: str
