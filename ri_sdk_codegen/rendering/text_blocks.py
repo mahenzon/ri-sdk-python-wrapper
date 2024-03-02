@@ -2,7 +2,7 @@ import textwrap
 from functools import cached_property, partial
 from typing import Callable, Literal, Protocol, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ri_sdk_codegen.rendering.render_configs import (
     FUNC_BODY_INDENT,
@@ -50,11 +50,7 @@ class DescriptionBlock(BaseModel):
     values: list[str]
     type: DescriptionBlockType = "block"
 
-    _separator: str = "\n"
-
-    @property
-    def separator(self) -> str:
-        return self._separator
+    separator: str = Field("\n", exclude=True)
 
     @classmethod
     def get_initial_indent(cls) -> str:
