@@ -43,3 +43,11 @@ def method_name_to_snake_case(input_str: str) -> str:
         )
 
     return "_".join(parts)
+
+
+def method_name_to_upper_camel_case(input_str: str) -> str:
+    if input_str.lower().startswith("ri_sdk_"):
+        # we can't use .removeprefix here because of the case (upper / lower)
+        prefix_size = len("ri_sdk_")
+        input_str = input_str[prefix_size:]
+    return "".join(w[0].upper() + w[1:] for w in input_str.split("_"))
