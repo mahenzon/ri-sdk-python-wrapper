@@ -56,8 +56,12 @@ def main() -> None:
     codegen = Codegen(
         codegen_base_dir=codegen_params.ri_sdk_codegen_dir,
         sdk_template_path=codegen_params.sdk_template_filepath,
+        method_return_type_template_path=codegen_params.method_return_type_template_filepath,
+        method_return_types_init_template_path=codegen_params.method_return_types_init_filepath,
         sdk_output_file_path=codegen_params.output_py_script,
+        sdk_return_types_output_path=codegen_params.ri_sdk_python_types_dir,
         sort_by_name=codegen_params.sort_methods,
+        remove_existing_types=codegen_params.remove_existing_types,
     )
 
     if codegen_params.parse_docs:

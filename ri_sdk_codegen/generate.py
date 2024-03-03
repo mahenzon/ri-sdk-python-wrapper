@@ -24,21 +24,33 @@ class Codegen:
         self,
         codegen_base_dir: Path,
         sdk_template_path: Path,
+        method_return_type_template_path: Path,
+        method_return_types_init_template_path: Path,
         sdk_output_file_path: Path,
+        sdk_return_types_output_path: Path,
         sort_by_name: bool = True,
         json_dump_params: JsonDumpParams | None = None,
         method_file_name: str = "method.json",
         method_options_file_name: str = "options.yaml",
+        remove_existing_types: bool = True,
     ) -> None:
         self.codegen_base_dir: Path = codegen_base_dir
         self.sdk_template_path: Path = sdk_template_path
+        self.method_return_type_template_path: Path = (
+            method_return_type_template_path
+        )
+        self.method_return_types_init_template_path: Path = (
+            method_return_types_init_template_path
+        )
         self.sdk_output_file_path: Path = sdk_output_file_path
+        self.sdk_return_types_output_path: Path = sdk_return_types_output_path
         self.sort_by_name: bool = sort_by_name
         self.json_dump_params: JsonDumpParams = (
             json_dump_params or JsonDumpParams()
         )
         self.method_file_name: str = method_file_name
         self.method_options_file_name: str = method_options_file_name
+        self.remove_existing_types: bool = remove_existing_types
 
     @classmethod
     def parse_methods_from_doc(cls, urls: list[str]) -> list[MethodSDK]:
@@ -115,6 +127,70 @@ class Codegen:
             self.sdk_output_file_path,
         )
 
+    def create_method_return_type(
+        self,
+        template: Template,
+        method: MethodSDK,
+    ) -> None:
+        """
+        :param template:
+        :param method:
+        :return:
+        """
+        result = template.render(method=method)
+        module_path = (
+            self.sdk_return_types_output_path / method.py_module_filename
+        )
+        module_path.write_text(result)
+
+        log.debug("Created new Python return type at %s", module_path)
+
+    def generate_return_types_init(
+        self,
+        sdk_methods: list[MethodSDK],
+    ) -> None:
+        """
+
+        :param sdk_methods:
+        :return:
+        """
+        template = Template(
+            filename=str(self.method_return_types_init_template_path),
+        )
+        filepath = self.sdk_return_types_output_path / "__init__.py"
+        sorted_methods = sorted(sdk_methods, key=lambda m: m.py_method_name)
+        result = template.render(sdk_methods=sorted_methods)
+        filepath.write_text(result)
+
+    def generate_return_types(
+        self,
+        sdk_methods: list[MethodSDK],
+    ) -> None:
+        """
+        :param sdk_methods:
+        :return:
+        """
+        if self.remove_existing_types:
+            for path in self.sdk_return_types_output_path.iterdir():
+                if path.is_file() and path.suffix == ".py":
+                    path.unlink()
+
+        template = Template(
+            filename=str(self.method_return_type_template_path),
+        )
+
+        for method in sdk_methods:
+            self.create_method_return_type(
+                template=template,
+                method=method,
+            )
+
+        self.generate_return_types_init(sdk_methods=sdk_methods)
+        log.info(
+            "Python return types generated at %s",
+            self.sdk_return_types_output_path,
+        )
+
     def save_method_to_file(self, method: MethodSDK) -> None:
         method_filepath = (
             self.codegen_base_dir / method.name / self.method_file_name
@@ -141,5 +217,6 @@ class Codegen:
         # TODO: check for repeated method name params
         #   (is there even a chance?)
         methods: list[MethodSDK] = self.read_methods_from_json()
+        self.generate_return_types(sdk_methods=methods)
         self.render_methods_to_sdk_script(sdk_methods=methods)
         return methods
