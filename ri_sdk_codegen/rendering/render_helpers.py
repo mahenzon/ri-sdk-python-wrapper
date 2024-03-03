@@ -1,11 +1,13 @@
 import textwrap
+from functools import cache
 from typing import TYPE_CHECKING
 
 from ri_sdk_codegen.rendering.render_configs import (
-    IN_FUNCTION_COMMENT,
-    IN_FUNCTION_SUBSEQUENT_COMMENT,
+    DEFAULT_MAX_WIDTH,
+    IN_METHOD_COMMENT,
+    IN_METHOD_SUBSEQUENT_COMMENT,
     PARAM_PREFIX_TEMPLATE,
-    PARAM_SUBSEQUENT_INDENT,
+    REGULAR_INDENT,
 )
 from ri_sdk_codegen.utils.case_converter import camel_case_to_snake_case
 
@@ -14,6 +16,11 @@ if TYPE_CHECKING:
         MethodParamSDK,
         MethodSDK,
     )
+
+
+@cache
+def make_indent(indent_size: int) -> str:
+    return indent_size * REGULAR_INDENT
 
 
 def create_param_python_name(name: str) -> str:
@@ -45,22 +52,38 @@ def function_param(p: "MethodParamSDK") -> str:
     return line
 
 
-def function_param_doc(p: "MethodParamSDK", max_with: int = 69) -> str:
+def function_param_doc(
+    p: "MethodParamSDK",
+    max_width: int = DEFAULT_MAX_WIDTH,
+    indent_size: int = 2,
+) -> str:
     return textwrap.fill(
         text=p.description,
-        width=max_with,
-        initial_indent=PARAM_PREFIX_TEMPLATE.format(name=p.py_name),
-        subsequent_indent=PARAM_SUBSEQUENT_INDENT,
+        width=max_width,
+        initial_indent=PARAM_PREFIX_TEMPLATE.format(
+            indent=make_indent(indent_size),
+            name=p.py_name,
+        ),
+        subsequent_indent=make_indent(indent_size + 1),
         fix_sentence_endings=True,
     )
 
 
-def receiver_var_comment(p: "MethodParamSDK", max_with: int = 69) -> str:
+def receiver_var_comment(
+    p: "MethodParamSDK",
+    max_width: int = DEFAULT_MAX_WIDTH,
+    indent_size: int = 2,
+) -> str:
     return textwrap.fill(
         text=p.description,
-        width=max_with,
-        initial_indent=IN_FUNCTION_COMMENT.format(name=p.name),
-        subsequent_indent=IN_FUNCTION_SUBSEQUENT_COMMENT,
+        width=max_width,
+        initial_indent=IN_METHOD_COMMENT.format(
+            indent=make_indent(indent_size),
+            name=p.name,
+        ),
+        subsequent_indent=IN_METHOD_SUBSEQUENT_COMMENT.format(
+            indent=make_indent(indent_size),
+        ),
         fix_sentence_endings=True,
     )
 
@@ -71,7 +94,10 @@ def sdk_call_param_convert(p: "MethodParamSDK") -> str:
     return ""
 
 
-def method_description(m: "MethodSDK", max_width: int = 69) -> str:
+def method_description(
+    m: "MethodSDK",
+    max_width: int = DEFAULT_MAX_WIDTH,
+) -> str:
     prepared_string_blocks = (
         # call its own method
         block.process(max_width)

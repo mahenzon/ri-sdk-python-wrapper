@@ -5,8 +5,8 @@ from typing import Callable, Literal, Protocol, TypeVar
 from pydantic import BaseModel, Field
 
 from ri_sdk_codegen.rendering.render_configs import (
-    FUNC_BODY_INDENT,
-    PARAM_SUBSEQUENT_INDENT,
+    METHOD_BODY_INDENT,
+    METHOD_PARAM_SUBSEQUENT_INDENT,
 )
 
 ReturnType = TypeVar("ReturnType", str, list[str])
@@ -54,12 +54,12 @@ class DescriptionBlock(BaseModel):
 
     @classmethod
     def get_initial_indent(cls) -> str:
-        return FUNC_BODY_INDENT
+        return METHOD_BODY_INDENT
 
     def get_subsequent_indent(self) -> str:
         if self.type.endswith("list-block"):
-            return PARAM_SUBSEQUENT_INDENT
-        return FUNC_BODY_INDENT
+            return METHOD_PARAM_SUBSEQUENT_INDENT
+        return METHOD_BODY_INDENT
 
     def get_renderer(self, max_width: int) -> Callable:
         return partial(
