@@ -100,7 +100,6 @@ ${receiver_var_comment(param)}
 
         ${sdk_method.url}
         ${'"""'}
-
         self.lib.${sdk_method.name}.argtypes = [
         % for param in sdk_method.params:
         % if param.name != 'errorCode':
