@@ -139,8 +139,12 @@ extend-ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"src/robointellect_base_sdk.py" = [
+"ri_sdk/robointellect_base_sdk.py" = [
     "E501",
+    "ERA001",
+    "RUF002",
+]
+"ri_sdk/types/*.py" = [
     "ERA001",
     "RUF002",
 ]
