@@ -3,9 +3,13 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from ri_sdk_codegen.config import TYPES_MODULE_NAME
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
-from ri_sdk_codegen.utils import method_name_to_snake_case
+from ri_sdk_codegen.utils import (
+    method_name_to_snake_case,
+    method_name_to_upper_camel_case,
+)
 
 KNOWN_TYPES: set[str] = {
     "bool (тип C)",
@@ -174,9 +178,20 @@ class MethodSDK(BaseModel):
         return method_name_to_snake_case(self.name).removeprefix("ri_sdk_")
 
     @cached_property
+    def py_module_name(self) -> str:
+        return f"{self.py_method_name}_result"
+
+    @cached_property
+    def py_module_filename(self) -> str:
+        return f"{self.py_module_name}.py"
+
+    @cached_property
+    def py_return_type_cls_name(self) -> str:
+        return f"{method_name_to_upper_camel_case(self.name)}Result"
+
+    @cached_property
     def py_method_return_type(self) -> str:
-        # TODO: if getter, set real type
-        return "tuple"
+        return f"{TYPES_MODULE_NAME}.{self.py_return_type_cls_name}"
 
     @cached_property
     def py_method_return_value(self) -> str:
