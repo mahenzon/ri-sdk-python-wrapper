@@ -1,6 +1,6 @@
 import textwrap
 from functools import cached_property, partial
-from typing import Callable, Literal, Protocol, TypeVar
+from typing import Callable, Literal
 
 from pydantic import BaseModel, Field
 
@@ -8,35 +8,6 @@ from ri_sdk_codegen.rendering.render_configs import (
     METHOD_BODY_INDENT,
     METHOD_PARAM_SUBSEQUENT_INDENT,
 )
-
-ReturnType = TypeVar("ReturnType", str, list[str])
-
-
-class TextProcessorProtocol(Protocol):
-    """
-    Protocol for configured `TextWrapper.fill` or `TextWrapper.wrap`
-    Called through `textwrap.fill` or `textwrap.wrap`
-    """
-
-    def __call__(
-        self,
-        text: str,
-        width: int = 70,
-        initial_indent: str = "",
-        subsequent_indent: str = "",
-        expand_tabs: bool = True,
-        replace_whitespace: bool = True,
-        fix_sentence_endings: bool = False,
-        break_long_words: bool = True,
-        drop_whitespace: bool = True,
-        break_on_hyphens: bool = True,
-        tabsize: int = 8,
-        *,
-        max_lines: int | None = None,
-        placeholder: str = " [...]",
-    ) -> ReturnType:
-        pass
-
 
 DescriptionBlockType = Literal[
     "block",
@@ -61,7 +32,7 @@ class DescriptionBlock(BaseModel):
             return METHOD_PARAM_SUBSEQUENT_INDENT
         return METHOD_BODY_INDENT
 
-    def get_renderer(self, max_width: int) -> Callable:
+    def get_renderer(self, max_width: int) -> Callable[[str], str]:
         return partial(
             textwrap.fill,
             width=max_width,
@@ -72,24 +43,24 @@ class DescriptionBlock(BaseModel):
             replace_whitespace=True,
         )
 
-    def process(self, max_width: int) -> ReturnType:
+    def process(self, max_width: int) -> str:
         return self.processors[self.type](max_width)
 
-    def process_text_block(self, max_width: int) -> ReturnType:
-        process_string: TextProcessorProtocol = self.get_renderer(max_width)
+    def process_text_block(self, max_width: int) -> str:
+        process_string = self.get_renderer(max_width)
         return self.separator.join(map(process_string, self.values))
 
-    def process_list_block(self, max_width: int) -> ReturnType:
-        process_string: TextProcessorProtocol = self.get_renderer(max_width)
+    def process_list_block(self, max_width: int) -> str:
+        process_string = self.get_renderer(max_width)
         return self.separator.join(map(process_string, self.values))
 
-    def process_unordered_list_block(self, max_width: int) -> ReturnType:
-        process_string: TextProcessorProtocol = self.get_renderer(max_width)
+    def process_unordered_list_block(self, max_width: int) -> str:
+        process_string = self.get_renderer(max_width)
         bullet_elems = (f"- {value}" for value in self.values)
         return self.separator.join(map(process_string, bullet_elems))
 
-    def process_ordered_list_block(self, max_width: int) -> ReturnType:
-        process_string: TextProcessorProtocol = self.get_renderer(max_width)
+    def process_ordered_list_block(self, max_width: int) -> str:
+        process_string = self.get_renderer(max_width)
         numbered_elems = (
             f"{idx}. {value}" for idx, value in enumerate(self.values, start=1)
         )
@@ -97,7 +68,7 @@ class DescriptionBlock(BaseModel):
 
     # TODO: cover in tests that all keys are used
     @cached_property
-    def processors(self) -> dict[DescriptionBlockType, Callable]:
+    def processors(self) -> dict[DescriptionBlockType, Callable[[int], str]]:
         return {
             "block": self.process_text_block,
             "list-block": self.process_list_block,
