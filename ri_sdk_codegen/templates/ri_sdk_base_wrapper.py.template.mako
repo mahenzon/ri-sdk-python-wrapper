@@ -64,7 +64,8 @@ ${method_description(sdk_method)}
     % for param in sdk_method.func_call_params:
 ${function_param_doc(param)}
     % endfor
-        # TODO: describe return value
+        :returns: Результат типа ${sdk_method.py_return_type_cls_name}
+        :raises ValueError: если полученный код ошибки не ноль
         ${'"""'}
         # Инициализация получателей
         % for param in sdk_method.func_sdk_receivers:
@@ -96,7 +97,7 @@ ${receiver_var_comment(param)}
         return ${sdk_method.py_method_return_type}(
             error_code,
             % for param in sdk_method.func_sdk_receivers:
-            ${prepare_param_for_sdk_call_result(param)},
+            ${prepare_param_for_sdk_call_result(sdk_method, param)},
             % endfor
         )
 % endfor

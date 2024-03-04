@@ -101,13 +101,24 @@ def prepare_param_for_sdk_call(m: "MethodSDK", p: "MethodParamSDK") -> str:
     assert_never(p)
 
 
-def prepare_param_for_sdk_call_result(p: "MethodParamSDK") -> str:
+def prepare_param_for_sdk_call_result(
+    m: "MethodSDK",
+    p: "MethodParamSDK",
+) -> str:
     if p.python_type == "bool":
         return f"bool({p.py_name})"
     if p.python_type in ("int", "float"):
         return f"{p.py_name}.value"
     if p.python_type == "bytes":
-        return f"utils.convert_c_ulonglong_to_python_bytes({p.py_name})"
+        if "[len]" in p.shared_object_type:
+            # convert using len (as in docs)
+            len_param: "MethodParamSDK" = m.param_u_long_long_length_param(p)
+            return f"""utils.convert_c_ulonglong_of_len_to_python_bytes(
+                {p.py_name},
+                {len_param.py_name},
+            )"""
+        else:
+            return f"utils.convert_c_ulonglong_to_python_bytes({p.py_name})"
     return p.py_name
 
 
