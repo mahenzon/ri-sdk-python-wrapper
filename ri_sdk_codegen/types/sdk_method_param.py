@@ -19,7 +19,7 @@ class BaseParam(BaseModel):
     name: str
     python_type: KnownPythonTypes
     py_ctype: KnownCPythonTypes
-    shared_object_type: str
+    shared_object_type: KnownSharedTypesType
     description: str
 
 
@@ -50,20 +50,20 @@ class MethodParamSDK(BaseParam):
             raise ValueError(msg)
 
         # idk if there's a prettier way
-        obj_type_key: KnownSharedTypesType = cast(
+        known_shared_type: KnownSharedTypesType = cast(
             # we already checked that it's in known types
             shared_object_type,
             # so mark for stat analysis that it id definitely is
             KnownSharedTypesType,
         )
 
-        py_ctype = TYPES_TO_C_TYPE_MAP[obj_type_key]
-        python_type = TYPES_TO_PYTHON_TYPE_MAP[obj_type_key]
+        py_ctype = TYPES_TO_C_TYPE_MAP[known_shared_type]
+        python_type = TYPES_TO_PYTHON_TYPE_MAP[known_shared_type]
         return cls(
             name=name,
             py_ctype=py_ctype,
             python_type=python_type,
-            shared_object_type=shared_object_type,
+            shared_object_type=known_shared_type,
             description=description,
             is_pointer=is_pointer,
         )
