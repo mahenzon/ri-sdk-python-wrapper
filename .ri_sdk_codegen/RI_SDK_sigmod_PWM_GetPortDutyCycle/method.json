@@ -17,54 +17,54 @@
   ],
   "params": [
     {
-      "py_ctype": "c_int",
       "name": "descriptor",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Дескриптор компонента ШИМ",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "port",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Порт, для которого читается частота",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "on",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "*int (тип C)",
       "description": "Указатель на количество тактов до перевода выхода в состояние логической «1»",
       "is_pointer": true,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "off",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "*int (тип C)",
       "description": "Указатель на количество тактов до перевода выхода в состояние логического «0»",
       "is_pointer": true,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "errorText",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[1000] (тип C)",
       "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "errorCode",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Код ошибки",
       "is_pointer": false,

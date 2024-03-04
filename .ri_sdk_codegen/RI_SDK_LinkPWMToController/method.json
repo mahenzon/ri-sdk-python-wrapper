@@ -23,45 +23,45 @@
   ],
   "params": [
     {
-      "py_ctype": "c_int",
       "name": "descriptor",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Дескриптор ШИМ, который будет подключаться к i2c адаптеру",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "to",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Дескриптор i2c адаптера, к которому будет подключаться ШИМ",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_uint8",
       "name": "addr",
       "python_type": "int",
+      "py_ctype": "c_uint8",
       "shared_object_type": "uint8_t (тип C)",
       "description": "Адрес подключения",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "errorText",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[1000] (тип C)",
       "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "errorCode",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Код ошибки",
       "is_pointer": false,

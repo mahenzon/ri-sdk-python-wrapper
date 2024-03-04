@@ -28,54 +28,54 @@
   ],
   "params": [
     {
-      "py_ctype": "c_char_p",
       "name": "group",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[] (тип C)",
       "description": "Тип компонента (\"executor\", \"connector\", \"sensor\")",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "deviceName",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[] (тип C)",
       "description": "Устройство компонента (\"i2c\", \"pwm\", \"servodrive\", \"servodrive_rotate\", \"led\", \"voltage_sensor\")",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "modelName",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[] (тип C)",
       "description": "Модель компонента (\"ch341\", \"cp2112\", \"pca9685\", \" mg90s\" ,\"a0090\" ,\"mg996\" ,\"corona_ds929mg\" ,\"corona_sb9039\" ,\"corona_ds843mg\" ,\"corona_ds238mg\", \"mg996r\", \"ky016\", \"ina219\")",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "descriptor",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "*int (тип C)",
       "description": "Указатель на компонент, который будет создан",
       "is_pointer": true,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "errorText",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[1000] (тип C)",
       "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "errorCode",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Код ошибки",
       "is_pointer": false,

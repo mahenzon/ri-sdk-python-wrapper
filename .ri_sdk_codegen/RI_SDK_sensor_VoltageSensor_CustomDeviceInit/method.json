@@ -30,72 +30,72 @@
   ],
   "params": [
     {
-      "py_ctype": "c_int",
       "name": "descriptor",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Дескриптор компонента датчика тока, напряжения и мощности",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_float",
       "name": "lsbBus",
       "python_type": "float",
+      "py_ctype": "c_float",
       "shared_object_type": "float (тип C)",
       "description": "Значение младшего бита напряжения на шине (Вольт)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_float",
       "name": "lsbShunt",
       "python_type": "float",
+      "py_ctype": "c_float",
       "shared_object_type": "float (тип C)",
       "description": "Значение младшего бита напряжения на шунте (Вольт)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_float",
       "name": "shuntResist",
       "python_type": "float",
+      "py_ctype": "c_float",
       "shared_object_type": "float (тип C)",
       "description": "Сопротивление шунта  (Ом)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_uint8",
       "name": "regVoltageShunt",
       "python_type": "int",
+      "py_ctype": "c_uint8",
       "shared_object_type": "uint8_t (тип C)",
       "description": "Номер регистра для чтения напряжения на шунте",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_uint8",
       "name": "regVoltageBus",
       "python_type": "int",
+      "py_ctype": "c_uint8",
       "shared_object_type": "uint8_t (тип C)",
       "description": "Номер регистра для чтения напряжения на шине",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "errorText",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[1000] (тип C)",
       "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "errorCode",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Код ошибки",
       "is_pointer": false,

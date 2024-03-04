@@ -11,63 +11,63 @@
   ],
   "params": [
     {
-      "py_ctype": "c_int",
       "name": "descriptor",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Дескриптор компонента, с которого будет производиться чтение",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_uint8",
       "name": "addr",
       "python_type": "int",
+      "py_ctype": "c_uint8",
       "shared_object_type": "uint8_t (тип C)",
       "description": "Адрес, с которого будет производиться чтение",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_ulonglong",
       "name": "buf",
       "python_type": "bytes",
+      "py_ctype": "c_ulonglong",
       "shared_object_type": "*long long unsigned[len] (тип C)",
       "description": "Указатель на массив байт, в который будет записаны прочитанные байты",
       "is_pointer": true,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "len",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Длина массива buf",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "readBytesLen",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "*int (тип C)",
       "description": "Указатель на количество прочитанных байтов",
       "is_pointer": true,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "errorText",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[1000] (тип C)",
       "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "errorCode",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Код ошибки",
       "is_pointer": false,

@@ -11,36 +11,36 @@
   ],
   "params": [
     {
-      "py_ctype": "c_char_p",
       "name": "deviceType",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[] (тип C)",
       "description": "Тип устройства : servodrive, rservodrive, i2c_adapter, pwm, led, voltage_sensor",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "modelList",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[] (тип C)",
       "description": "Список доступных моделей устройства",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_char_p",
       "name": "errorText",
       "python_type": "str",
+      "py_ctype": "c_char_p",
       "shared_object_type": "char[1000] (тип C)",
       "description": "Текст ошибки (передается как параметр, если происходит ошибка метод записывает в этот параметр текст ошибки)",
       "is_pointer": false,
       "pointer_py_ctype": "POINTER"
     },
     {
-      "py_ctype": "c_int",
       "name": "errorCode",
       "python_type": "int",
+      "py_ctype": "c_int",
       "shared_object_type": "int (тип C)",
       "description": "Код ошибки",
       "is_pointer": false,
