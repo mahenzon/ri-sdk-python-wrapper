@@ -30,6 +30,25 @@ class MethodSDK(BaseModel):
         opt: ParamOptions = self.options.params[param.name]
         return opt.direction == "output"
 
+    def param_u_long_long_length_param(
+        self,
+        param: MethodParamSDK,
+    ) -> MethodParamSDK:
+        """
+        If needed, can be overridden in options.yaml
+        (not needed right now)
+
+        :param param:
+        :return:
+        """
+        for p in self.func_sdk_receivers:
+            # hardcoded for now, because there's no other name
+            if p.name == "readBytesLen":
+                return p
+
+        msg = f"No len param for param {param.name}"
+        raise ValueError(msg)
+
     @cached_property
     def func_call_params(self) -> list[MethodParamSDK]:
         return [
