@@ -48,8 +48,8 @@ class MethodParamSDK(BaseParam):
             msg = f"Unrecognized shared_object_type: {shared_object_type!r}"
             raise ValueError(msg)
 
-        # noinspection PyTypeChecker
-        known_shared_type: KnownSharedTypesType = shared_object_type
+        known_shared_type: KnownSharedTypesType = shared_object_type  # type: ignore[assignment]
+        assert known_shared_type in KNOWN_TYPES
 
         py_ctype = TYPES_TO_C_TYPE_MAP[known_shared_type]
         python_type = TYPES_TO_PYTHON_TYPE_MAP[known_shared_type]
