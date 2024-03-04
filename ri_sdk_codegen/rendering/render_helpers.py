@@ -1,6 +1,6 @@
 import textwrap
 from functools import cache
-from typing import TYPE_CHECKING, assert_never
+from typing import TYPE_CHECKING
 
 from ri_sdk_codegen.rendering.render_configs import (
     DEFAULT_MAX_WIDTH,
@@ -98,7 +98,8 @@ def prepare_param_for_sdk_call(m: "MethodSDK", p: "MethodParamSDK") -> str:
             return p.py_name
         else:
             return f"utils.convert_python_bytes_to_c_ulonglong({p.py_name})"
-    assert_never(p)
+    msg = f"Unexpected python type {p.python_type!r} for method {m.name} param {p}"
+    raise AssertionError(msg)
 
 
 def prepare_param_for_sdk_call_result(
