@@ -49,6 +49,7 @@ class MethodParamSDK(BaseParam):
             raise ValueError(msg)
 
         known_shared_type: KnownSharedTypesType = shared_object_type  # type: ignore[assignment]
+        # ruff: noqa: S101. we need this one for mypy
         assert known_shared_type in KNOWN_TYPES
 
         py_ctype = TYPES_TO_C_TYPE_MAP[known_shared_type]
