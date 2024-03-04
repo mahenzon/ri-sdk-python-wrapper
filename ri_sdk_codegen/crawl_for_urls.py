@@ -9,16 +9,18 @@ log = logging.getLogger(__name__)
 
 
 class DocsUrlCrawler:
-    def __init__(self, base_url: str) -> None:
+    def __init__(self, base_url: str, request_timeout: int = 10) -> None:
         self.base_url = base_url
         self.already_visited: set[str] = set()
+        # TODO: get from config
+        self.request_timeout = request_timeout
 
     def fetch_sdk_url_pages(self, url: str) -> Generator[str, None, None]:
         if url in self.already_visited:
             return
         self.already_visited.add(url)
         log.debug("* Visit url %s", url)
-        response = requests.get(url)
+        response = requests.get(url, timeout=self.request_timeout)
         soup = BeautifulSoup(response.text, "html.parser")
 
         h1_tag = soup.find("h1")
