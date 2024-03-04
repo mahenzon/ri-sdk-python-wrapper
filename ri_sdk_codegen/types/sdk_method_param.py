@@ -1,4 +1,3 @@
-from ctypes import cast
 from functools import cached_property
 
 from pydantic import BaseModel
@@ -49,13 +48,8 @@ class MethodParamSDK(BaseParam):
             msg = f"Unrecognized shared_object_type: {shared_object_type!r}"
             raise ValueError(msg)
 
-        # idk if there's a prettier way
-        known_shared_type: KnownSharedTypesType = cast(
-            # we already checked that it's in known types
-            shared_object_type,
-            # so mark for stat analysis that it id definitely is
-            KnownSharedTypesType,
-        )
+        # noinspection PyTypeChecker
+        known_shared_type: KnownSharedTypesType = shared_object_type
 
         py_ctype = TYPES_TO_C_TYPE_MAP[known_shared_type]
         python_type = TYPES_TO_PYTHON_TYPE_MAP[known_shared_type]
