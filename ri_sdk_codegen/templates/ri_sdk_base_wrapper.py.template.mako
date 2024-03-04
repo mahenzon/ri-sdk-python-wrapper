@@ -22,8 +22,18 @@ from ri_sdk_codegen.rendering.render_helpers import (
 %>
 
 class RoboIntellectBaseSDK:
-    def __init__(self, lib: ctypes.CDLL) -> None:
+    def __init__(
+        self,
+        lib: ctypes.CDLL,
+        setup_methods_args: bool = False,
+    ) -> None:
+        """
+        :param lib: RI SDK library .dll / .so
+        :param setup_methods_args: whether to configure methods args on init
+        """
         self.lib = lib
+        if setup_methods_args:
+            self.setup_all_methods_args_types()
 
     @classmethod
     def raise_on_error(cls, error_text_c: ctypes.Array[ctypes.c_char]) -> NoReturn:
