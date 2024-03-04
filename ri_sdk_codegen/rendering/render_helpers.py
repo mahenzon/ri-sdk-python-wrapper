@@ -89,6 +89,8 @@ def receiver_var_comment(
 
 
 def prepare_param_for_sdk_call(m: "MethodSDK", p: "MethodParamSDK") -> str:
+    if p.py_ctype == "c_uint8":
+        return f"ctypes.c_uint8({p.py_name})"
     if p.python_type in ("bool", "int", "float"):
         return p.py_name
     if p.python_type == "str":
