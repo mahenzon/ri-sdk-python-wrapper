@@ -12,7 +12,7 @@ class RoboIntellectBaseSDK:
         self.lib = lib
 
     @classmethod
-    def raise_on_error(cls, error_text_c: ctypes.Array) -> NoReturn:
+    def raise_on_error(cls, error_text_c: ctypes.Array[ctypes.c_char]) -> NoReturn:
         """
         # todo: more details?
 
@@ -25,7 +25,7 @@ class RoboIntellectBaseSDK:
     def process_result(
         cls,
         error_code: int,
-        error_text_c: ctypes.Array,
+        error_text_c: ctypes.Array[ctypes.c_char],
     ) -> None:
         """
         :param error_code:
