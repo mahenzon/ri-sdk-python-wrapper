@@ -96,9 +96,7 @@ class DocPageCrawler:
         ].get_text()
         # ruff: noqa: ERA001
         # golang_grpc_object_type = table_row[2].get_text()
-        param_description = table_row[
-            self.param_description_col_idx
-        ].get_text()
+        param_description = table_row[self.param_description_col_idx].get_text()
         return MethodParamSDK.from_info(
             name=param_name,
             shared_object_type=param_shared_object_type,

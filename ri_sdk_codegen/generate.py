@@ -36,18 +36,14 @@ class Codegen:
     ) -> None:
         self.codegen_base_dir: Path = codegen_base_dir
         self.sdk_template_path: Path = sdk_template_path
-        self.method_return_type_template_path: Path = (
-            method_return_type_template_path
-        )
+        self.method_return_type_template_path: Path = method_return_type_template_path
         self.method_return_types_init_template_path: Path = (
             method_return_types_init_template_path
         )
         self.sdk_output_file_path: Path = sdk_output_file_path
         self.sdk_return_types_output_path: Path = sdk_return_types_output_path
         self.sort_by_name: bool = sort_by_name
-        self.json_dump_params: JsonDumpParams = (
-            json_dump_params or JsonDumpParams()
-        )
+        self.json_dump_params: JsonDumpParams = json_dump_params or JsonDumpParams()
         self.method_file_name: str = method_file_name
         self.method_options_file_name: str = method_options_file_name
         self.remove_existing_types: bool = remove_existing_types
@@ -138,9 +134,7 @@ class Codegen:
         :return:
         """
         result = template.render(method=method)
-        module_path = (
-            self.sdk_return_types_output_path / method.py_module_filename
-        )
+        module_path = self.sdk_return_types_output_path / method.py_module_filename
         module_path.write_text(result)
 
         log.debug("Created new Python return type at %s", module_path)
@@ -192,9 +186,7 @@ class Codegen:
         )
 
     def save_method_to_file(self, method: MethodSDK) -> None:
-        method_filepath = (
-            self.codegen_base_dir / method.name / self.method_file_name
-        )
+        method_filepath = self.codegen_base_dir / method.name / self.method_file_name
         method_filepath.parent.mkdir(parents=True, exist_ok=True)
         method_filepath.write_text(
             method.model_dump_json(

@@ -26,15 +26,12 @@ MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILENAME = (
 )
 TEMPLATE_FOLDER_NAME = "templates"
 TEMPLATE_FOLDER_DIR = BASE_DIR / "ri_sdk_codegen" / TEMPLATE_FOLDER_NAME
-MAKO_TEMPLATE_RI_SDK_FILEPATH = (
-    TEMPLATE_FOLDER_DIR / MAKO_TEMPLATE_RI_SDK_FILENAME
-)
+MAKO_TEMPLATE_RI_SDK_FILEPATH = TEMPLATE_FOLDER_DIR / MAKO_TEMPLATE_RI_SDK_FILENAME
 MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPE_FILEPATH = (
     TEMPLATE_FOLDER_DIR / MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPE_FILENAME
 )
 MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILEPATH = (
-    TEMPLATE_FOLDER_DIR
-    / MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILENAME
+    TEMPLATE_FOLDER_DIR / MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILENAME
 )
 DOCS_ENTRY_PATH = "/docs/category/ri-sdk-api"
 
@@ -44,8 +41,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "--update-links",
     action="store_true",
-    help="Update links (default: False). "
-    "Crawls RI SDK docs for all RI_SDK_ pages.",
+    help="Update links (default: False). Crawls RI SDK docs for all RI_SDK_ pages.",
 )
 parser.add_argument(
     "--parse-docs",
