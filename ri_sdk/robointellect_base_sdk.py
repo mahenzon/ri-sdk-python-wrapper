@@ -34,3 +34,14 @@ class RoboIntellectBaseSDK:
         """
         if error_code:
             cls.raise_on_error(error_text_c)
+
+    def setup_all_methods_args_types(self) -> None:
+        """
+        Установка типов аргументов всех методов.
+        :return:
+        """
+        for name in dir(self):
+            if not name.startswith("setup_arg_types_"):
+                continue
+            method = getattr(self, name)
+            method()
