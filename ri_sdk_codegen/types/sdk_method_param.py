@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from ri_sdk_codegen.rendering.render_helpers import create_param_python_name
 from ri_sdk_codegen.types.constants import (
     KNOWN_TYPES,
+    SERVICE_PARAMS_NAMES,
     TYPES_TO_C_TYPE_MAP,
     TYPES_TO_PYTHON_TYPE_MAP,
 )
@@ -26,6 +27,10 @@ class MethodParamSDK(BaseParam):
     @cached_property
     def py_name(self) -> str:
         return create_param_python_name(self.name)
+
+    @cached_property
+    def is_service_param(self) -> bool:
+        return self.name in SERVICE_PARAMS_NAMES
 
     @classmethod
     def from_info(

@@ -4,7 +4,6 @@ from pydantic import BaseModel, Field
 
 from ri_sdk_codegen.config import TYPES_MODULE_NAME
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
-from ri_sdk_codegen.types.constants import SERVICE_PARAMS_NAMES
 from ri_sdk_codegen.types.options_override import MethodOptions, ParamOptions
 from ri_sdk_codegen.types.sdk_method_param import MethodParamSDK
 from ri_sdk_codegen.utils import (
@@ -33,13 +32,12 @@ class MethodSDK(BaseModel):
 
     @cached_property
     def func_call_params(self) -> list[MethodParamSDK]:
-        # TODO: filter only args, not receive types
         return [
             param
             for param in self.params
             # skip service param
             if (
-                param.name not in SERVICE_PARAMS_NAMES
+                not param.is_service_param
                 # check if is not receive type
                 and not self.is_receive_type(param)
             )
@@ -47,13 +45,12 @@ class MethodSDK(BaseModel):
 
     @cached_property
     def func_sdk_receivers(self) -> list[MethodParamSDK]:
-        # TODO: return list of receivers inits
         return [
             param
             for param in self.params
             # skip service param
             if (
-                param.name not in SERVICE_PARAMS_NAMES
+                not param.is_service_param
                 # check if is of receive type
                 and self.is_receive_type(param)
             )
@@ -61,12 +58,11 @@ class MethodSDK(BaseModel):
 
     @cached_property
     def func_sdk_call_args(self) -> list[MethodParamSDK]:
-        # TODO: pass prepared values
         return [
             param
             for param in self.params
             # skip service param
-            if param.name not in SERVICE_PARAMS_NAMES
+            if not param.is_service_param
         ]
 
     @cached_property
