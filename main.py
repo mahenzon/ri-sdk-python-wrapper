@@ -32,6 +32,11 @@ def post_run_formatting(codegen_params: CodegenParams) -> None:
                 for f in codegen_params.ri_sdk_codegen_dir.glob("**/*.yaml")
                 if f.is_file()
             ),
+            *(
+                str(f)
+                for f in codegen_params.ri_sdk_codegen_dir.glob("**/*.txt")
+                if f.is_file()
+            ),
         ],
     )
 
