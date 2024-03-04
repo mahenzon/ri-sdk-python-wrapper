@@ -1,4 +1,24 @@
-KNOWN_TYPES: set[str] = {
+import typing
+from typing import Literal
+
+KnownPythonTypes = Literal[
+    "bool",
+    "int",
+    "float",
+    "str",
+    "bytes",
+]
+
+KnownCPythonTypes = Literal[
+    "c_bool",
+    "c_uint8",
+    "c_int",
+    "c_float",
+    "c_char_p",
+    "c_ulonglong",
+]
+
+KnownSharedTypesType = Literal[
     "bool (тип C)",
     "uint8_t (тип C)",
     "int (тип C)",
@@ -9,10 +29,15 @@ KNOWN_TYPES: set[str] = {
     "char[1000] (тип C)",
     "*long long unsigned (тип C)",
     "*long long unsigned[len] (тип C)",
-}
+]
+
+KNOWN_TYPES: set[KnownSharedTypesType] = set(
+    typing.get_args(KnownSharedTypesType),
+)
+
 
 # shared object type to python ctype
-TYPES_TO_C_TYPE_MAP: dict[str, str] = {
+TYPES_TO_C_TYPE_MAP: dict[KnownSharedTypesType, KnownCPythonTypes] = {
     "bool (тип C)": "c_bool",
     "uint8_t (тип C)": "c_uint8",
     "int (тип C)": "c_int",
@@ -26,7 +51,7 @@ TYPES_TO_C_TYPE_MAP: dict[str, str] = {
 }
 
 # shared object type to python native type
-TYPES_TO_PYTHON_TYPE_MAP: dict[str, str] = {
+TYPES_TO_PYTHON_TYPE_MAP: dict[KnownSharedTypesType, KnownPythonTypes] = {
     "bool (тип C)": "bool",
     "uint8_t (тип C)": "int",
     "int (тип C)": "int",
