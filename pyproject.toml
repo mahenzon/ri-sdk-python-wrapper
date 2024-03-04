@@ -104,6 +104,9 @@ exclude = [
 unfixable = ["B"]
 
 extend-ignore = [
+    "S702",  # not relevant, Mako templates allow HTML
+    #    and JavaScript rendering by default and are inherently open to XSS attacks
+
 #    "D401",
 #    "D403",
 #    "D400",
