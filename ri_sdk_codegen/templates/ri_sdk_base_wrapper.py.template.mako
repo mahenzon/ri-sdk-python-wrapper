@@ -7,14 +7,15 @@ Do not edit manually.
 import ctypes
 from typing import NoReturn
 
-from ri_sdk import types
+from ri_sdk import types, utils
 <%!
 from ri_sdk_codegen.rendering.render_helpers import (
     lib_ctype_param,
     function_param,
     function_param_doc,
     receiver_var_comment,
-    sdk_call_param_convert,
+    prepare_param_for_sdk_call,
+    prepare_param_for_sdk_call_result,
     method_description,
     comment_ctype_param,
 )
@@ -84,9 +85,10 @@ ${receiver_var_comment(param)}
         # Код ошибки
         error_code = self.lib.${sdk_method.name}(
         % for param in sdk_method.func_sdk_call_args:
-            ## TODO: convert ctype properly
-            ${param.py_name}${sdk_call_param_convert(param)},
+            ${comment_ctype_param(param)}
+            ${prepare_param_for_sdk_call(sdk_method, param)},
         % endfor
+            # текст ошибки (если произошла ошибка)
             error_text_c,
         )
         self.process_result(error_code, error_text_c)
@@ -94,8 +96,7 @@ ${receiver_var_comment(param)}
         return ${sdk_method.py_method_return_type}(
             error_code,
             % for param in sdk_method.func_sdk_receivers:
-            ## TODO: convert to Python type
-            ${param.py_name},
+            ${prepare_param_for_sdk_call_result(param)},
             % endfor
         )
 % endfor

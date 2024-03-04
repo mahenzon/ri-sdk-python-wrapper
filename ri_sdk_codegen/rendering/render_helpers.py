@@ -1,6 +1,6 @@
 import textwrap
 from functools import cache
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, assert_never
 
 from ri_sdk_codegen.rendering.render_configs import (
     DEFAULT_MAX_WIDTH,
@@ -88,10 +88,27 @@ def receiver_var_comment(
     )
 
 
-def sdk_call_param_convert(p: "MethodParamSDK") -> str:
-    if p.py_ctype == "c_char_p":
-        return ".encode()"
-    return ""
+def prepare_param_for_sdk_call(m: "MethodSDK", p: "MethodParamSDK") -> str:
+    if p.python_type in ("bool", "int", "float"):
+        return p.py_name
+    if p.python_type == "str":
+        return f"{p.py_name}.encode()"
+    if p.python_type == "bytes":
+        if m.is_receive_type(p):
+            return p.py_name
+        else:
+            return f"utils.convert_python_bytes_to_c_ulonglong({p.py_name})"
+    assert_never(p)
+
+
+def prepare_param_for_sdk_call_result(p: "MethodParamSDK") -> str:
+    if p.python_type == "bool":
+        return f"bool({p.py_name})"
+    if p.python_type in ("int", "float"):
+        return f"{p.py_name}.value"
+    if p.python_type == "bytes":
+        return f"utils.convert_c_ulonglong_to_python_bytes({p.py_name})"
+    return p.py_name
 
 
 def method_description(
