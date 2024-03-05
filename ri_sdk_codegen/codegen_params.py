@@ -13,11 +13,11 @@ ALL_RI_SDK_PAGES_FILENAME = "ri_sdk_pages.txt"
 RI_SDK_PAGES_FILEPATH = RI_SDK_CODEGEN_DIR / ALL_RI_SDK_PAGES_FILENAME
 URL_BASE = "https://docs.robointellect.ru"
 
-ROBOINTELLECT_BASE_SDK_FILENAME = "robointellect_base_sdk.py"
+ROBOINTELLECT_BASE_SDK_FILENAME = "sdk_wrapper/robointellect_sdk.py"
 ROBOINTELLECT_SDK_OUTPUT_FILEPATH = Path(
     RI_SDK_PYTHON_CODE_SRC_DIR / ROBOINTELLECT_BASE_SDK_FILENAME,
 )
-MAKO_TEMPLATE_RI_SDK_FILENAME = "ri_sdk_base_wrapper.py.template.mako"
+MAKO_TEMPLATE_RI_SDK_FILENAME = "ri_sdk_wrapper.py.template.mako"
 MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPE_FILENAME = (
     "ri_sdk_method_return_type.py.template.mako"
 )
