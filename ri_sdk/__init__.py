@@ -1,9 +1,9 @@
 __all__ = (
-    "RoboIntellectBaseSDK",
+    "RoboIntellectSDK",
     "types",
     "utils",
     "exceptions",
 )
 
 from ri_sdk import exceptions, types, utils
-from ri_sdk.robointellect_base_sdk import RoboIntellectBaseSDK
+from ri_sdk.sdk_wrapper import RoboIntellectSDK
