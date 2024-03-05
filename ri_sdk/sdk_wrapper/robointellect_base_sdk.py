@@ -9,6 +9,10 @@ if TYPE_CHECKING:
     ErrorBufferType = TypeVar("ErrorBufferType", bound=ctypes.Array[ctypes.c_char])
 
     class MethodProtocol(Protocol):
+        # method definitely has __name__ attribute
+        __name__: str
+
+        # method's call protocol looks like this:
         def __call__(self, *args: ArgsType | ErrorBufferType) -> int:
             pass
 
@@ -62,7 +66,7 @@ class RoboIntellectBaseSDK:
 
     def call_sdk_method(
         self,
-        method_name: str,
+        method: MethodProtocol,
         *args: ArgsType,
     ) -> int:
         """
@@ -70,14 +74,11 @@ class RoboIntellectBaseSDK:
         Если статус 0, возвращает этот статус.
         Если статус не 0, выкидывает исключение MethodCallError
 
-        :param method_name: RI SDK method name
+        :param method: метод RI SDK
         :param args: all method args to be passed
         :return: error code
         :raises: MethodCallError
         """
-        # берем метод библиотеки RI SDK
-        method: MethodProtocol = getattr(self.lib, method_name)
-
         # error_text_c - Текст ошибки. Передается как параметр
         # если происходит ошибка, метод записывает текст в этот параметр
         error_text_c = ctypes.create_string_buffer(1000)
@@ -86,6 +87,6 @@ class RoboIntellectBaseSDK:
         self.process_result(
             error_code=error_code,
             error_text_c=error_text_c,
-            method_name=method_name,
+            method_name=method.__name__,
         )
         return error_code
