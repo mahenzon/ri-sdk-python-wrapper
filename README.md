@@ -9,3 +9,159 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 - build w/ Hatch
 - GitHub Actions (publish)
 - create usage examples for robohand
+
+
+### Install
+```shell
+pip install ri-sdk
+```
+
+### Run
+
+```python
+from ctypes import cdll, CDLL
+import os
+import platform
+from pathlib import Path
+
+from ri_sdk import RoboIntellectSDK
+from ri_sdk.exceptions import MethodCallError
+
+
+def get_lib() -> CDLL:
+    """
+    Подключаем внешнюю библиотеку для работы с SDK
+    """
+    my_platform = platform.system()
+    if my_platform == "Windows":
+        lib_name = "librisdk.dll"
+    elif my_platform == "Linux":
+        lib_name = "librisdk.so"
+    else:
+        raise Exception("Unsupported platform")
+
+    lib_path = Path(os.getenv("LIB_RISDK_DIR", "."))
+    lib_filepath = lib_path / lib_name
+    if not lib_filepath.is_file():
+        raise FileNotFoundError(lib_filepath)
+
+    print("load lib", lib_filepath)
+    lib = cdll.LoadLibrary(str(lib_filepath))
+    return lib
+
+
+def init_pwm(ri_sdk: RoboIntellectSDK) -> int:
+    """
+    создаем компонент ШИМ с конкретной моделью
+    как исполняемое устройство,
+    получаем дескриптор сервопривода
+
+    :param ri_sdk:
+    :return:
+    """
+    create_pwm_result = ri_sdk.create_model_component(
+        group="connector",
+        device_name="pwm",
+        model_name="pca9685",
+    )
+    return create_pwm_result.descriptor
+
+
+def init_i2c(ri_sdk: RoboIntellectSDK, pwm_descriptor: int) -> int:
+    """
+    Создаём компонент i2c адаптера
+    примитивное определение подключенной модели адаптера
+    пробуем создать i2c адаптер модели ch341 и связать с ним ШИМ
+    если не прокатило, то пробуем создать i2c адаптер модели cp2112
+
+    :param pwm_descriptor:
+    :param ri_sdk:
+    :return:
+    """
+    create_i2c_result = ri_sdk.create_model_component(
+        group="connector",
+        device_name="i2c_adapter",
+        model_name="ch341",
+    )
+
+    # связываем i2c адаптер с ШИМ по адресу 0x40
+    try:
+        ri_sdk.link_pwm_to_controller(
+            descriptor=pwm_descriptor,
+            to=create_i2c_result.descriptor,
+            addr=0x40,
+        )
+    except MethodCallError as e:
+        print("caught error", e, "trying to create i2c adapter, gonna try another type")
+    else:
+        return create_i2c_result.descriptor
+
+    create_i2c_result = ri_sdk.create_model_component(
+        group="connector",
+        device_name="i2c_adapter",
+        model_name="cp2112",
+    )
+
+    # связываем i2c адаптер с ШИМ по адресу 0x40
+    ri_sdk.link_pwm_to_controller(
+        descriptor=pwm_descriptor,
+        to=create_i2c_result.descriptor,
+        addr=0x40,
+    )
+
+
+def init_led(ri_sdk: RoboIntellectSDK, pwm_descriptor: int) -> int:
+    """
+    Создаём компонент светодиода с конкретной моделью (ky016)
+    как исполняемое устройство и получаем дескриптор светодиода
+
+    :param ri_sdk:
+    :param pwm_descriptor:
+    :return:
+    """
+
+    create_led_result = ri_sdk.create_model_component(
+        group="executor",
+        device_name="led",
+        model_name="ky016",
+    )
+    # связываем светодиод с ШИМ, передаем значения трех пинов к которым подключен светодиод
+    ri_sdk.link_led_to_controller(
+        descriptor=create_led_result.descriptor,
+        pwm=pwm_descriptor,
+        rport=15,  # red
+        gport=14,  # green
+        bport=13,  # blue
+    )
+    return create_led_result.descriptor
+
+
+def main():
+    lib = get_lib()
+    ri_sdk = RoboIntellectSDK(
+        lib=lib,
+        setup_methods_args=True,
+    )
+    ri_sdk.init_sdk(log_level=1)
+    pwm_descriptor = init_pwm(ri_sdk)
+    i2c_descriptor = init_i2c(ri_sdk, pwm_descriptor)
+    led_descriptor = init_led(ri_sdk, pwm_descriptor)
+    print("i2c_descriptor:", i2c_descriptor)
+    print("led_descriptor:", led_descriptor)
+
+    # Устанавливаем фиолетовый цвет светодиода
+    ri_sdk.exec_rgb_led_single_pulse(
+        descriptor=led_descriptor,
+        r=255,
+        g=0,
+        b=255,
+        duration=0,
+        run_async=True,
+    )
+    print("Done, bye!")
+
+
+if __name__ == "__main__":
+    main()
+
+```
