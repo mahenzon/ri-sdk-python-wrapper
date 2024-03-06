@@ -1,3 +1,61 @@
+[project]
+name = "ri-sdk"
+description = "RI SDK Pythonic Wrapper"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+dynamic = ["version"]
+authors = [
+  { name = "Suren Khorenyan", email = "surenkhorenyan@gmail.com" },
+]
+maintainers = [
+  { name = "Suren Khorenyan", email = "surenkhorenyan@gmail.com" },
+]
+keywords = [
+  "RI SDK",
+  "RoboIntellect",
+  "RoboHand",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Other Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Manufacturing",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Natural Language :: Russian",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Hardware",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/mahenzon/ri-sdk-python-wrapper"
+Documentation = "https://github.com/mahenzon/ri-sdk-python-wrapper"
+"Source code" = "https://github.com/mahenzon/ri-sdk-python-wrapper"
+
+
 [tool.poetry]
 package-mode = false
 
