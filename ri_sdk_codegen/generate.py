@@ -28,6 +28,7 @@ class Codegen:
         method_return_types_init_template_path: Path,
         sdk_output_file_path: Path,
         sdk_return_types_output_path: Path,
+        methods_options_filepath: Path,
         sort_by_name: bool = True,
         json_dump_params: JsonDumpParams | None = None,
         method_file_name: str = "method.json",
@@ -41,6 +42,7 @@ class Codegen:
             method_return_types_init_template_path
         )
         self.sdk_output_file_path: Path = sdk_output_file_path
+        self.methods_options_filepath: Path = methods_options_filepath
         self.sdk_return_types_output_path: Path = sdk_return_types_output_path
         self.sort_by_name: bool = sort_by_name
         self.json_dump_params: JsonDumpParams = json_dump_params or JsonDumpParams()
@@ -48,8 +50,7 @@ class Codegen:
         self.method_options_file_name: str = method_options_file_name
         self.remove_existing_types: bool = remove_existing_types
 
-    @classmethod
-    def parse_methods_from_doc(cls, urls: list[str]) -> list[MethodSDK]:
+    def parse_methods_from_doc(self, urls: list[str]) -> list[MethodSDK]:
         """
         Fetch every doc url and parse params
 
@@ -61,7 +62,10 @@ class Codegen:
             if not (url := page.strip()):
                 continue
             log.info("Parse page %s", url)
-            method = DocPageCrawler(url).prepare_method_sdk_info()
+            method = DocPageCrawler(
+                url,
+                methods_options_filepath=self.methods_options_filepath,
+            ).prepare_method_sdk_info()
             methods.append(method)
 
         return methods
