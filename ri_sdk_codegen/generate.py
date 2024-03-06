@@ -1,5 +1,6 @@
 import json
 import logging
+import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -34,6 +35,7 @@ class Codegen:
         method_file_name: str = "method.json",
         method_options_file_name: str = "options.yaml",
         remove_existing_types: bool = True,
+        remove_unknown_methods_cache: bool = False,
     ) -> None:
         self.codegen_base_dir: Path = codegen_base_dir
         self.sdk_template_path: Path = sdk_template_path
@@ -49,6 +51,25 @@ class Codegen:
         self.method_file_name: str = method_file_name
         self.method_options_file_name: str = method_options_file_name
         self.remove_existing_types: bool = remove_existing_types
+        self.remove_unknown_methods_cache = remove_unknown_methods_cache
+
+    def _remove_not_updated_methods(self, methods: list[MethodSDK]) -> None:
+        """
+        Remove deleted / renamed methods
+
+        :param methods:
+        :return:
+        """
+        log.info("Remove not updated methods")
+        known_methods_names = {method.name for method in methods}
+        log.debug(
+            "Gonna remove methods that are not in known methods: %s",
+            known_methods_names,
+        )
+        for dir_path in self.codegen_base_dir.iterdir():
+            if dir_path.is_dir() and dir_path.name not in known_methods_names:
+                log.debug("Removing method cache %s", dir_path)
+                shutil.rmtree(dir_path)
 
     def parse_methods_from_doc(self, urls: list[str]) -> list[MethodSDK]:
         """
@@ -68,6 +89,8 @@ class Codegen:
             ).prepare_method_sdk_info()
             methods.append(method)
 
+        if self.remove_unknown_methods_cache:
+            self._remove_not_updated_methods(methods)
         return methods
 
     @classmethod
