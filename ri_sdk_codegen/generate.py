@@ -23,7 +23,7 @@ class JsonDumpParams:
 class Codegen:
     def __init__(
         self,
-        codegen_base_dir: Path,
+        codegen_methods_cache_dir: Path,
         sdk_template_path: Path,
         method_return_type_template_path: Path,
         method_return_types_init_template_path: Path,
@@ -37,7 +37,7 @@ class Codegen:
         remove_existing_types: bool = True,
         remove_unknown_methods_cache: bool = False,
     ) -> None:
-        self.codegen_base_dir: Path = codegen_base_dir
+        self.codegen_methods_cache_dir: Path = codegen_methods_cache_dir
         self.sdk_template_path: Path = sdk_template_path
         self.method_return_type_template_path: Path = method_return_type_template_path
         self.method_return_types_init_template_path: Path = (
@@ -66,7 +66,7 @@ class Codegen:
             "Gonna remove methods that are not in known methods: %s",
             known_methods_names,
         )
-        for dir_path in self.codegen_base_dir.iterdir():
+        for dir_path in self.codegen_methods_cache_dir.iterdir():
             if dir_path.is_dir() and dir_path.name not in known_methods_names:
                 log.debug("Removing method cache %s", dir_path)
                 shutil.rmtree(dir_path)
@@ -110,7 +110,7 @@ class Codegen:
 
     def read_methods_from_json(self) -> list[MethodSDK]:
         methods = []
-        for method_dir in self.codegen_base_dir.iterdir():
+        for method_dir in self.codegen_methods_cache_dir.iterdir():
             if not method_dir.is_dir():
                 continue
             method_file = method_dir / self.method_file_name
@@ -213,7 +213,9 @@ class Codegen:
         )
 
     def save_method_to_file(self, method: MethodSDK) -> None:
-        method_filepath = self.codegen_base_dir / method.name / self.method_file_name
+        method_filepath = (
+            self.codegen_methods_cache_dir / method.name / self.method_file_name
+        )
         method_filepath.parent.mkdir(parents=True, exist_ok=True)
         method_filepath.write_text(
             method.model_dump_json(

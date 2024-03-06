@@ -61,7 +61,7 @@ def main() -> None:
 
     log.info("Init codegen")
     codegen = Codegen(
-        codegen_base_dir=codegen_params.ri_sdk_codegen_dir,
+        codegen_methods_cache_dir=codegen_params.ri_sdk_codegen_methods_cache_dir,
         sdk_template_path=codegen_params.sdk_template_filepath,
         method_return_type_template_path=codegen_params.method_return_type_template_filepath,
         method_return_types_init_template_path=codegen_params.method_return_types_init_filepath,

@@ -118,8 +118,8 @@ class CodegenParams:
     method_return_types_init_filepath: Path = (
         MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILEPATH
     )
-    # todo: inner methods dir!
     ri_sdk_codegen_dir: Path = RI_SDK_CODEGEN_DIR
+    ri_sdk_codegen_methods_cache_dir: Path = RI_SDK_CODEGEN_DIR / "methods"
     ri_sdk_python_code_src_dir: Path = RI_SDK_PYTHON_CODE_SRC_DIR
     ri_sdk_python_types_dir: Path = RI_SDK_PYTHON_TYPES_DIR
     methods_options_filepath: Path = RI_SDK_CODEGEN_DIR / "options.yaml"
