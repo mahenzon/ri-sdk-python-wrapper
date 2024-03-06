@@ -108,6 +108,7 @@ def init_i2c(ri_sdk: RoboIntellectSDK, pwm_descriptor: int) -> int:
         to=create_i2c_result.descriptor,
         addr=0x40,
     )
+    return create_i2c_result.descriptor
 
 
 def init_led(ri_sdk: RoboIntellectSDK, pwm_descriptor: int) -> int:
