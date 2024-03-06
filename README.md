@@ -2,16 +2,16 @@
 
 Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 
-
 ### TODO:
+
 - add tests
 - GitHub Actions (lint)
 - build w/ Hatch
 - GitHub Actions (publish)
 - create usage examples for robohand
 
-
 ### Install
+
 ```shell
 pip install ri-sdk
 ```
@@ -169,3 +169,25 @@ if __name__ == "__main__":
 ### Notes
 
 Docs typo? sensor_voltage_sensor_read_reg_bytes read length is output type... but it's not
+
+## Codegen
+
+#### Install dependencies
+
+```shell
+poetry install
+```
+
+#### Full RI SDK codegen:
+
+```shell
+main.py --update-links --parse-docs --remove-unknown-methods-cache --generate-sdk
+```
+
+Each stage can be used separately:
+
+- `--update-links`
+- `--parse-docs [--remove-unknown-methods-cache]`
+- `--generate-sdk`
+
+Add `-v` flag for verbose output.
