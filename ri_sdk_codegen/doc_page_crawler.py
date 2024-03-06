@@ -81,11 +81,30 @@ class DocPageCrawler:
             raise ValueError(msg)
         return DescriptionBlock(values=values, type=block_type)
 
+    @classmethod
+    def _get_table_description_block(cls, tag: Tag) -> DescriptionBlock:
+        rows = tag.find_all("tr")
+
+        table_data = []
+        header_found = bool(tag.find("th"))
+        # Extract table content into a list of lines
+        for row in rows:
+            cells = row.find_all(["th", "td"])
+            row_data = tuple(cell.text.strip() for cell in cells)
+            table_data.append(row_data)
+
+        return DescriptionBlock.from_table_rows(
+            table_data,
+            first_row_is_header=header_found,
+        )
+
     def _process_description_tag(self, tag: Tag) -> DescriptionBlock | None:
-        if tag.name == "p":
+        if tag.name in ("p", "h3"):
             return DescriptionBlock(values=tag.text.split("\n"))
         if tag.name in ("ol", "ul"):
             return self._get_list_description_block(tag)
+        if tag.name == "table":
+            return self._get_table_description_block(tag)
         log.warning("Unexpected sibling tag %s", tag)
         return None  # lol mypy
 
