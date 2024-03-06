@@ -6,8 +6,6 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 
 - add tests
 - GitHub Actions (lint)
-- build w/ Hatch
-- GitHub Actions (publish)
 - create usage examples for robohand
 
 ### Install
