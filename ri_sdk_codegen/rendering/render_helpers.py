@@ -89,6 +89,9 @@ def receiver_var_comment(
 
 
 def prepare_param_for_sdk_call(m: "MethodSDK", p: "MethodParamSDK") -> str:
+    if m.is_auto_len_param(p):
+        param_to_take_len = m.param_to_take_len_from(p)
+        return f"len({param_to_take_len.py_name})"
     if p.py_ctype in ("c_uint8", "c_bool"):
         return f"ctypes.{p.py_ctype}({p.py_name})"
     if p.python_type in ("bool", "int", "float"):
