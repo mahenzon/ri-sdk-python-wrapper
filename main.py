@@ -52,12 +52,14 @@ def main() -> None:
     log.debug("Codegen params: %s", codegen_params)
 
     if codegen_params.update_links:
+        log.warning("-- Update links")
         crawler = DocsUrlCrawler(base_url=codegen_params.base_url)
         crawler.find_and_write_urls(
             docs_crawl_start_url=codegen_params.docs_crawl_start_url,
             filepath=codegen_params.ri_sdk_pages_file_path,
         )
 
+    log.info("Init codegen")
     codegen = Codegen(
         codegen_base_dir=codegen_params.ri_sdk_codegen_dir,
         sdk_template_path=codegen_params.sdk_template_filepath,
@@ -70,10 +72,12 @@ def main() -> None:
     )
 
     if codegen_params.parse_docs:
+        log.warning("-- Parse docs to caches files")
         urls = codegen_params.ri_sdk_pages_file_path.read_text().splitlines()
         codegen.parse_docs_and_save_methods_to_json_cache(urls)
 
     if codegen_params.generate_sdk:
+        log.warning("-- Generate SDK Wrapper")
         codegen.generate_sdk_script()
 
     log.warning("Almost done.. formatting")
