@@ -165,3 +165,7 @@ if __name__ == "__main__":
     main()
 
 ```
+
+### Notes
+
+Docs typo? sensor_voltage_sensor_read_reg_bytes read length is output type... but it's not
