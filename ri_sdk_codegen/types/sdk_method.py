@@ -46,7 +46,7 @@ class MethodSDK(BaseModel):
             if p.name == "readBytesLen":
                 return p
 
-        msg = f"No len param for param {param.name}"
+        msg = f"No len param for param {param.name} {param} on method {self}"
         raise ValueError(msg)
 
     @cached_property
