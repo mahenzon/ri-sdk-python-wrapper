@@ -7,7 +7,7 @@ Do not edit manually.
 from ri_sdk_codegen.rendering.render_helpers import (
     lib_ctype_param,
     function_param,
-    function_param_doc,
+    param_text_doc,
     receiver_var_comment,
     prepare_param_for_sdk_call,
     prepare_param_for_sdk_call_result,
@@ -61,7 +61,7 @@ ${method_description(sdk_method)}
         ${sdk_method.url}
 
     % for param in sdk_method.func_call_params:
-${function_param_doc(param)}
+${param_text_doc(param)}
     % endfor
         :returns: Результат типа ${sdk_method.py_return_type_cls_name}
         :raises ValueError: если полученный код ошибки не ноль
@@ -78,9 +78,12 @@ ${receiver_var_comment(param)}
 
         # Код ошибки. Вернётся 0, или будет выброшено исключение
         error_code = self.call_sdk_method(
-            # передаём SDK метод, он будет вызван внутри (плюс обработка ошибки)
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
             self.lib.${sdk_method.name},
         % for param in sdk_method.func_sdk_call_args:
+            % if sdk_method.is_auto_len_param(param):
+    ${param_text_doc(param, add_param_prefix=False)}
+            % endif
             ${comment_ctype_param(param)}
             ${prepare_param_for_sdk_call(sdk_method, param)},
         % endfor

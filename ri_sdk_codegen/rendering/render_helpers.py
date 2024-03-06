@@ -52,19 +52,29 @@ def function_param(p: "MethodParamSDK") -> str:
     return line
 
 
-def function_param_doc(
+def param_text_doc(
     p: "MethodParamSDK",
     max_width: int = DEFAULT_MAX_WIDTH,
     indent_size: int = 2,
+    add_param_prefix: bool = True,
 ) -> str:
+    if add_param_prefix:
+        initial_indent_tpl = PARAM_PREFIX_TEMPLATE
+        subsequent_indent_tpl = "{indent}"
+    else:
+        initial_indent_tpl = IN_METHOD_COMMENT
+        subsequent_indent_tpl = f"{{indent}}#{REGULAR_INDENT}"
+
     return textwrap.fill(
         text=p.description,
         width=max_width,
-        initial_indent=PARAM_PREFIX_TEMPLATE.format(
+        initial_indent=initial_indent_tpl.format(
             indent=make_indent(indent_size),
             name=p.py_name,
         ),
-        subsequent_indent=make_indent(indent_size + 1),
+        subsequent_indent=subsequent_indent_tpl.format(
+            indent=make_indent(indent_size + 1),
+        ),
         fix_sentence_endings=True,
     )
 
