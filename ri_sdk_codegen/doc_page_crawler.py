@@ -1,18 +1,26 @@
 import logging
 import re
+from functools import cached_property
+from pathlib import Path
 from typing import Literal
 
 import requests
+import yaml
 from bs4 import BeautifulSoup, NavigableString, PageElement, Tag
 
 from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
-from ri_sdk_codegen.types import MethodParamSDK, MethodSDK
+from ri_sdk_codegen.types import MethodParamSDK, MethodSDK, MethodsOptions
 
 log = logging.getLogger(__name__)
 
 
 class DocPageCrawler:
-    def __init__(self, url: str, request_timeout: int = 10) -> None:
+    def __init__(
+        self,
+        url: str,
+        methods_options_filepath: Path,
+        request_timeout: int = 10,
+    ) -> None:
         self.url = url
         self.request_timeout = request_timeout
         self.h1_method_name_regex = re.compile("^RI_SDK_")
@@ -24,6 +32,7 @@ class DocPageCrawler:
         self.param_shared_object_type_col_idx = 1
         self.golang_grpc_object_type_col_idx = 2
         self.param_description_col_idx = 3
+        self.methods_options_filepath = methods_options_filepath
 
     @classmethod
     def _ensure_is_tag_type(cls, val: Tag | NavigableString | None) -> Literal[True]:
@@ -49,6 +58,28 @@ class DocPageCrawler:
             msg = f"No header value with RI_SDK_. URL: {self.url}, tag: {h1_tag}"
             raise ValueError(msg)
         return h1_tag.string
+
+    @cached_property
+    def _methods_options(self) -> MethodsOptions:
+        """
+        Read and save methods options
+        :return:
+        """
+        if not self.methods_options_filepath.is_file():
+            return MethodsOptions()
+        with self.methods_options_filepath.open() as f:
+            return MethodsOptions.model_validate(yaml.safe_load(f).get("methods", {}))
+
+    def _validate_method_name(self, method_name: str) -> str:
+        """
+        Method name can be overridden
+
+        :param method_name:
+        :return:
+        """
+        if method_name in self._methods_options.names_overrides:
+            return self._methods_options.names_overrides[method_name]
+        return method_name
 
     def _get_description_tag(self, soup: BeautifulSoup) -> Tag:
         description_h2 = soup.find("h2", id=self.description_h2_tag_id)
@@ -181,6 +212,7 @@ class DocPageCrawler:
         response = requests.get(self.url, timeout=self.request_timeout)
         soup = BeautifulSoup(response.content, "html.parser")
         method_name = self._get_method_name(soup)
+        method_name = self._validate_method_name(method_name)
         log.debug("* Method name: %r", method_name)
         all_description_lines = self._get_description_blocks(soup)
         params = self._get_params(soup)
