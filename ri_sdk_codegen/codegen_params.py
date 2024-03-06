@@ -67,6 +67,11 @@ parser.add_argument(
     help="Generate SDK with sorted methods.",
 )
 parser.add_argument(
+    "--remove-unknown-methods-cache",
+    action="store_true",
+    help=f"Remove unknown methods from the {RI_SDK_CODEGEN_DIR} after crawling docs.",
+)
+parser.add_argument(
     "--base-url",
     default=URL_BASE,
     help=f"Base URL (default: {URL_BASE})",
@@ -100,6 +105,7 @@ class CodegenParams:
     generate_sdk: bool = False
     verbose: bool = False
     sort_methods: bool = True
+    remove_unknown_methods_cache: bool = False
     remove_existing_types: bool = True
     base_url: str = URL_BASE
     docs_entry_path: str = DOCS_ENTRY_PATH
@@ -112,9 +118,11 @@ class CodegenParams:
     method_return_types_init_filepath: Path = (
         MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILEPATH
     )
+    # todo: inner methods dir!
     ri_sdk_codegen_dir: Path = RI_SDK_CODEGEN_DIR
     ri_sdk_python_code_src_dir: Path = RI_SDK_PYTHON_CODE_SRC_DIR
     ri_sdk_python_types_dir: Path = RI_SDK_PYTHON_TYPES_DIR
+    methods_options_filepath: Path = RI_SDK_CODEGEN_DIR / "options.yaml"
 
     @property
     def docs_crawl_start_url(self) -> str:
@@ -129,6 +137,7 @@ def get_params() -> CodegenParams:
         generate_sdk=args.generate_sdk,
         verbose=args.verbose,
         sort_methods=args.sort_methods,
+        remove_unknown_methods_cache=args.remove_unknown_methods_cache,
         base_url=args.base_url,
         ri_sdk_pages_file_path=args.pages_urls_filepath,
         output_py_script=args.output_py_script,
