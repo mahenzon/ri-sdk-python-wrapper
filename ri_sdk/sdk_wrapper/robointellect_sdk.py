@@ -5,6 +5,8 @@ Do not edit manually.
 
 import ctypes
 
+from ri_sdk import types, utils
+
 from .robointellect_base_sdk import RoboIntellectBaseSDK
 
 
@@ -32,3 +34,5645 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
                 continue
             method = getattr(self, name)
             method()
+
+    def create_basic(
+        self,
+    ) -> types.CreateBasicResult:
+        """
+        Функция создает базовый компонент, который является
+        абстракцией первого уровня над всеми остальными компонентами.
+        Этот компонент не имеет своих собственных методов. Его можно
+        расширить до компонента уровня группы
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic
+
+        :returns: Результат типа CreateBasicResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_CreateBasic,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.CreateBasicResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def create_device_component(
+        self,
+        group: str,
+        device_name: str,
+    ) -> types.CreateDeviceComponentResult:
+        """
+        Создает и записывает в реестр библиотеки компонент уровня
+        устройства. Это третий уровень абстракции. Такие компоненты
+        реализуют методы управления своими устройствами. Компонент
+        уровня устройства можно расширить до конкретной модели
+        соответствующего устройства.
+
+        Без этого расширения, использование методов управления
+        устройством невозможно, так как именно модель содержит
+        значения параметров, необходимых для управления
+
+        Доступные устройства:
+
+        1. i2c_adapter - i2c адаптер
+        2. pwm - ШИМ модулятор
+        3. servodrive - сервопривод
+        4. servodrive_rotate - сервопривод вращения
+        5. led - светодиод
+        6. voltage_sensor - датчик тока, напряжения и мощности
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent
+
+        :param group: Тип компонента ("executor", "connector",
+            "sensor")
+        :param device_name: Устройство компонента ("i2c", "pwm",
+            "servodrive", "led", "voltage_sensor",
+            "servodrive_rotate")
+        :returns: Результат типа CreateDeviceComponentResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_CreateDeviceComponent,
+            # name: group; object type: char[] (тип C)
+            group.encode(),
+            # name: deviceName; object type: char[] (тип C)
+            device_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.CreateDeviceComponentResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def create_group_component(
+        self,
+        group: str,
+    ) -> types.CreateGroupComponentResult:
+        """
+        Функция создает базовый компонент, который является
+        абстракцией первого уровня над всеми остальными компонентами.
+        Этот компонент не имеет своих собственных методов. Его можно
+        расширить до компонента уровня группы.
+
+        Доступны следующие группы компонентов:
+
+        1. executor - исполнительный устройства (сервопривод,
+            светодиод)
+        2. connector - устройства для связывания других устройств
+            (i2c адаптер, ШИМ модулятор)
+        3. sensor - датчики (Датчик напряжения и силы тока)
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateGroupComponent
+
+        :param group: Тип компонента ("executor", "connector",
+            "sensor")
+        :returns: Результат типа CreateGroupComponentResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_CreateGroupComponent,
+            # name: group; object type: char[] (тип C)
+            group.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.CreateGroupComponentResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def create_model_component(
+        self,
+        group: str,
+        device_name: str,
+        model_name: str,
+    ) -> types.CreateModelComponentResult:
+        """
+        Компонент четвертого уровня абстракции - модели устройства.
+        Не реализует своих собственных методов, но содержит параметры
+        данной модели, необходимые для расчетов при управлении
+        устройством. Для управления устройством необходимо расширить
+        компонент устройства до конкретной модели.
+
+        Доступные модели:
+
+        1. i2c адаптеры: cp2112, ch341
+        2. ШИМ:: pca9685
+        3. сервоприводы: mg90s, a0090, mg996, Corona DS929MG, Corona
+            SB-9039, Corona DS843MG, Corona DS238MG
+        4. сервоприводы вращения: mg996r
+        5. светодиоды: ky016
+        6. датчик тока, напряжения и мощности: ina219
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateModelComponent
+
+        :param group: Тип компонента ("executor", "connector",
+            "sensor")
+        :param device_name: Устройство компонента ("i2c", "pwm",
+            "servodrive", "servodrive_rotate", "led",
+            "voltage_sensor")
+        :param model_name: Модель компонента ("ch341", "cp2112",
+            "pca9685", " mg90s" ,"a0090" ,"mg996" ,"corona_ds929mg"
+            ,"corona_sb9039" ,"corona_ds843mg" ,"corona_ds238mg",
+            "mg996r", "ky016", "ina219")
+        :returns: Результат типа CreateModelComponentResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_CreateModelComponent,
+            # name: group; object type: char[] (тип C)
+            group.encode(),
+            # name: deviceName; object type: char[] (тип C)
+            device_name.encode(),
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.CreateModelComponentResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def destroy_component(
+        self,
+        descriptor: int,
+    ) -> types.DestroyComponentResult:
+        """
+        Функция удаляет компонент с дескриптором равным параметру,
+        переданному в функцию
+
+        Доступны следующие группы компонентов:
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-destroy-functions/RI_SDK_DestroyComponent
+
+        :param descriptor: Дескриптор компонента, который будет
+            удален
+        :returns: Результат типа DestroyComponentResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_DestroyComponent,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.DestroyComponentResult(
+            error_code,
+        )
+
+    def destroy_sdk(
+        self,
+        is_force: bool,
+    ) -> types.DestroySDKResult:
+        """
+        Функция удаляет компонент с дескриптором равным параметру,
+        переданному в функцию
+
+        Доступны следующие группы компонентов:
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-end-functions/RI_SDK_DestroySDK
+
+        :param is_force: Признак полного очищения реестра
+        :returns: Результат типа DestroySDKResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_DestroySDK,
+            # name: isForce; object type: bool (тип C)
+            ctypes.c_bool(is_force),
+        )
+        return types.DestroySDKResult(
+            error_code,
+        )
+
+    def device_model_list(
+        self,
+        device_type: str,
+        model_list: str,
+    ) -> types.DeviceModelListResult:
+        """
+        Метод получает все доступные модели для устройства
+        (modelList) по его названию (deviceType)
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_Device_ModelList
+
+        :param device_type: Тип устройства : servodrive, rservodrive,
+            i2c_adapter, pwm, led, voltage_sensor
+        :param model_list: Список доступных моделей устройства
+        :returns: Результат типа DeviceModelListResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_Device_ModelList,
+            # name: deviceType; object type: char[] (тип C)
+            device_type.encode(),
+            # name: modelList; object type: char[] (тип C)
+            model_list.encode(),
+        )
+        return types.DeviceModelListResult(
+            error_code,
+        )
+
+    def init_sdk(
+        self,
+        log_level: int,
+    ) -> types.InitSDKResult:
+        """
+        Инициализация RI SDK. Инициализирует библиотеку RI SDK.
+        Инициализацию необходимо выполнять в самом начале выполнения
+        программы. Иначе остальные функции будут возвращать ошибку.
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_InitSDK
+
+        :param log_level: Уровень глубины логирования (0 - только
+            верхний уровень, 1, 2, 3 - более подробная трассировка)
+        :returns: Результат типа InitSDKResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_InitSDK,
+            # name: logLevel; object type: int (тип C)
+            log_level,
+        )
+        return types.InitSDKResult(
+            error_code,
+        )
+
+    def link_led_to_controller(
+        self,
+        descriptor: int,
+        pwm: int,
+        rport: int,
+        gport: int,
+        bport: int,
+    ) -> types.LinkLedToControllerResult:
+        """
+        Сообщает библиотеке, что необходимо программно связать
+        компонент светодиода с дескриптором descriptor и ШИМ
+        модулятором  с дескриптором  pwm по порту port.
+
+        Эту функцию необходимо вызывать перед вызовом функций
+        управления соответствующим светодиодом.
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController
+
+        :param descriptor: Дескриптор светодиода, который будет
+            подключаться к ШИМ
+        :param pwm: Дескриптор ШИМ, к которому будет подключаться
+            светодиод
+        :param rport: Порт подключения красного цвета
+        :param gport: Порт подключения зеленого цвета
+        :param bport: Порт подключения синего  цвета
+        :returns: Результат типа LinkLedToControllerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_LinkLedToController,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: pwm; object type: int (тип C)
+            pwm,
+            # name: rport; object type: int (тип C)
+            rport,
+            # name: gport; object type: int (тип C)
+            gport,
+            # name: bport; object type: int (тип C)
+            bport,
+        )
+        return types.LinkLedToControllerResult(
+            error_code,
+        )
+
+    def link_pwm_to_controller(
+        self,
+        descriptor: int,
+        to: int,
+        addr: int,
+    ) -> types.LinkPWMToControllerResult:
+        """
+        Сообщает библиотеки, что необходимо программно связать pwm  с
+        дескриптором descriptor с i2c адаптером с дескриптором  to по
+        адресу addr
+
+        Эту функцию необходимо вызывать перед вызовом функций
+        управления соответствующим ШИМ модулятором и перед вызовом
+        функций управления устройством, который подключен к данному
+        ШИМ модулятору (например сервопривод)
+
+        У программиста есть возможность вручную установить номер шины
+        i2c, на которой будет устновлено соединение с ШИМ. Для этого
+        необходимо перед вызовом функции RI_SDK_LinkPWMToController
+        вызвать функцию RI_SDK_connector_i2c_SetBus.
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkPWMToController
+
+        :param descriptor: Дескриптор ШИМ, который будет подключаться
+            к i2c адаптеру
+        :param to: Дескриптор i2c адаптера, к которому будет
+            подключаться ШИМ
+        :param addr: Адрес подключения
+        :returns: Результат типа LinkPWMToControllerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_LinkPWMToController,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: to; object type: int (тип C)
+            to,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+        )
+        return types.LinkPWMToControllerResult(
+            error_code,
+        )
+
+    def link_r_servodrive_to_controller(
+        self,
+        descriptor: int,
+        pwm: int,
+        port: int,
+    ) -> types.LinkRServodriveToControllerResult:
+        """
+        Сообщает библиотеке, что необходимо программно связать
+        компонент сервопривода вращения с дескриптором descriptor с
+        ШИМ модулятором с дескриптором pwm по порту port.
+
+        Эту функцию необходимо вызывать перед вызовом функций
+        управления соответствующим сервоприводом вращения.
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController
+
+        :param descriptor: Дескриптор сервопривода вращения, который
+            будет подключаться к ШИМ
+        :param pwm: Дескриптор ШИМ, к которому будет подключаться
+            привод
+        :param port: Порт подключения
+        :returns: Результат типа LinkRServodriveToControllerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_LinkRServodriveToController,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: pwm; object type: int (тип C)
+            pwm,
+            # name: port; object type: int (тип C)
+            port,
+        )
+        return types.LinkRServodriveToControllerResult(
+            error_code,
+        )
+
+    def link_servodrive_to_controller(
+        self,
+        descriptor: int,
+        pwm: int,
+        port: int,
+    ) -> types.LinkServodriveToControllerResult:
+        """
+        Сообщает библиотеке, что необходимо программно связать
+        компонент сервопривода с дескриптором descriptor с ШИМ
+        модулятором с дескриптором pwm по порту port.
+
+        Эту функцию необходимо вызывать перед вызовом функций
+        управления соответствующим сервоприводом.
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkServodriveToController
+
+        :param descriptor: Дескриптор сервопривода, который будет
+            подключаться к ШИМ
+        :param pwm: Дескриптор ШИМ, к которому будет подключаться
+            сервопривод
+        :param port: Порт подключения
+        :returns: Результат типа LinkServodriveToControllerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_LinkServodriveToController,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: pwm; object type: int (тип C)
+            pwm,
+            # name: port; object type: int (тип C)
+            port,
+        )
+        return types.LinkServodriveToControllerResult(
+            error_code,
+        )
+
+    def link_voltage_sensor_to_controller(
+        self,
+        descriptor: int,
+        to: int,
+        addr: int,
+    ) -> types.LinkVoltageSensorToControllerResult:
+        """
+        Сообщает библиотеке, что необходимо программно связать датчик
+        тока, напряжения и мощности с дескриптором descriptor с i2c
+        адаптером с дескриптором  to по адресу addr
+
+        Эту функцию необходимо вызывать перед вызовом функций
+        управления соответствующим датчиком тока, напряжения и
+        мощности.
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController
+
+        :param descriptor: Дескриптор датчика тока, напряжения и
+            мощности, который будет подключаться к i2c адаптеру
+        :param to: Дескриптор i2c адаптера, к которому будет
+            подключаться датчик тока, напряжения и мощности
+        :param addr: Адрес подключения
+        :returns: Результат типа LinkVoltageSensorToControllerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_LinkVoltageSensorToController,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: to; object type: int (тип C)
+            to,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+        )
+        return types.LinkVoltageSensorToControllerResult(
+            error_code,
+        )
+
+    def sensor_extend(
+        self,
+        basic: int,
+    ) -> types.SensorExtendResult:
+        """
+        Расширяет базовый компонент с дескриптором  basic.
+        Записывает в параметр descriptor дескриптор нового компонента
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/RI_SDK_Sensor_Extend
+
+        :param basic: Базовый компонент
+        :returns: Результат типа SensorExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_Sensor_Extend,
+            # name: basic; object type: int (тип C)
+            basic,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.SensorExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def connector_extend(
+        self,
+        basic: int,
+    ) -> types.ConnectorExtendResult:
+        """
+        Расширяет базовый компонент с дескриптором  basic.
+        Записывает в параметр descriptor дескриптор нового компонента
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/RI_SDK_connector_Extend
+
+        :param basic: Указатель на базовый компонент
+        :returns: Результат типа ConnectorExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_Extend,
+            # name: basic; object type: int (тип C)
+            basic,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ConnectorExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def connector_i2c_close(
+        self,
+        descriptor: int,
+        addr: int,
+    ) -> types.ConnectorI2cCloseResult:
+        """
+        Закрывает соединение по адресу  addr для i2c адаптера с
+        дескриптором descriptor
+
+        После закрытия соединения по данному адресу, функции
+        чтения/записи для данного адреса будут возвращать ошибку.
+
+        Для того, чтобы продолжить использовать функции чтения/записи
+        необходимо вновь открыть соединение по этому адресу
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Close
+
+        :param descriptor: Дескриптор компонента, у которого будет
+            закрыто соединение
+        :param addr: Адрес, по которому будет закрыто соединение
+        :returns: Результат типа ConnectorI2cCloseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_Close,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+        )
+        return types.ConnectorI2cCloseResult(
+            error_code,
+        )
+
+    def connector_i2c_close_all(
+        self,
+        descriptor: int,
+    ) -> types.ConnectorI2cCloseAllResult:
+        """
+        Закрывает все открытые соединения для i2c адаптера с
+        дескриптором descriptor
+
+        После закрытия соединения по данному адресу, функции
+        чтения/записи для всех адресов  будут возвращать ошибку.
+
+        Для того, чтобы продолжить использовать функции чтения/записи
+        необходимо вновь открыть соединение по нужному адресу
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll
+
+        :param descriptor: Дескриптор компонента, у которого будут
+            закрыты все соединения
+        :returns: Результат типа ConnectorI2cCloseAllResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_CloseAll,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.ConnectorI2cCloseAllResult(
+            error_code,
+        )
+
+    def connector_i2c_extend(
+        self,
+        connector_descriptor: int,
+    ) -> types.ConnectorI2cExtendResult:
+        """
+        Расширяет компонент группы коннекторов с дескриптором
+        connectorDescriptor,  записывает в параметр descriptor
+        дескриптор нового компонента (i2c адаптера)
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend
+
+        :param connector_descriptor: Дескриптор компонента группы
+            коннекторов
+        :returns: Результат типа ConnectorI2cExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_Extend,
+            # name: connectorDescriptor; object type: int (тип C)
+            connector_descriptor,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ConnectorI2cExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def connector_i2c_extend_to_model(
+        self,
+        base_descriptor: int,
+        model_name: str,
+    ) -> types.ConnectorI2cExtendToModelResult:
+        """
+        Расширяет компонент группы коннекторов с дескриптором
+        i2cDescriptor,  записывает в параметр descriptor дескриптор
+        нового компонента (i2c адаптера)
+
+        Доступные модели i2c адаптера: cp2112, ch341
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ExtendToModel
+
+        :param base_descriptor: Дескриптор компонента i2c адаптера
+        :param model_name: Модель компонента ("ch341", "cp2112")
+        :returns: Результат типа ConnectorI2cExtendToModelResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_ExtendToModel,
+            # name: baseDescriptor; object type: int (тип C)
+            base_descriptor,
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ConnectorI2cExtendToModelResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def connector_i2c_open(
+        self,
+        descriptor: int,
+        addr: int,
+    ) -> types.ConnectorI2cOpenResult:
+        """
+        Сообщает i2c адаптеру с дескриптором descriptor, что
+        необходимо открыть соединение по адресу addr
+
+        Создание нового подключения по какому-либо адресу необходимо
+        делать перед тем, как производить чтение/запись по этому
+        адресу
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open
+
+        :param descriptor: Дескриптор компонента, у которого будет
+            открыто соединение
+        :param addr: Адрес, по которому будет открыто соединение
+        :returns: Результат типа ConnectorI2cOpenResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_Open,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+        )
+        return types.ConnectorI2cOpenResult(
+            error_code,
+        )
+
+    def connector_i2c_read_byte(
+        self,
+        descriptor: int,
+        addr: int,
+    ) -> types.ConnectorI2cReadByteResult:
+        """
+        Чтение байта по указанному адресу.
+
+        Читает с i2c адаптера один байт по адресу addr и записывает
+        их в value
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadByte
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться чтение
+        :param addr: Адрес, по которому будет производиться чтение
+        :returns: Результат типа ConnectorI2cReadByteResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # value - Указатель на байт, в который запишется прочитанный
+        #    байт
+        value = ctypes.c_ulonglong()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_ReadByte,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+            # name: value; object type: *long long unsigned (тип C)
+            value,
+        )
+        return types.ConnectorI2cReadByteResult(
+            error_code,
+            utils.convert_c_ulonglong_to_python_bytes(value),
+        )
+
+    def connector_i2c_read_bytes(
+        self,
+        descriptor: int,
+        addr: int,
+        length: int,
+    ) -> types.ConnectorI2cReadBytesResult:
+        """
+        Читает с i2c адаптера len байтов по адресу addr и записывает
+        их в buf
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadBytes
+
+        :param descriptor: Дескриптор компонента, с которого будет
+            производиться чтение
+        :param addr: Адрес, с которого будет производиться чтение
+        :param length: Длина массива buf
+        :returns: Результат типа ConnectorI2cReadBytesResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # buf - Указатель на массив байт, в который будет записаны
+        #    прочитанные байты
+        buf = ctypes.c_ulonglong()
+        # readBytesLen - Указатель на количество прочитанных байтов
+        read_bytes_len = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_ReadBytes,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            buf,
+            # name: len; object type: int (тип C)
+            length,
+            # name: readBytesLen; object type: *int (тип C)
+            read_bytes_len,
+        )
+        return types.ConnectorI2cReadBytesResult(
+            error_code,
+            utils.convert_c_ulonglong_of_len_to_python_bytes(
+                buf,
+                read_bytes_len,
+            ),
+            read_bytes_len.value,
+        )
+
+    def connector_i2c_set_bus(
+        self,
+        descriptor: int,
+        bus: int,
+    ) -> types.ConnectorI2cSetBusResult:
+        """
+        Позволяет программисту в коде своей программы определить
+        номер шины, на которой в дальнейшем будет открыто соединение
+        с компонентом при вызове функции связывания
+        RI_SDK_LinkPWMToController.
+
+        Если не вызывать эту функцию, то номер шины будет определён
+        автоматически, причем для Linux на архитектуре aarch64 номер
+        шины всегда будет равен 1.
+
+        Функцию RI_SDK_connector_i2c_SetBus необходимо вызывать ДО
+        связывания (вызов RI_SDK_LinkPWMToController), так как если
+        на заданной шине уже открыто соединение,
+        RI_SDK_connector_i2c_SetBus вернёт ошибку.
+
+        Если номер шины необходимо изменить, нужно сперва закрыть все
+        открытые с помощью заданного I2C адаптера соединения с
+        помощью функции RI_SDK_connector_i2c_CloseAll или функции
+        RI_SDK_connector_i2c_Close, вызванной для каждого открытого
+        соединения.
+
+        Внимание! Вызов RI_SDK_connector_i2c_SetBus определяет номер
+        шины только на ОС Linux.  На ОС Windows номер шины
+        определяется автоматически независимо от результатов
+        выполнения RI_SDK_connector_i2c_SetBus.
+
+        Ошибки, возвращаемые RI SDK при вызове функции
+        RI_SDK_connector_i2c_SetBus\u200b
+
+        # Код ошибки | Описание ошибки | Рекомендуемые действия
+        211011 | Значение шины отрицательное. | Измените номер шины
+            на положительное число или 0.
+        211012 | Существуют открытые соединения | Закройте перед
+            вызовом функции все открытые соединения
+            (RI_SDK_connector_i2c_Close или
+            RI_SDK_connector_i2c_CloseAll).
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus
+
+        :param descriptor: Дескриптор компонента, у которого будет
+            открыто соединение
+        :param bus: Номер шины, на котором должно быть открыто
+            соединение
+        :returns: Результат типа ConnectorI2cSetBusResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # nextBus - Указатель на установленный номер шины
+        next_bus = ctypes.c_int()
+        # prevBus - Указатель на предыдущий номер шины
+        prev_bus = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_SetBus,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: bus; object type: int (тип C)
+            bus,
+            # name: nextBus; object type: *int (тип C)
+            next_bus,
+            # name: prevBus; object type: *int (тип C)
+            prev_bus,
+        )
+        return types.ConnectorI2cSetBusResult(
+            error_code,
+            next_bus.value,
+            prev_bus.value,
+        )
+
+    def connector_i2c_state(
+        self,
+        descriptor: int,
+    ) -> types.ConnectorI2cStateResult:
+        """
+        Чтение состояния адаптера.
+
+        Записывает константу состояния i2c адаптера с дескриптором
+        descriptor в параметр state
+
+        Состояние I2C соединения:
+
+        - 0 - Линия свободна - означает, что в данный момент времени
+            не выполняется никакая функция чтения/записи с данного
+            i2c адаптера.
+        - 1 - Линия занята. Означает, что уже выполняется какая-либо
+            функция чтения/записи для данного i2c адаптера.
+
+        Если линия у какого-либо i2c адаптера занята, то при
+        выполнении функций чтения/записи для данного i2c адаптера
+        программа будет ожидать, пока линия освободится.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State
+
+        :param descriptor: Дескриптор компонента
+        :returns: Результат типа ConnectorI2cStateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # state - Указатель на код состояния i2c адаптера
+        state = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_State,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: state; object type: *int (тип C)
+            state,
+        )
+        return types.ConnectorI2cStateResult(
+            error_code,
+            state.value,
+        )
+
+    def connector_i2c_write_byte(
+        self,
+        descriptor: int,
+        addr: int,
+        value: bytes,
+    ) -> types.ConnectorI2cWriteByteResult:
+        """
+        Запись байта по указанному адресу.
+
+        Записывает байт из value через  i2c адаптера по адресу addr
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteByte
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться запись
+        :param addr: Адрес, по которому будет производиться запись
+        :param value: Указатель на байт для записи
+        :returns: Результат типа ConnectorI2cWriteByteResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_WriteByte,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+            # name: value; object type: *long long unsigned (тип C)
+            utils.convert_python_bytes_to_c_ulonglong(value),
+        )
+        return types.ConnectorI2cWriteByteResult(
+            error_code,
+        )
+
+    def connector_i2c_write_bytes(
+        self,
+        descriptor: int,
+        addr: int,
+        buf: bytes,
+    ) -> types.ConnectorI2cWriteBytesResult:
+        """
+        Записывает len байтов из buf через  i2c адаптера по адресу
+        addr
+
+        Длина массива байт buf должна быть раной len
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteBytes
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться запись
+        :param addr: Адрес, по которому будет производиться запись
+        :param buf: Указатель на массив байт для записи
+        :returns: Результат типа ConnectorI2cWriteBytesResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # wroteBytesLen - Указатель на количество записаных байтов
+        wrote_bytes_len = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_connector_i2c_WriteBytes,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8(addr),
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            utils.convert_python_bytes_to_c_ulonglong(buf),
+            # length - Длина массива buf
+            # name: len; object type: int (тип C)
+            len(buf),
+            # name: wroteBytesLen; object type: *int (тип C)
+            wrote_bytes_len,
+        )
+        return types.ConnectorI2cWriteBytesResult(
+            error_code,
+            wrote_bytes_len.value,
+        )
+
+    def exec_rgb_led_extend(
+        self,
+        executor: int,
+    ) -> types.ExecRGBLEDExtendResult:
+        """
+        Расширение исполнителя до светодиода.
+
+        Расширяет компонент группы исполнителей с дескриптором  exec,
+        Записывает в параметр descriptor дескриптор нового компонента
+        (светодиод)
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Extend
+
+        :param executor: Компонент группы, который будет расширятся
+        :returns: Результат типа ExecRGBLEDExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент светодиода, который
+        #    получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_Extend,
+            # name: exec; object type: int (тип C)
+            executor,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecRGBLEDExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def exec_rgb_led_extend_to_model(
+        self,
+        base_descriptor: int,
+        model_name: str,
+    ) -> types.ExecRGBLEDExtendToModelResult:
+        """
+        Расширение светодиода до модели.
+
+        Расширяет компонент устройства светодиода с дескриптором
+        base,  Записывает в параметр descriptor дескриптор нового
+        компонента (компонент конкретной модели светодиода)
+        Доступные модели сервопривода: ky016
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_ExtendToModel
+
+        :param base_descriptor: Дескриптор компонента светодиода,
+            который будет расширятся
+        :param model_name: Модель компонента ("ky016")
+        :returns: Результат типа ExecRGBLEDExtendToModelResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент светодиода конкретной
+        #    модели, который получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_ExtendToModel,
+            # name: baseDescriptor; object type: int (тип C)
+            base_descriptor,
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecRGBLEDExtendToModelResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def exec_rgb_led_flashing_with_frequency(
+        self,
+        descriptor: int,
+        r: int,
+        g: int,
+        b: int,
+        frequency: int,
+        qty: int,
+        run_async: bool = False,
+    ) -> types.ExecRGBLEDFlashingWithFrequencyResult:
+        """
+        Мигание с заданной частотой.
+
+        Дает команду светодиоду с дескриптором descriptor мигать с
+        частотой frequency.  Количество миганий задается параметром
+        qty.  Параметры r, g, b устанавливают яркость свечения для
+        красного, зеленого и синего цвета соответственно. Параметр
+        async устанавливает режим выполнения команды - асинхронный
+        или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        *При значении qty = 0 операция выполняется до тех пор, пока
+        не придет другая команда или команда остановки
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithFrequency
+
+        :param descriptor: Дескриптор компонента светодиода
+        :param r: Значение яркости для красного цвета (0 -255)
+        :param g: Значение яркости для зеленого цвета (0 -255)
+        :param b: Значение яркости для синего цвета (0 -255)
+        :param frequency: Частота импульса (Гц)
+        :param qty: Количество итераций (миганий)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRGBLEDFlashingWithFrequencyResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_FlashingWithFrequency,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: r; object type: int (тип C)
+            r,
+            # name: g; object type: int (тип C)
+            g,
+            # name: b; object type: int (тип C)
+            b,
+            # name: frequency; object type: int (тип C)
+            frequency,
+            # name: qty; object type: int (тип C)
+            qty,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRGBLEDFlashingWithFrequencyResult(
+            error_code,
+        )
+
+    def exec_rgb_led_flashing_with_pause(
+        self,
+        descriptor: int,
+        r: int,
+        g: int,
+        b: int,
+        duration: int,
+        pause: int,
+        qty: int,
+        run_async: bool = False,
+    ) -> types.ExecRGBLEDFlashingWithPauseResult:
+        """
+        Мигание с заданной продолжительностью и паузой.
+
+        Дает команду светодиоду с дескриптором descriptor мигать с
+        паузой между миганиями равной pause.  Параметр  duration
+        устанавливает время одного светового импульса . Количество
+        миганий задается параметром qty.  Параметры r, g, b
+        устанавливают яркость свечения для красного, зеленого и
+        синего цвета соответственно. Параметр async устанавливает
+        режим выполнения команды - асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        *При значении qty = 0 операция выполняется до тех пор, пока
+        не придет другая команда или команда остановки
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithPause
+
+        :param descriptor: Дескриптор компонента светодиода
+        :param r: Значение яркости для красного цвета (0 -255)
+        :param g: Значение яркости для зеленого цвета (0 -255)
+        :param b: Значение яркости для синего цвета (0 -255)
+        :param duration: Продолжительность одного светового
+            импульса(миллисекунды)
+        :param pause: Пауза между импульсами (миллисекунды)
+        :param qty: Количество итераций (миганий)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRGBLEDFlashingWithPauseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_FlashingWithPause,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: r; object type: int (тип C)
+            r,
+            # name: g; object type: int (тип C)
+            g,
+            # name: b; object type: int (тип C)
+            b,
+            # name: duration; object type: int (тип C)
+            duration,
+            # name: pause; object type: int (тип C)
+            pause,
+            # name: qty; object type: int (тип C)
+            qty,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRGBLEDFlashingWithPauseResult(
+            error_code,
+        )
+
+    def exec_rgb_led_flicker(
+        self,
+        descriptor: int,
+        r: int,
+        g: int,
+        b: int,
+        duration: int,
+        qty: int,
+        run_async: bool = False,
+    ) -> types.ExecRGBLEDFlickerResult:
+        """
+        Мерцание.
+
+        Дает команду светодиоду с дескриптором descriptor мерцать
+        (постепенно изменять яркость цвета от 0 до значений r, g, b
+        для красного, зеленого и синего цвета соответственно и
+        обратно). Параметр  duration устанавливает время, за которое
+        яркость света изменяется от 0 до значения установленного
+        параметрами r, g, b и за которое яркость уменьшается обратно
+        до 0.
+        Количество мерцаний задается параметром qty.  Параметр async
+        устанавливает режим выполнения команды - асинхронный или
+        синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        *При значении qty = 0 операция выполняется до тех пор, пока
+        не придет другая команда или команда остановки
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker
+
+        :param descriptor: Дескриптор компонента светодиода
+        :param r: Значение максимальной яркости для красного цвета (0
+            -255)
+        :param g: Значение максимальной яркости для зеленого цвета (0
+            -255)
+        :param b: Значение максимальной яркости для синего цвета (0
+            -255)
+        :param duration: Продолжительность изменения яркости от 0 до
+            максимальной(миллисекунды)
+        :param qty: Количество итераций (мерцаний)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRGBLEDFlickerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_Flicker,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: r; object type: int (тип C)
+            r,
+            # name: g; object type: int (тип C)
+            g,
+            # name: b; object type: int (тип C)
+            b,
+            # name: duration; object type: int (тип C)
+            duration,
+            # name: qty; object type: int (тип C)
+            qty,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRGBLEDFlickerResult(
+            error_code,
+        )
+
+    def exec_rgb_led_get_color(
+        self,
+        descriptor: int,
+    ) -> types.ExecRGBLEDGetColorResult:
+        """
+        Чтение текущего свечения цвета светодиода
+
+        Получает значения текущих яркостей красного, зеленого и
+        синего цветов у сервопривода с дескриптором descriptor и
+        записывает эти значения в  r, g, b.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor
+
+        :param descriptor: Дескриптор компонента светодиода
+        :returns: Результат типа ExecRGBLEDGetColorResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # r - Указатель на значение яркости для красного цвета (0
+        #    -255)
+        r = ctypes.c_int()
+        # g - Указатель на значение яркости для зеленого цвета (0
+        #    -255)
+        g = ctypes.c_int()
+        # b - Указатель на значение яркости для синего цвета (0 -255)
+        b = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_GetColor,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: r; object type: *int (тип C)
+            r,
+            # name: g; object type: *int (тип C)
+            g,
+            # name: b; object type: *int (тип C)
+            b,
+        )
+        return types.ExecRGBLEDGetColorResult(
+            error_code,
+            r.value,
+            g.value,
+            b.value,
+        )
+
+    def exec_rgb_led_get_state(
+        self,
+        descriptor: int,
+    ) -> types.ExecRGBLEDGetStateResult:
+        """
+        Чтение состояния светодиода.
+
+        Получает значение константы состояния  светодиода с
+        дескриптором descriptor и записывает его в state
+
+        Коды состояния:
+
+        1. 0 - Компонент ожидает вызова действий. - Светодиод не
+            выполняет никакую команду
+        2. 2 - Простое свечение. Светодиод выполняет команду простого
+            свечения.
+        3. 3 - Мигание. Светодиод выполняет одну из 2-х команд
+            мигания
+        4. 4 - Мерцание. Светодиод выполняет команду мерцания.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetState
+
+        :param descriptor: Дескриптор компонента светодиода
+        :returns: Результат типа ExecRGBLEDGetStateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # state - Указатель на код состояния светодиода
+        state = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_GetState,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: state; object type: *int (тип C)
+            state,
+        )
+        return types.ExecRGBLEDGetStateResult(
+            error_code,
+            state.value,
+        )
+
+    def exec_rgb_led_single_pulse(
+        self,
+        descriptor: int,
+        r: int,
+        g: int,
+        b: int,
+        duration: int,
+        run_async: bool = False,
+    ) -> types.ExecRGBLEDSinglePulseResult:
+        """
+        Непрерывное свечение.
+
+        Дает команду непрерывного свечения для светодиода с
+        дескриптором descriptor.  Параметры r, g, b устанавливают
+        яркость свечения для красного, зеленого и синего цвета
+        соответственно.  Параметр duration задает продолжительность
+        свечения.Параметр async устанавливает режим выполнения
+        команды - асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        *При значении duration = 0 операция выполняется до тех пор,
+        пока не придет другая команда или команда остановки
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse
+
+        :param descriptor: Дескриптор компонента светодиода
+        :param r: Значение яркости для красного цвета (0 -255)
+        :param g: Значение яркости для зеленого цвета (0 -255)
+        :param b: Значение яркости для синего цвета (0 -255)
+        :param duration: Продолжительность импульса (миллисекунды)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRGBLEDSinglePulseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_SinglePulse,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: r; object type: int (тип C)
+            r,
+            # name: g; object type: int (тип C)
+            g,
+            # name: b; object type: int (тип C)
+            b,
+            # name: duration; object type: int (тип C)
+            duration,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRGBLEDSinglePulseResult(
+            error_code,
+        )
+
+    def exec_rgb_led_stop(
+        self,
+        descriptor: int,
+    ) -> types.ExecRGBLEDStopResult:
+        """
+        Прекращение выполнения команды светодиодом
+
+        Дает команду светодиоду с дескриптором descriptor остановить
+        выполнение выполняемой в данный момент  команды. Светодиод
+        прекращает свечение и затухает.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop
+
+        :param descriptor: Дескриптор компонента светодиода
+        :returns: Результат типа ExecRGBLEDStopResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RGB_LED_Stop,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.ExecRGBLEDStopResult(
+            error_code,
+        )
+
+    def exec_r_servo_drive_custom_device_init(
+        self,
+        descriptor: int,
+        min_pulse_clockwise: int,
+        max_pulse_clockwise: int,
+        min_pulse_counter_clockwise: int,
+        max_pulse_counter_clockwise: int,
+    ) -> types.ExecRServoDriveCustomDeviceInitResult:
+        """
+        Инициализация собственного компонента.
+
+        Инициализирует собственный компонент сервопривода вращения.
+        Альтернатива функции RI_SDK_exec_RServoDrive_ExtendToModel.
+
+        Устанавливает значения минимального и максимального импульса
+        для поворота по часовой и против часовой стрелки (мкс).
+        Эти значение устанавливаются для сервопривода вращения с
+        дескриптором descriptor.
+
+        Данная функция используется для получения возможности работы
+        с сервоприводом вращения, модель которого не поддерживается
+        библиотекой.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_CustomDeviceInit
+
+        :param descriptor: Дескриптор компонента сервопривода,
+            который будет инициализирован
+        :param min_pulse_clockwise: Минимальное значение импульса
+            (микросекунды) для поворота по часовой
+        :param max_pulse_clockwise: Максимальное значение импульса
+            (микросекунды) для поворота по часовой
+        :param min_pulse_counter_clockwise: Минимальное значение
+            импульса (микросекунды) для поворота против часовой
+        :param max_pulse_counter_clockwise: Максимальное значение
+            импульса (микросекунды) для поворота против часовой
+        :returns: Результат типа ExecRServoDriveCustomDeviceInitResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_CustomDeviceInit,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: minPulseClockwise; object type: int (тип C)
+            min_pulse_clockwise,
+            # name: maxPulseClockwise; object type: int (тип C)
+            max_pulse_clockwise,
+            # name: minPulseCounterClockwise; object type: int (тип C)
+            min_pulse_counter_clockwise,
+            # name: maxPulseCounterClockwise; object type: int (тип C)
+            max_pulse_counter_clockwise,
+        )
+        return types.ExecRServoDriveCustomDeviceInitResult(
+            error_code,
+        )
+
+    def exec_r_servo_drive_extend(
+        self,
+        executor: int,
+    ) -> types.ExecRServoDriveExtendResult:
+        """
+        Расширение исполнителя до сервопривода вращения.
+
+        Расширяет компонент группы исполнителей с дескриптором  exec.
+        Записывает в параметр descriptor дескриптор нового компонента
+        (Сервопривода вращения)
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend
+
+        :param executor: Компонент группы, который будет расширятся
+        :returns: Результат типа ExecRServoDriveExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент сервопривода вращения,
+        #    который получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_Extend,
+            # name: exec; object type: int (тип C)
+            executor,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecRServoDriveExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def exec_r_servo_drive_extend_to_model(
+        self,
+        base_descriptor: int,
+        model_name: str,
+    ) -> types.ExecRServoDriveExtendToModelResult:
+        """
+        Расширение сервопривода вращения до модели.
+
+        Расширяет компонент устройства сервопривода вращения с
+        дескриптором  base.
+        Записывает в параметр descriptor дескриптор нового компонента
+        (компонент конкретной модели сервопривода вращения)
+
+        Доступные модели сервопривода: mg996r
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel
+
+        :param base_descriptor: Дескриптор компонента сервопривода
+            вращения, который будет расширятся
+        :param model_name: Модель компонента ("mg996r")
+        :returns: Результат типа ExecRServoDriveExtendToModelResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент сервопривода вращения
+        #    конкретной модели, который получится в результате
+        #    расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_ExtendToModel,
+            # name: baseDescriptor; object type: int (тип C)
+            base_descriptor,
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecRServoDriveExtendToModelResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def exec_r_servo_drive_get_state(
+        self,
+        descriptor: int,
+    ) -> types.ExecRServoDriveGetStateResult:
+        """
+        Чтение состояния сервопривода.
+
+        Получает значение константы состояния  сервопривода с
+        дескриптором descriptor и записывает его в state.
+
+        Коды состояния:
+
+        0 - Сервопривод ожидает вызова действий. Сервопривод ничего
+        не делает и готов к работе.
+        1 - Компонент выполняет действие. Сервопривод в данный момент
+        осуществляет движение.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_GetState
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :returns: Результат типа ExecRServoDriveGetStateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # state - Указатель код состояния сервопривода
+        state = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_GetState,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: state; object type: *int (тип C)
+            state,
+        )
+        return types.ExecRServoDriveGetStateResult(
+            error_code,
+            state.value,
+        )
+
+    def exec_r_servo_drive_rotate_by_pulse(
+        self,
+        descriptor: int,
+        pulse: int,
+        run_async: bool = False,
+    ) -> types.ExecRServoDriveRotateByPulseResult:
+        """
+        Направление и скорость задаются через значение импульса.
+        Вращение выполняется до тех пор, пока не будет вызвана
+        функция остановки.
+
+        Дает команду сервоприводу с дескриптором descriptor вращаться
+        до тех пор, пока не
+        будет вызвана функция остановки. Направление и скорость
+        вращения задается параметром pulse, соответствующее значению
+        управляющего импульса.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        Размер рабочего диапазона для mg996r - по часовой стрелке
+        1020 мкс (от 400 до 1420 мкс), против часовой стрелки 1020
+        мкс (от 1540 до 2560 мкс).
+        Максимальная скорость при вращении по часовой стрелке
+        достигается при минимальном значении из рабочего диапазона,
+        для вращения против часовой наоборот, минимальное значение из
+        рабочего диапазона вращает сервопривод с минимальной
+        скоростью.
+        Для управляющего сигнала между диапазонами вращение не
+        происходит.
+
+        Даже в рамках одной и той же модели сервопривода существует
+        погрешность, допускаемая при производстве, которая приводит
+        к тому, что рабочий диапазон длин импульсов отличается. Для
+        точной работы каждый конкретный сервопривод должен быть
+        откалиброван: путём экспериментов необходимо подобрать
+        корректный диапазон, характерный именно для него.
+        С помощью метода инициализации собственного компонента
+        сервопривода вращения
+        можно инициализировать сервопривод с откалиброванными
+        характеристиками.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды.
+        Т.е. поток выполнения программы остановится в этой функции и
+        будет ожидать команды на завершении вращения.
+        При асинхронном режиме выполнение функции осуществляется
+        параллельно дальнейшей работе программы.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulse
+
+        :param descriptor: Дескриптор сервопривода
+        :param pulse: Значение импульса (мкс)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRServoDriveRotateByPulseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_RotateByPulse,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: pulse; object type: int (тип C)
+            pulse,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRServoDriveRotateByPulseResult(
+            error_code,
+        )
+
+    def exec_r_servo_drive_rotate_by_pulse_over_time(
+        self,
+        descriptor: int,
+        pulse: int,
+        timeout: int,
+        run_async: bool = False,
+    ) -> types.ExecRServoDriveRotateByPulseOverTimeResult:
+        """
+        Вращение, направление и скорость которого, задается через
+        значение импульса.
+        Вращение выполняется до тех пор, пока не сработает заданный
+        таймаут или не будет вызвана команда остановки.
+
+        Дает команду сервоприводу с дескриптором descriptor вращаться
+        до тех пор, пока не сработает заданный таймаут или не
+        будет вызвана функция остановки. Направление и скорость
+        вращения задается параметром pulse, соответствующее значению
+        управляющего импульса.
+        В параметре timeout передана длительность таймаута, в течении
+        которого будет выполняться вращение.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        Размер рабочего диапазона для mg996r - по часовой стрелке
+        1020 мкс (от 400 до 1420 мкс), против часовой стрелки 1020
+        мкс (от 1540 до 2560 мкс).
+        Максимальная скорость при вращении по часовой стрелке
+        достигается при минимальном значении из рабочего диапазона,
+        для вращения против часовой наоборот, минимальное значение из
+        рабочего диапазона вращает сервопривод с минимальной
+        скоростью.
+        Для управляющего сигнала между диапазонами вращение не
+        происходит.
+
+        Даже в рамках одной и той же модели сервопривода существует
+        погрешность, допускаемая при производстве, которая приводит
+        к тому, что рабочий диапазон длин импульсов отличается. Для
+        точной работы каждый конкретный сервопривод должен быть
+        откалиброван: путём экспериментов необходимо подобрать
+        корректный диапазон, характерный именно для него.
+        С помощью метода инициализации собственного компонента
+        сервопривода вращения
+        можно инициализировать сервопривод с откалиброванными
+        характеристиками.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. Вращение
+        выполняется до истечения таймаута, т.к. функцию остановки
+        невозможно (в том же потоке) вызвать раньше завершения
+        текущей команды.
+        При асинхронном режиме ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+        И если после функции вращения для используемого сервопривода
+        будет вызвана следующая команда, то вращение будет прервано
+        до истечения таймаута.
+
+        Если таймаут задан равным нулю, то будет вызвана функция
+        вращения по импульсу, а таймаут меньше нуля вызовет ошибку.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulseOverTime
+
+        :param descriptor: Дескриптор сервопривода
+        :param pulse: Значение импульса (микросекунды)
+        :param timeout: Значение таймаут (микросекунды)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRServoDriveRotateByPulseOverTimeResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_RotateByPulseOverTime,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: pulse; object type: int (тип C)
+            pulse,
+            # name: timeout; object type: int (тип C)
+            timeout,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRServoDriveRotateByPulseOverTimeResult(
+            error_code,
+        )
+
+    def exec_r_servo_drive_rotate_with_relative_speed(
+        self,
+        descriptor: int,
+        direction: int,
+        speed: int,
+        run_async: bool = False,
+    ) -> types.ExecRServoDriveRotateWithRelativeSpeedResult:
+        """
+        Вращение в заданном направлении с заданной относительной
+        скоростью. Вращение выполняется до тех пор, пока не будет
+        вызвана функция остановки.
+
+        Дает команду сервоприводу с дескриптором descriptor вращаться
+        до тех пор, пока не будет вызвана функция остановки.
+        Направление поворота задается параметром direction, а
+        скорость поворота параметром speed.
+        При этом скорость поворота задается в процентах от
+        максимальной скорости вращения.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        Направления движения:
+        0 - по часовой стрелке
+        1 - против часовой стрелки
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды.
+        Т.е. поток выполнения программы остановится в этой функции и
+        будет ожидать команды на завершении вращения.
+        При асинхронном режиме выполнение функции осуществляется
+        параллельно дальнейшей работе программы.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
+
+        :param descriptor: Дескриптор сервопривода
+        :param direction: Направление движения
+        :param speed: Угловая скорость поворота (процент от
+            максимальной скорости)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRServoDriveRotateWithRelativeSpeedResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: direction; object type: int (тип C)
+            direction,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRServoDriveRotateWithRelativeSpeedResult(
+            error_code,
+        )
+
+    def exec_r_servo_drive_rotate_with_relative_speed_over_time(
+        self,
+        descriptor: int,
+        direction: int,
+        speed: int,
+        timeout: int,
+        run_async: bool = False,
+    ) -> types.ExecRServoDriveRotateWithRelativeSpeedOverTimeResult:
+        """
+        Вращение в заданном направлении с заданной относительной
+        скоростью.
+        Вращение выполняется до тех пор, пока не сработает заданный
+        таймаут или не будет вызвана команда остановки.
+
+        Дает команду сервоприводу с дескриптором descriptor вращаться
+        до тех пор, пока не сработает заданный таймаут или не
+        будет вызвана функция остановки.
+        Направление поворота задается параметром direction, а
+        скорость поворота параметром speed.
+        При этом скорость поворота задается в процентах от
+        максимальной скорости вращения.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        Направления движения:
+        0 - по часовой стрелке
+        1 - против часовой стрелки
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. Вращение
+        выполняется до истечения таймаута, т.к. функцию остановки
+        невозможно (в том же потоке) вызвать раньше завершения
+        текущей команды.
+        При асинхронном режиме ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+        И если после функции вращения для используемого сервопривода
+        будет вызвана следующая команда, то вращение будет прервано
+        до истечения таймаута.
+
+        Если таймаут задан равным нулю, то будет вызвана функция
+        вращения с заданным процентом от максимальной скорости, а
+        таймаут меньше нуля вызовет ошибку.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
+
+        :param descriptor: Дескриптор сервопривода
+        :param direction: Направление движения
+        :param speed: Угловая скорость поворота (процент от
+            максимальной скорости)
+        :param timeout: Значение таймаут (микросекунды)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecRServoDriveRotateWithRelativeSpeedOverTimeResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: direction; object type: int (тип C)
+            direction,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: timeout; object type: int (тип C)
+            timeout,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecRServoDriveRotateWithRelativeSpeedOverTimeResult(
+            error_code,
+        )
+
+    def exec_r_servo_drive_stop(
+        self,
+        descriptor: int,
+    ) -> types.ExecRServoDriveStopResult:
+        """
+        Остановка выполняемого действия.
+
+        Дает команду сервоприводу вращения с дескриптором descriptor
+        остановить движение, если оно производится в данный момент.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Stop
+
+        :param descriptor: Дескриптор компонента сервопривода
+            вращения
+        :returns: Результат типа ExecRServoDriveStopResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_RServoDrive_Stop,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.ExecRServoDriveStopResult(
+            error_code,
+        )
+
+    def exec_servo_drive_custom_device_init(
+        self,
+        descriptor: int,
+        max_impulse: int,
+        min_impulse: int,
+        max_speed: int,
+        range_angle: int,
+    ) -> types.ExecServoDriveCustomDeviceInitResult:
+        """
+        Инициализация собственного компонента.
+
+        Инициализирует собственный компонент сервопривода.
+        Альтернатива функции RI_SDK_exec_ServoDrive_ExtendToModel.
+
+        Устанавливает значения минимального и максимального импульса
+        (мкс), максимальной скорости вращения (градусов в секунду),
+        размера рабочего диапазона в мкс. Эти значение
+        устанавливаются для сервопривода с дескриптором descriptor.
+
+        Данная функция используется для получения возможности работы
+        с сервоприводом, модель которого не поддерживается
+        библиотекой.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit
+
+        :param descriptor: Дескриптор компонента сервопривода,
+            который будет инициализирован
+        :param max_impulse: Максимальное значение импульса
+            (микросекунды)
+        :param min_impulse: Минимальное  значение импульса
+            (микросекунды)
+        :param max_speed: Максимальная угловая скорость (градус /
+            секунда)
+        :param range_angle: Диапазон вращения сервопривода
+            (микросекунды)
+        :returns: Результат типа ExecServoDriveCustomDeviceInitResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_CustomDeviceInit,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: maxImpulse; object type: int (тип C)
+            max_impulse,
+            # name: minImpulse; object type: int (тип C)
+            min_impulse,
+            # name: maxSpeed; object type: int (тип C)
+            max_speed,
+            # name: rangeAngle; object type: int (тип C)
+            range_angle,
+        )
+        return types.ExecServoDriveCustomDeviceInitResult(
+            error_code,
+        )
+
+    def exec_servo_drive_extend(
+        self,
+        executor: int,
+    ) -> types.ExecServoDriveExtendResult:
+        """
+        Расширение исполнителя до сервопривода.
+
+        Расширяет компонент группы исполнителей с дескриптором  exec,
+        Записывает в параметр descriptor дескриптор нового компонента
+        (Сервопривода)
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Extend
+
+        :param executor: Компонент группы, который будет расширятся
+        :returns: Результат типа ExecServoDriveExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент сервопривода, который
+        #    получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_Extend,
+            # name: exec; object type: int (тип C)
+            executor,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecServoDriveExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def exec_servo_drive_extend_to_model(
+        self,
+        base_descriptor: int,
+        model_name: str,
+    ) -> types.ExecServoDriveExtendToModelResult:
+        """
+        Расширение сервопривода до модели.
+
+        Расширяет компонент устройства сервопривода с дескриптором
+        base.
+        Записывает в параметр descriptor дескриптор нового компонента
+        (компонент конкретной модели сервопривода)
+
+        Доступные модели сервопривода: mg90s, a0090, mg996, corona
+        ds929mg, corona sb9039, corona ds843mg, corona ds238mg
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_ExtendToModel
+
+        :param base_descriptor: Базовый дескриптор компонента
+            сервопривода, который будет расширяться
+        :param model_name: Модель компонента
+        :returns: Результат типа ExecServoDriveExtendToModelResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент сервопривода конкретной
+        #    модели, который получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_ExtendToModel,
+            # name: baseDescriptor; object type: int (тип C)
+            base_descriptor,
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecServoDriveExtendToModelResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def exec_servo_drive_get_current_angle(
+        self,
+        descriptor: int,
+    ) -> types.ExecServoDriveGetCurrentAngleResult:
+        """
+        Чтение текущего угла.
+
+        Получает значение угла поворота у сервопривода с дескриптором
+        descriptor и записывает его в angle
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetCurrentAngle
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :returns: Результат типа ExecServoDriveGetCurrentAngleResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # angle - Указатель на код состояния сервопривода
+        angle = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_GetCurrentAngle,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: angle; object type: *int (тип C)
+            angle,
+        )
+        return types.ExecServoDriveGetCurrentAngleResult(
+            error_code,
+            angle.value,
+        )
+
+    def exec_servo_drive_get_state(
+        self,
+        descriptor: int,
+    ) -> types.ExecServoDriveGetStateResult:
+        """
+        Чтение состояния сервопривода.
+
+        Получает значение константы состояния  сервопривода с
+        дескриптором descriptor и записывает его в state
+
+        Коды состояния:
+
+        0 - Сервопривод ожидает вызова действий. Сервопривод ничего
+        не делает и готов к работе.
+        1 - Компонент выполняет действие. Сервопривод в данный момент
+        осуществляет движение.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :returns: Результат типа ExecServoDriveGetStateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # state - Указатель на код состояния сервопривода
+        state = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_GetState,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: state; object type: *int (тип C)
+            state,
+        )
+        return types.ExecServoDriveGetStateResult(
+            error_code,
+            state.value,
+        )
+
+    def exec_servo_drive_min_step_rotate(
+        self,
+        descriptor: int,
+        direction: int,
+        speed: int,
+        run_async: bool = False,
+    ) -> types.ExecServoDriveMinStepRotateResult:
+        """
+        Поворот на минимальный шаг.
+
+        Дает команду сервоприводу с дескриптором descriptor повернуть
+        на 1 градус. Направление поворота задается параметром
+        direction, а скорость поворота параметром speed.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        Направления движения:
+        0 - по часовой стрелке
+        1 - против часовой стрелки
+
+        *Изначально у серопривода положение 0 градусов.  Поэтому
+        первое движение он может совершить только на положительный
+        угол.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate
+
+        :param descriptor: Дескриптор сервопривода
+        :param direction: Направление движения
+        :param speed: Угловая скорость поворота (градус / секунда)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecServoDriveMinStepRotateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_MinStepRotate,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: direction; object type: int (тип C)
+            direction,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecServoDriveMinStepRotateResult(
+            error_code,
+        )
+
+    def exec_servo_drive_rotate(
+        self,
+        descriptor: int,
+        direction: int,
+        speed: int,
+        run_async: bool = False,
+    ) -> types.ExecServoDriveRotateResult:
+        """
+        Вращение с заданной угловой скоростью.
+
+        Дает команду сервоприводу с дескриптором descriptor вращаться
+        до тех пор, пока не будет достигнуто крайнее значение угла
+        поворота (либо максимальный угол поворота либо минимальный,
+        в зависимости от направления движения). Направление поворота
+        задается параметром direction, а скорость поворота параметром
+        speed.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        Направления движения:
+        0 - по часовой стрелке
+        1 - против часовой стрелки
+
+        *Изначально у серопривода положение 0 градусов.  Поэтому
+        первое движение он может совершить только на положительный
+        угол.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Rotate
+
+        :param descriptor: Дескриптор сервопривода
+        :param direction: Направление движения
+        :param speed: Угловая скорость поворота (градус / секунда)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecServoDriveRotateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_Rotate,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: direction; object type: int (тип C)
+            direction,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecServoDriveRotateResult(
+            error_code,
+        )
+
+    def exec_servo_drive_rotate_with_relative_speed(
+        self,
+        descriptor: int,
+        direction: int,
+        speed: int,
+        run_async: bool = False,
+    ) -> types.ExecServoDriveRotateWithRelativeSpeedResult:
+        """
+        Вращение в заданном направлении с заданной относительной
+        скоростью.
+
+        Дает команду сервоприводу с дескриптором descriptor вращаться
+        до тех пор, пока не будет достигнуто крайнее значение угла
+        поворота (либо максимальный угол поворота либо минимальный,
+        в зависимости от направления движения). Направление поворота
+        задается параметром direction, а скорость поворота параметром
+        speed.  При этом скорость поворота задается в процентах от
+        максимальной скорости
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        Направления движения:
+        0 - по часовой стрелке
+        1 - против часовой стрелки
+
+        *Изначально у серопривода положение 0 градусов.  Поэтому
+        первое движение он может совершить только на положительный
+        угол.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :param direction: Направление движения
+        :param speed: Угловая скорость поворота (процент от
+            максимальной скорости)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecServoDriveRotateWithRelativeSpeedResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: direction; object type: int (тип C)
+            direction,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecServoDriveRotateWithRelativeSpeedResult(
+            error_code,
+        )
+
+    def exec_servo_drive_set_position_to_mid_working_range(
+        self,
+        descriptor: int,
+    ) -> types.ExecServoDriveSetPositionToMidWorkingRangeResult:
+        """
+        Поворот сервопривода в середину рабочего диапазона
+
+        Дает команду сервоприводу с выбранным десктриптором
+        повернуться в середину рабочего диапазона с максимальной
+        скоростью.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :returns: Результат типа ExecServoDriveSetPositionToMidWorkingRangeResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.ExecServoDriveSetPositionToMidWorkingRangeResult(
+            error_code,
+        )
+
+    def exec_servo_drive_stop(
+        self,
+        descriptor: int,
+    ) -> types.ExecServoDriveStopResult:
+        """
+        Остановка выполняемого действия.
+
+        Дает команду сервоприводу с дескриптором descriptor
+        остановить движение, если оно производится в данный момент.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Stop
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :returns: Результат типа ExecServoDriveStopResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_Stop,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.ExecServoDriveStopResult(
+            error_code,
+        )
+
+    def exec_servo_drive_turn(
+        self,
+        descriptor: int,
+        angle: int,
+        speed: int,
+        run_async: bool = False,
+    ) -> types.ExecServoDriveTurnResult:
+        """
+        Поворот на заданный угол с заданной угловой скоростью.
+
+        Дает команду сервоприводу  с дескриптором descriptor
+        повернуть на angle градусов. Направление поворота задается
+        параметром direction, а скорость поворота параметром speed.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию.
+
+        *Изначально у серопривода положение 0 градусов.  Поэтому
+        первое движение он может совершить только на положительный
+        угол.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Turn
+
+        :param descriptor: Дескриптор сервопривода
+        :param angle: Угол поворота в градусах. Если угол
+            положительный, поворот осуществляется по часовой стрелке,
+            если отрицательный, то против часовой
+        :param speed: Угловая скорость поворота (градус / секунда)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecServoDriveTurnResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_Turn,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: angle; object type: int (тип C)
+            angle,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecServoDriveTurnResult(
+            error_code,
+        )
+
+    def exec_servo_drive_turn_by_duty_cycle(
+        self,
+        descriptor: int,
+        steps: int,
+    ) -> types.ExecServoDriveTurnByDutyCycleResult:
+        """
+        Абсолютный поворот. Угол задается через
+        кол-во шагов сервопривода.
+
+        Дает команду сервоприводу  дескриптором descriptor встать в
+        положение, соответствующее переданному значению скважности.
+
+        Значение скважности не может быть больше значения разрешения
+        ШИМ, к которому подключен сервопривод.
+
+        Также значение скважности должно быть больше или равным
+        ((minPulse * freq)/1000000 * 0xFFFF)+1) >> 4
+        и меньше или равным
+        ((maxPulse * freq)/1000000 * 0xFFFF)+1) >> 4
+
+        Где:
+        minPulse - минимальное значение импульса для данного
+        сервопривода (maxPulse - pulseRange);
+        maxPulse- максимальное значение импульса для данного
+        сервопривода;
+        freq - значение частоты ШИМ модулятора, к которому подключен
+        сервопривод.
+
+        Для модели mg90s, у которой размер рабочего диапазона равен
+        2444 мкс, максимальное значение импульса равно 2771 мкс, при
+        подключении к ШИМ модулятору pca9586, у которого частота
+        равна 50 Гц, значение скважности должно попадать в промежуток
+        от 55 до 554 шагов включительно.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :param steps: Количество шагов для шим преобразователя
+        :returns: Результат типа ExecServoDriveTurnByDutyCycleResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_TurnByDutyCycle,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: steps; object type: int (тип C)
+            steps,
+        )
+        return types.ExecServoDriveTurnByDutyCycleResult(
+            error_code,
+        )
+
+    def exec_servo_drive_turn_by_pulse(
+        self,
+        descriptor: int,
+        pulse: int,
+    ) -> types.ExecServoDriveTurnByPulseResult:
+        """
+        Абсолютный поворот к углу, определенному значением импульса.
+
+        Дает команду сервоприводу  дескриптором descriptor встать в
+        положение, соответствующее переданному значению управляющего
+        импульса.
+
+        Размер рабочего  диапазона для mg90s - 2444 мкс () ~ 219
+        градусов (от 0 до 219)
+        Максимальный импульс - 2711 мкс
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse
+
+        :param descriptor: Дескриптор компонента сервопривода
+        :param pulse: Значение импульса (микросекунды)
+        :returns: Результат типа ExecServoDriveTurnByPulseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_TurnByPulse,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: pulse; object type: int (тип C)
+            pulse,
+        )
+        return types.ExecServoDriveTurnByPulseResult(
+            error_code,
+        )
+
+    def exec_servo_drive_turn_with_relative_speed(
+        self,
+        descriptor: int,
+        angle: int,
+        speed: int,
+        run_async: bool = False,
+    ) -> types.ExecServoDriveTurnWithRelativeSpeedResult:
+        """
+        Поворот на заданный угол с заданной угловой скоростью.
+
+        Дает команду сервоприводу  с дескриптором descriptor
+        повернуть на angle градусов. Направление поворота задается
+        параметром direction, а скорость поворота параметром speed.
+        При этом скорость поворота задается в процентах от
+        максимальной скорости.
+        Параметр async устанавливает режим выполнения команды -
+        асинхронный или синхронный.
+
+        При синхронном режиме, программа, которая вызвала данную
+        функцию, ожидает завершение выполнения команды. При
+        асинхронном режиме этого ожидания не происходит, и выполнение
+        команды осуществляется параллельно дальнейшей работе
+        программы, вызвавшей данную функцию
+
+        *Изначально у серопривода положение 0 градусов.  Поэтому
+        первое движение он может совершить только на положительный
+        угол.
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
+
+        :param descriptor: Дескриптор сервопривода
+        :param angle: Угол поворота в градусах. Если угол
+            положительный, поворот осуществляется по часовой стрелке,
+            если отрицательный, то против часовой
+        :param speed: Угловая скорость поворота (процент от
+            максимальной скорости)
+        :param run_async: Признак асинхронного выполнения команды
+        :returns: Результат типа ExecServoDriveTurnWithRelativeSpeedResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: angle; object type: int (тип C)
+            angle,
+            # name: speed; object type: int (тип C)
+            speed,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool(run_async),
+        )
+        return types.ExecServoDriveTurnWithRelativeSpeedResult(
+            error_code,
+        )
+
+    def executor_extend(
+        self,
+        basic: int,
+    ) -> types.ExecutorExtendResult:
+        """
+        Расширяет базовый компонент с дескриптором  basic.
+        Записывает в параметр descriptor дескриптор нового компонента
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_Extend
+
+        :param basic: Базовый компонент
+        :returns: Результат типа ExecutorExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент, который будет создан
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_executor_Extend,
+            # name: basic; object type: int (тип C)
+            basic,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.ExecutorExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def executor_state(
+        self,
+        descriptor: int,
+    ) -> types.ExecutorStateResult:
+        """
+        Чтение состояния исполнителя.
+
+        Записывает в параметр state константу состояния
+        исполнительного устройства с дескриптором  равным descriptor
+
+        Коды состояния:
+
+        1. 0 - Компонент ожидает вызова действий
+        2. 1 - Компонент выполняет действие
+        3. 2 - Компонент выполняет простое свечение (только для
+            светодиода)
+        4. 3 - Компонент выполняет мигание (только для светодиода)
+        5. 4 - Компонент выполняет мерцание (только для светодиода)
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_State
+
+        :param descriptor: Дескриптор компонента группы исполнителей
+        :returns: Результат типа ExecutorStateResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # state - Указатель на код состояния исполнителя
+        state = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_executor_State,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: state; object type: *int (тип C)
+            state,
+        )
+        return types.ExecutorStateResult(
+            error_code,
+            state.value,
+        )
+
+    def sensor_voltage_sensor_current(
+        self,
+        descriptor: int,
+    ) -> types.SensorVoltageSensorCurrentResult:
+        """
+        Получение значения силы тока в цепи.
+
+        Дает команду датчику тока , напряжения и мощности с
+        дескриптором descriptor измерить силу тока в цепи, к которой
+        подключен датчик. Записывает полученное значение в переменную
+        current
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Current
+
+        :param descriptor: Дескриптор компонента датчика тока,
+            напряжения и мощности
+        :returns: Результат типа SensorVoltageSensorCurrentResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # current - Указатель на значение силы тока (Ампер)
+        current = ctypes.c_float()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_Current,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: current; object type: *float (тип C)
+            current,
+        )
+        return types.SensorVoltageSensorCurrentResult(
+            error_code,
+            current.value,
+        )
+
+    def sensor_voltage_sensor_custom_device_init(
+        self,
+        descriptor: int,
+        lsb_bus: float,
+        lsb_shunt: float,
+        shunt_resist: float,
+        reg_voltage_shunt: int,
+        reg_voltage_bus: int,
+    ) -> types.SensorVoltageSensorCustomDeviceInitResult:
+        """
+        Инициализация собственного компонента.
+
+        Инициализирует собственный компонент датчика тока, напряжения
+        и мощности. Альтернатива функции
+        RI_SDK_sensor_VoltageSensor_ExtendToModel.
+
+        Устанавливает значение младшего бита напряжения на
+        шине(Вольт), значение младшего бита напряжения на
+        шунте(Вольт) и сопротивление шунта(Ом). Эти значение
+        устанавливаются для датчика тока, напряжения и мощности с
+        дескриптором descriptor.
+        Также задаются номера регистров для чтения значения
+        напряжения на шунте (regVoltageShunt) и напряжения на шине
+        (regVoltageBus).
+
+        Данная функция используется для получения возможности работы
+        с датчиком тока, напряжения и мощности, модель которого не
+        поддерживается библиотекой.
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_CustomDeviceInit
+
+        :param descriptor: Дескриптор компонента датчика тока,
+            напряжения и мощности
+        :param lsb_bus: Значение младшего бита напряжения на шине
+            (Вольт)
+        :param lsb_shunt: Значение младшего бита напряжения на шунте
+            (Вольт)
+        :param shunt_resist: Сопротивление шунта  (Ом)
+        :param reg_voltage_shunt: Номер регистра для чтения
+            напряжения на шунте
+        :param reg_voltage_bus: Номер регистра для чтения напряжения
+            на шине
+        :returns: Результат типа SensorVoltageSensorCustomDeviceInitResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_CustomDeviceInit,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: lsbBus; object type: float (тип C)
+            lsb_bus,
+            # name: lsbShunt; object type: float (тип C)
+            lsb_shunt,
+            # name: shuntResist; object type: float (тип C)
+            shunt_resist,
+            # name: regVoltageShunt; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg_voltage_shunt),
+            # name: regVoltageBus; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg_voltage_bus),
+        )
+        return types.SensorVoltageSensorCustomDeviceInitResult(
+            error_code,
+        )
+
+    def sensor_voltage_sensor_extend(
+        self,
+        sensor: int,
+    ) -> types.SensorVoltageSensorExtendResult:
+        """
+        Расширения компонента группы датчиков до датчика тока,
+        напряжения и мощности.
+
+        Расширяет компонент группы датчиков с дескриптором sensor до
+        компонента датчика тока, напряжения и мощности. Записывает
+        новый дескриптор в descriptor
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Extend
+
+        :param sensor: Компонент группы, который будет расширятся
+        :returns: Результат типа SensorVoltageSensorExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент датчика тока,
+        #    напряжения и мощности, который получится в результате
+        #    расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_Extend,
+            # name: sensor; object type: int (тип C)
+            sensor,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.SensorVoltageSensorExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def sensor_voltage_sensor_extend_to_model(
+        self,
+        base: int,
+        model_name: str,
+    ) -> types.SensorVoltageSensorExtendToModelResult:
+        """
+        Расширение датчика тока, напряжения и мощности до конкретной
+        модели.
+
+        Расширяет компонент датчика тока, напряжения и мощности с
+        дескриптором  base.  Записывает в параметр descriptor
+        дескриптор нового компонента (компонент конкретной модели
+        датчика тока, напряжения и мощности)
+
+        Доступные модели сервопривода: ina219
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ExtendToModel
+
+        :param base: Компонент датчика тока, напряжения и мощности,
+            который будет расширятся
+        :param model_name: Модель компонента ("ina219")
+        :returns: Результат типа SensorVoltageSensorExtendToModelResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент датчика тока,
+        #    напряжения и мощности конкретной модели, который
+        #    получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_ExtendToModel,
+            # name: base; object type: int (тип C)
+            base,
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.SensorVoltageSensorExtendToModelResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def sensor_voltage_sensor_power(
+        self,
+        descriptor: int,
+    ) -> types.SensorVoltageSensorPowerResult:
+        """
+        Получение значения мощности в цепи.
+
+        Дает команду датчику тока , напряжения и мощности с
+        дескриптором descriptor измерить мощность в цепи, к которой
+        подключен датчик. Записывает полученное значение в переменную
+        power
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Power
+
+        :param descriptor: Дескриптор компонента датчика тока,
+            напряжения и мощности
+        :returns: Результат типа SensorVoltageSensorPowerResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # power - Указатель на значение мощности (Ватт)
+        power = ctypes.c_float()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_Power,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: power; object type: *float (тип C)
+            power,
+        )
+        return types.SensorVoltageSensorPowerResult(
+            error_code,
+            power.value,
+        )
+
+    def sensor_voltage_sensor_read_reg_bytes(
+        self,
+        descriptor: int,
+        reg: int,
+        length: int,
+    ) -> types.SensorVoltageSensorReadRegBytesResult:
+        """
+        Чтение массива байтов из регистра.
+
+        Читает len байт по регистру reg у датчика тока, напряжения и
+        мощности с дескриптором descriptor.  Записывает прочитанные
+        байты в буфер buf.
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ReadRegBytes
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться чтение
+        :param reg: Регистр, по которому будет производиться чтение
+        :param length: Длина массива buf
+        :returns: Результат типа SensorVoltageSensorReadRegBytesResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # buf - Указатель на массив байт для чтения
+        buf = ctypes.c_ulonglong()
+        # readBytesLen - Указатель на количество прочитанных байтов
+        read_bytes_len = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_ReadRegBytes,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg),
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            buf,
+            # name: len; object type: int (тип C)
+            length,
+            # name: readBytesLen; object type: *int (тип C)
+            read_bytes_len,
+        )
+        return types.SensorVoltageSensorReadRegBytesResult(
+            error_code,
+            utils.convert_c_ulonglong_of_len_to_python_bytes(
+                buf,
+                read_bytes_len,
+            ),
+            read_bytes_len.value,
+        )
+
+    def sensor_voltage_sensor_sense(
+        self,
+        descriptor: int,
+    ) -> types.SensorVoltageSensorSenseResult:
+        """
+        Получение значений силы тока, напряжения в цепи, напряжения
+        на шунте и мощности.
+
+        Дает команду датчику тока, напряжения и мощности с
+        дескриптором descriptor измерить силу тока, напряжение в
+        цепи, напряжение на шунте и мощность. Записывает полученные
+        значения в переменные voltage, voltageShunt, current и power
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Sense
+
+        :param descriptor: Дескриптор компонента датчика тока,
+            напряжения и мощности
+        :returns: Результат типа SensorVoltageSensorSenseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # voltage - Указатель на значение напряжения в цепи (Вольт)
+        voltage = ctypes.c_float()
+        # voltageShunt - Указатель на значение напряжения на шунте
+        #    (Вольт)
+        voltage_shunt = ctypes.c_float()
+        # current - Указатель на значение силы тока (Ампер)
+        current = ctypes.c_float()
+        # power - Указатель на значение мощности (Ватт)
+        power = ctypes.c_float()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_Sense,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: voltage; object type: *float (тип C)
+            voltage,
+            # name: voltageShunt; object type: *float (тип C)
+            voltage_shunt,
+            # name: current; object type: *float (тип C)
+            current,
+            # name: power; object type: *float (тип C)
+            power,
+        )
+        return types.SensorVoltageSensorSenseResult(
+            error_code,
+            voltage.value,
+            voltage_shunt.value,
+            current.value,
+            power.value,
+        )
+
+    def sensor_voltage_sensor_voltage(
+        self,
+        descriptor: int,
+        voltage: float,
+    ) -> types.SensorVoltageSensorVoltageResult:
+        """
+        Получение значения напряжения в цепи.
+
+        Дает команду датчику тока, напряжения и мощности с
+        дескриптором descriptor измерить напряжение в цепи, к которой
+        подключен датчик. Записывает полученное значение в переменную
+        voltage
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Voltage
+
+        :param descriptor: Дескриптор датчик тока, напряжения и
+            мощности
+        :param voltage: Указатель на значение напряжения в цепи
+            (Вольт)
+        :returns: Результат типа SensorVoltageSensorVoltageResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_Voltage,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: voltage; object type: float (тип C)
+            voltage,
+        )
+        return types.SensorVoltageSensorVoltageResult(
+            error_code,
+        )
+
+    def sensor_voltage_sensor_voltage_shunt(
+        self,
+        descriptor: int,
+    ) -> types.SensorVoltageSensorVoltageShuntResult:
+        """
+        Получение значения напряжения на шунте.
+
+        Дает команду датчику тока, напряжения и мощности с
+        дескриптором descriptor измерить напряжение на шунте.
+        Записывает полученное значение в переменную voltageShunt
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt
+
+        :param descriptor: Дескриптор компонента датчика тока,
+            напряжения и мощности
+        :returns: Результат типа SensorVoltageSensorVoltageShuntResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # voltageShunt - Указатель на значение напряжения на шунте
+        #    (Вольт)
+        voltage_shunt = ctypes.c_float()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_VoltageShunt,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: voltageShunt; object type: *float (тип C)
+            voltage_shunt,
+        )
+        return types.SensorVoltageSensorVoltageShuntResult(
+            error_code,
+            voltage_shunt.value,
+        )
+
+    def sensor_voltage_sensor_write_reg_bytes(
+        self,
+        descriptor: int,
+        reg: int,
+        buf: bytes,
+    ) -> types.SensorVoltageSensorWriteRegBytesResult:
+        """
+        Запись массива байт в регистр.
+
+        Производит запись len байт из массива buf по регистру reg для
+        датчика тока, напряжения и мощности с дескриптором
+        descriptor.
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_WriteRegBytes
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться запись
+        :param reg: Регистр, по которому будет производиться запись
+        :param buf: Указатель на массив байт для записи
+        :returns: Результат типа SensorVoltageSensorWriteRegBytesResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # wroteBytesLen - Указатель на количество записанных байтов
+        wrote_bytes_len = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sensor_VoltageSensor_WriteRegBytes,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg),
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            utils.convert_python_bytes_to_c_ulonglong(buf),
+            # length - Длина массива buf
+            # name: len; object type: int (тип C)
+            len(buf),
+            # name: wroteBytesLen; object type: *int (тип C)
+            wrote_bytes_len,
+        )
+        return types.SensorVoltageSensorWriteRegBytesResult(
+            error_code,
+            wrote_bytes_len.value,
+        )
+
+    def sigmod_pwm_close(
+        self,
+        descriptor: int,
+    ) -> types.SigmodPWMCloseResult:
+        """
+        Закрытие соединения с i2c адаптером
+
+        Закрывает текущее соединение с i2c адаптером у ШИМ модулятора
+        с дескриптором descriptor
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Close
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :returns: Результат типа SigmodPWMCloseResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_Close,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.SigmodPWMCloseResult(
+            error_code,
+        )
+
+    def sigmod_pwm_extend(
+        self,
+        connector: int,
+    ) -> types.SigmodPWMExtendResult:
+        """
+        Расширение компонента группы.
+
+        Расширяет компонент группы коннекторов с дескриптором
+        connector,  Записывает в параметр descriptor дескриптор
+        нового компонента (ШИМ модулятора)
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Extend
+
+        :param connector: Коннектор компонента группы, который будет
+            расширятся
+        :returns: Результат типа SigmodPWMExtendResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент ШИМ, который получится
+        #    в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_Extend,
+            # name: connector; object type: int (тип C)
+            connector,
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.SigmodPWMExtendResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def sigmod_pwm_extend_to_model(
+        self,
+        base_descriptor: int,
+        model_name: str,
+    ) -> types.SigmodPWMExtendToModelResult:
+        """
+        Расширение ШИМ до модели.
+
+        Расширяет компонент устройства ШИМ модулятор с дескриптором
+        baseDescriptor,  Записывает в параметр descriptor дескриптор
+        нового компонента (компонент конкретной модели ШИМ
+        модулятора)
+
+        Доступные модели ШИМ: pca9685
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ExtendToModel
+
+        :param base_descriptor: Дескриптор компонента ШИМ, который
+            будет расширятся
+        :param model_name: Модель компонента ("pca9685")
+        :returns: Результат типа SigmodPWMExtendToModelResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # descriptor - Указатель на компонент ШИМ конкретной модели,
+        #    который получится в результате расширения
+        descriptor = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_ExtendToModel,
+            # name: baseDescriptor; object type: int (тип C)
+            base_descriptor,
+            # name: modelName; object type: char[] (тип C)
+            model_name.encode(),
+            # name: descriptor; object type: *int (тип C)
+            descriptor,
+        )
+        return types.SigmodPWMExtendToModelResult(
+            error_code,
+            descriptor.value,
+        )
+
+    def sigmod_pwm_get_freq(
+        self,
+        descriptor: int,
+    ) -> types.SigmodPWMGetFreqResult:
+        """
+        Чтение частоты ШИМ.
+
+        Записывает в параметр freq значение частоты для ШИМ
+        модулятора с дескриптором descriptor
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetFreq
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :returns: Результат типа SigmodPWMGetFreqResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # freq - Указатель на частоту ШИМ
+        freq = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_GetFreq,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: freq; object type: *int (тип C)
+            freq,
+        )
+        return types.SigmodPWMGetFreqResult(
+            error_code,
+            freq.value,
+        )
+
+    def sigmod_pwm_get_port_duty_cycle(
+        self,
+        descriptor: int,
+        port: int,
+    ) -> types.SigmodPWMGetPortDutyCycleResult:
+        """
+        Чтение скважности.
+
+        Получает значение скважности на порту port для ШИМ модулятора
+        с дескриптором descriptor.  Записывает значения количества
+        тактов до перевода выхода в состояние логической «1» в on и
+        количество тактов до перевода выхода в состояние логического
+        «0» в off
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortDutyCycle
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :param port: Порт, для которого читается частота
+        :returns: Результат типа SigmodPWMGetPortDutyCycleResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # on - Указатель на количество тактов до перевода выхода в
+        #    состояние логической «1»
+        on = ctypes.c_int()
+        # off - Указатель на количество тактов до перевода выхода в
+        #    состояние логического «0»
+        off = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_GetPortDutyCycle,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: port; object type: int (тип C)
+            port,
+            # name: on; object type: *int (тип C)
+            on,
+            # name: off; object type: *int (тип C)
+            off,
+        )
+        return types.SigmodPWMGetPortDutyCycleResult(
+            error_code,
+            on.value,
+            off.value,
+        )
+
+    def sigmod_pwm_get_port_freq(
+        self,
+        descriptor: int,
+        port: int,
+    ) -> types.SigmodPWMGetPortFreqResult:
+        """
+        Чтение частоты порта.
+
+        Записывает в параметр freq значение частоты на порту port для
+        ШИМ модулятора с дескриптором descriptor
+
+        *Не поддерживается для модели pca9685
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortFreq
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :param port: Порт, для которого читается частота
+        :returns: Результат типа SigmodPWMGetPortFreqResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # freq - Указатель на частоту ШИМ на порту port
+        freq = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_GetPortFreq,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: port; object type: int (тип C)
+            port,
+            # name: freq; object type: *int (тип C)
+            freq,
+        )
+        return types.SigmodPWMGetPortFreqResult(
+            error_code,
+            freq.value,
+        )
+
+    def sigmod_pwm_get_resolution(
+        self,
+        descriptor: int,
+    ) -> types.SigmodPWMGetResolutionResult:
+        """
+        Чтение разрешения ШИМ.
+
+        Записывает в параметр resolution значение разрешения для ШИМ
+        модулятора с дескриптором descriptor
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetResolution
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :returns: Результат типа SigmodPWMGetResolutionResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # resolution - Указатель на разрешение ШИМ
+        resolution = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_GetResolution,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: resolution; object type: *int (тип C)
+            resolution,
+        )
+        return types.SigmodPWMGetResolutionResult(
+            error_code,
+            resolution.value,
+        )
+
+    def sigmod_pwm_read_byte(
+        self,
+        descriptor: int,
+        reg: int,
+    ) -> types.SigmodPWMReadByteResult:
+        """
+        Чтение байта из регистра.
+
+        Читает один байт по регистру reg у ШИМ модулятора с
+        дескриптором descriptor.  Записывает прочитанный байт в
+        value.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadByte
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться чтение
+        :param reg: Регистр, по которому будет производиться чтение
+        :returns: Результат типа SigmodPWMReadByteResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # value - Указатель на байт для чтения
+        value = ctypes.c_ulonglong()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_ReadByte,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg),
+            # name: value; object type: *long long unsigned (тип C)
+            value,
+        )
+        return types.SigmodPWMReadByteResult(
+            error_code,
+            utils.convert_c_ulonglong_to_python_bytes(value),
+        )
+
+    def sigmod_pwm_read_reg_bytes(
+        self,
+        descriptor: int,
+        reg: int,
+        length: int,
+    ) -> types.SigmodPWMReadRegBytesResult:
+        """
+        Чтение массива байтов из регистра.
+
+        Читает len байт по регистру reg у ШИМ модулятора с
+        дескриптором descriptor.  Записывает прочитанные байты в
+        буфер buf.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadRegBytes
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться чтение
+        :param reg: Регистр, по которому будет производиться чтение
+        :param length: Длина массива buf
+        :returns: Результат типа SigmodPWMReadRegBytesResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # buf - Указатель на массив байт для чтения
+        buf = ctypes.c_ulonglong()
+        # readBytesLen - Указатель на количество записанных байтов
+        read_bytes_len = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_ReadRegBytes,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg),
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            buf,
+            # name: len; object type: int (тип C)
+            length,
+            # name: readBytesLen; object type: *int (тип C)
+            read_bytes_len,
+        )
+        return types.SigmodPWMReadRegBytesResult(
+            error_code,
+            utils.convert_c_ulonglong_of_len_to_python_bytes(
+                buf,
+                read_bytes_len,
+            ),
+            read_bytes_len.value,
+        )
+
+    def sigmod_pwm_reset_all(
+        self,
+        descriptor: int,
+    ) -> types.SigmodPWMResetAllResult:
+        """
+        Устанавливает скважность равное 0 на всех портах у ШИМ
+        модулятора с дескриптором descriptor.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetAll
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :returns: Результат типа SigmodPWMResetAllResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_ResetAll,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+        )
+        return types.SigmodPWMResetAllResult(
+            error_code,
+        )
+
+    def sigmod_pwm_reset_port(
+        self,
+        descriptor: int,
+        port: int,
+    ) -> types.SigmodPWMResetPortResult:
+        """
+        Устанавливает скважность равное 0 на порту port  у ШИМ
+        модулятора с дескриптором descriptor.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetPort
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :param port: Порт, на котором будет сброшено соединение
+        :returns: Результат типа SigmodPWMResetPortResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_ResetPort,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: port; object type: int (тип C)
+            port,
+        )
+        return types.SigmodPWMResetPortResult(
+            error_code,
+        )
+
+    def sigmod_pwm_set_freq(
+        self,
+        descriptor: int,
+        freq: int,
+    ) -> types.SigmodPWMSetFreqResult:
+        """
+        Установка частоты ШИМ.
+
+        Устанавливает новое значение частоты равное
+        freq для ШИМ модулятора с дескриптором descriptor.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetFreq
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :param freq: Частота ШИМ
+        :returns: Результат типа SigmodPWMSetFreqResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_SetFreq,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: freq; object type: int (тип C)
+            freq,
+        )
+        return types.SigmodPWMSetFreqResult(
+            error_code,
+        )
+
+    def sigmod_pwm_set_port_duty_cycle(
+        self,
+        descriptor: int,
+        port: int,
+        on: int,
+        off: int,
+    ) -> types.SigmodPWMSetPortDutyCycleResult:
+        """
+        Установка скважности.
+
+        Устанавливает новое значение скважности на порту port для ШИМ
+        модулятора с дескриптором descriptor.  Скважность задается с
+        помощью параметров on и off, в которых передаются
+        соответственно  количества тактов до перевода выхода в
+        состояние логической «1» и логического «0».
+
+        Значение on и off зависит от спецификаций конкретного ШИМ
+        контроллера,
+        например для  PCA9685 разрешение ШИМ: 12 бит = 4096 тактов
+        (рабочий цикл от 0 до 100%). Этот параметр показывает, с
+        какой
+        точностью мы можем менять коэффициент заполнения. Чем больше
+        разрешение,тем плавнее будет меняться мощность на управляемом
+        устройстве.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :param port: Порт, для которого читается частота
+        :param on: Количество тактов до перевода выхода в состояние
+            логической «1»
+        :param off: Количество тактов до перевода выхода в состояние
+            логического «0»
+        :returns: Результат типа SigmodPWMSetPortDutyCycleResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_SetPortDutyCycle,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: port; object type: int (тип C)
+            port,
+            # name: on; object type: int (тип C)
+            on,
+            # name: off; object type: int (тип C)
+            off,
+        )
+        return types.SigmodPWMSetPortDutyCycleResult(
+            error_code,
+        )
+
+    def sigmod_pwm_set_port_freq(
+        self,
+        descriptor: int,
+        port: int,
+        freq: int,
+    ) -> types.SigmodPWMSetPortFreqResult:
+        """
+        Установка частоты порта.
+
+        Устанавливает новое значение частоты равное freq на порту
+        port для ШИМ модулятора с дескриптором descriptor.
+
+        *Не поддерживается для модели pca9685
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortFreq
+
+        :param descriptor: Дескриптор компонента ШИМ
+        :param port: Порт, для которого устанавливается частота
+        :param freq: Частота ШИМ, устанавливаема на порту port
+        :returns: Результат типа SigmodPWMSetPortFreqResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_SetPortFreq,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: port; object type: int (тип C)
+            port,
+            # name: freq; object type: int (тип C)
+            freq,
+        )
+        return types.SigmodPWMSetPortFreqResult(
+            error_code,
+        )
+
+    def sigmod_pwm_write_byte(
+        self,
+        descriptor: int,
+        reg: int,
+        value: bytes,
+    ) -> types.SigmodPWMWriteByteResult:
+        """
+        Запись байта в регистр.
+
+        Производит запись одного байта со значением value по регистру
+        reg для ШИМ модулятора с дескриптором descriptor
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteByte
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться запись
+        :param reg: Регистр, по которому будет производиться запись
+        :param value: Указатель на байт для записи
+        :returns: Результат типа SigmodPWMWriteByteResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_WriteByte,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg),
+            # name: value; object type: *long long unsigned (тип C)
+            utils.convert_python_bytes_to_c_ulonglong(value),
+        )
+        return types.SigmodPWMWriteByteResult(
+            error_code,
+        )
+
+    def sigmod_pwm_write_reg_bytes(
+        self,
+        descriptor: int,
+        reg: int,
+        buf: bytes,
+    ) -> types.SigmodPWMWriteRegBytesResult:
+        """
+        Запись массива байт в регистр.
+
+        Производит запись len байт из массива buf по регистру reg для
+        ШИМ модулятора с дескриптором descriptor.
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteRegBytes
+
+        :param descriptor: Дескриптор компонента, в котором будет
+            производиться запись
+        :param reg: Регистр, по которому будет производиться запись
+        :param buf: Указатель на массив байт для записи
+        :returns: Результат типа SigmodPWMWriteRegBytesResult
+        :raises ValueError: если полученный код ошибки не ноль
+        """
+        # Инициализация получателей
+
+        # wroteBytesLen - Указатель на количество записанных байтов
+        wrote_bytes_len = ctypes.c_int()
+
+        # Код ошибки. Вернётся 0, или будет выброшено исключение
+        error_code = self.call_sdk_method(
+            # SDK метод. будет вызван внутри (плюс обработка ошибки)
+            self.lib.RI_SDK_sigmod_PWM_WriteRegBytes,
+            # name: descriptor; object type: int (тип C)
+            descriptor,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8(reg),
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            utils.convert_python_bytes_to_c_ulonglong(buf),
+            # length - Длина массива buf
+            # name: len; object type: int (тип C)
+            len(buf),
+            # name: wroteBytesLen; object type: *int (тип C)
+            wrote_bytes_len,
+        )
+        return types.SigmodPWMWriteRegBytesResult(
+            error_code,
+            wrote_bytes_len.value,
+        )
+
+    def setup_arg_types_for_create_basic(self) -> None:
+        """
+        Инициализация метода RI_SDK_CreateBasic
+
+        Обращение и документация:
+        >>> self.create_basic
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic
+        """
+        self.lib.RI_SDK_CreateBasic.argtypes = [
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_create_device_component(self) -> None:
+        """
+        Инициализация метода RI_SDK_CreateDeviceComponent
+
+        Обращение и документация:
+        >>> self.create_device_component
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent
+        """
+        self.lib.RI_SDK_CreateDeviceComponent.argtypes = [
+            # name: group; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: deviceName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_create_group_component(self) -> None:
+        """
+        Инициализация метода RI_SDK_CreateGroupComponent
+
+        Обращение и документация:
+        >>> self.create_group_component
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateGroupComponent
+        """
+        self.lib.RI_SDK_CreateGroupComponent.argtypes = [
+            # name: group; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_create_model_component(self) -> None:
+        """
+        Инициализация метода RI_SDK_CreateModelComponent
+
+        Обращение и документация:
+        >>> self.create_model_component
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateModelComponent
+        """
+        self.lib.RI_SDK_CreateModelComponent.argtypes = [
+            # name: group; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: deviceName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_destroy_component(self) -> None:
+        """
+        Инициализация метода RI_SDK_DestroyComponent
+
+        Обращение и документация:
+        >>> self.destroy_component
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-destroy-functions/RI_SDK_DestroyComponent
+        """
+        self.lib.RI_SDK_DestroyComponent.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_destroy_sdk(self) -> None:
+        """
+        Инициализация метода RI_SDK_DestroySDK
+
+        Обращение и документация:
+        >>> self.destroy_sdk
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-end-functions/RI_SDK_DestroySDK
+        """
+        self.lib.RI_SDK_DestroySDK.argtypes = [
+            # name: isForce; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_device_model_list(self) -> None:
+        """
+        Инициализация метода RI_SDK_Device_ModelList
+
+        Обращение и документация:
+        >>> self.device_model_list
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_Device_ModelList
+        """
+        self.lib.RI_SDK_Device_ModelList.argtypes = [
+            # name: deviceType; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: modelList; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_init_sdk(self) -> None:
+        """
+        Инициализация метода RI_SDK_InitSDK
+
+        Обращение и документация:
+        >>> self.init_sdk
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_InitSDK
+        """
+        self.lib.RI_SDK_InitSDK.argtypes = [
+            # name: logLevel; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_link_led_to_controller(self) -> None:
+        """
+        Инициализация метода RI_SDK_LinkLedToController
+
+        Обращение и документация:
+        >>> self.link_led_to_controller
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController
+        """
+        self.lib.RI_SDK_LinkLedToController.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: pwm; object type: int (тип C)
+            ctypes.c_int,
+            # name: rport; object type: int (тип C)
+            ctypes.c_int,
+            # name: gport; object type: int (тип C)
+            ctypes.c_int,
+            # name: bport; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_link_pwm_to_controller(self) -> None:
+        """
+        Инициализация метода RI_SDK_LinkPWMToController
+
+        Обращение и документация:
+        >>> self.link_pwm_to_controller
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkPWMToController
+        """
+        self.lib.RI_SDK_LinkPWMToController.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: to; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_link_r_servodrive_to_controller(self) -> None:
+        """
+        Инициализация метода RI_SDK_LinkRServodriveToController
+
+        Обращение и документация:
+        >>> self.link_r_servodrive_to_controller
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController
+        """
+        self.lib.RI_SDK_LinkRServodriveToController.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: pwm; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_link_servodrive_to_controller(self) -> None:
+        """
+        Инициализация метода RI_SDK_LinkServodriveToController
+
+        Обращение и документация:
+        >>> self.link_servodrive_to_controller
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkServodriveToController
+        """
+        self.lib.RI_SDK_LinkServodriveToController.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: pwm; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_link_voltage_sensor_to_controller(self) -> None:
+        """
+        Инициализация метода RI_SDK_LinkVoltageSensorToController
+
+        Обращение и документация:
+        >>> self.link_voltage_sensor_to_controller
+
+        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController
+        """
+        self.lib.RI_SDK_LinkVoltageSensorToController.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: to; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_Sensor_Extend
+
+        Обращение и документация:
+        >>> self.sensor_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/RI_SDK_Sensor_Extend
+        """
+        self.lib.RI_SDK_Sensor_Extend.argtypes = [
+            # name: basic; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_Extend
+
+        Обращение и документация:
+        >>> self.connector_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/RI_SDK_connector_Extend
+        """
+        self.lib.RI_SDK_connector_Extend.argtypes = [
+            # name: basic; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_close(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_Close
+
+        Обращение и документация:
+        >>> self.connector_i2c_close
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Close
+        """
+        self.lib.RI_SDK_connector_i2c_Close.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_close_all(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_CloseAll
+
+        Обращение и документация:
+        >>> self.connector_i2c_close_all
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll
+        """
+        self.lib.RI_SDK_connector_i2c_CloseAll.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_Extend
+
+        Обращение и документация:
+        >>> self.connector_i2c_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend
+        """
+        self.lib.RI_SDK_connector_i2c_Extend.argtypes = [
+            # name: connectorDescriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_extend_to_model(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_ExtendToModel
+
+        Обращение и документация:
+        >>> self.connector_i2c_extend_to_model
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ExtendToModel
+        """
+        self.lib.RI_SDK_connector_i2c_ExtendToModel.argtypes = [
+            # name: baseDescriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_open(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_Open
+
+        Обращение и документация:
+        >>> self.connector_i2c_open
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open
+        """
+        self.lib.RI_SDK_connector_i2c_Open.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_read_byte(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_ReadByte
+
+        Обращение и документация:
+        >>> self.connector_i2c_read_byte
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadByte
+        """
+        self.lib.RI_SDK_connector_i2c_ReadByte.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: value; object type: *long long unsigned (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_read_bytes(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_ReadBytes
+
+        Обращение и документация:
+        >>> self.connector_i2c_read_bytes
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadBytes
+        """
+        self.lib.RI_SDK_connector_i2c_ReadBytes.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: len; object type: int (тип C)
+            ctypes.c_int,
+            # name: readBytesLen; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_set_bus(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_SetBus
+
+        Обращение и документация:
+        >>> self.connector_i2c_set_bus
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus
+        """
+        self.lib.RI_SDK_connector_i2c_SetBus.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: bus; object type: int (тип C)
+            ctypes.c_int,
+            # name: nextBus; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: prevBus; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_state(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_State
+
+        Обращение и документация:
+        >>> self.connector_i2c_state
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State
+        """
+        self.lib.RI_SDK_connector_i2c_State.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: state; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_write_byte(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_WriteByte
+
+        Обращение и документация:
+        >>> self.connector_i2c_write_byte
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteByte
+        """
+        self.lib.RI_SDK_connector_i2c_WriteByte.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: value; object type: *long long unsigned (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_connector_i2c_write_bytes(self) -> None:
+        """
+        Инициализация метода RI_SDK_connector_i2c_WriteBytes
+
+        Обращение и документация:
+        >>> self.connector_i2c_write_bytes
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteBytes
+        """
+        self.lib.RI_SDK_connector_i2c_WriteBytes.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: addr; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: len; object type: int (тип C)
+            ctypes.c_int,
+            # name: wroteBytesLen; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_Extend
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Extend
+        """
+        self.lib.RI_SDK_exec_RGB_LED_Extend.argtypes = [
+            # name: exec; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_extend_to_model(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_ExtendToModel
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_extend_to_model
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_ExtendToModel
+        """
+        self.lib.RI_SDK_exec_RGB_LED_ExtendToModel.argtypes = [
+            # name: baseDescriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_flashing_with_frequency(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_FlashingWithFrequency
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_flashing_with_frequency
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithFrequency
+        """
+        self.lib.RI_SDK_exec_RGB_LED_FlashingWithFrequency.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: r; object type: int (тип C)
+            ctypes.c_int,
+            # name: g; object type: int (тип C)
+            ctypes.c_int,
+            # name: b; object type: int (тип C)
+            ctypes.c_int,
+            # name: frequency; object type: int (тип C)
+            ctypes.c_int,
+            # name: qty; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_flashing_with_pause(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_FlashingWithPause
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_flashing_with_pause
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithPause
+        """
+        self.lib.RI_SDK_exec_RGB_LED_FlashingWithPause.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: r; object type: int (тип C)
+            ctypes.c_int,
+            # name: g; object type: int (тип C)
+            ctypes.c_int,
+            # name: b; object type: int (тип C)
+            ctypes.c_int,
+            # name: duration; object type: int (тип C)
+            ctypes.c_int,
+            # name: pause; object type: int (тип C)
+            ctypes.c_int,
+            # name: qty; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_flicker(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_Flicker
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_flicker
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker
+        """
+        self.lib.RI_SDK_exec_RGB_LED_Flicker.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: r; object type: int (тип C)
+            ctypes.c_int,
+            # name: g; object type: int (тип C)
+            ctypes.c_int,
+            # name: b; object type: int (тип C)
+            ctypes.c_int,
+            # name: duration; object type: int (тип C)
+            ctypes.c_int,
+            # name: qty; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_get_color(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_GetColor
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_get_color
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor
+        """
+        self.lib.RI_SDK_exec_RGB_LED_GetColor.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: r; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: g; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: b; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_get_state(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_GetState
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_get_state
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetState
+        """
+        self.lib.RI_SDK_exec_RGB_LED_GetState.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: state; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_single_pulse(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_SinglePulse
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_single_pulse
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse
+        """
+        self.lib.RI_SDK_exec_RGB_LED_SinglePulse.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: r; object type: int (тип C)
+            ctypes.c_int,
+            # name: g; object type: int (тип C)
+            ctypes.c_int,
+            # name: b; object type: int (тип C)
+            ctypes.c_int,
+            # name: duration; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_rgb_led_stop(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RGB_LED_Stop
+
+        Обращение и документация:
+        >>> self.exec_rgb_led_stop
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop
+        """
+        self.lib.RI_SDK_exec_RGB_LED_Stop.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_custom_device_init(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_CustomDeviceInit
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_custom_device_init
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_CustomDeviceInit
+        """
+        self.lib.RI_SDK_exec_RServoDrive_CustomDeviceInit.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: minPulseClockwise; object type: int (тип C)
+            ctypes.c_int,
+            # name: maxPulseClockwise; object type: int (тип C)
+            ctypes.c_int,
+            # name: minPulseCounterClockwise; object type: int (тип C)
+            ctypes.c_int,
+            # name: maxPulseCounterClockwise; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_Extend
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend
+        """
+        self.lib.RI_SDK_exec_RServoDrive_Extend.argtypes = [
+            # name: exec; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_extend_to_model(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_ExtendToModel
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_extend_to_model
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel
+        """
+        self.lib.RI_SDK_exec_RServoDrive_ExtendToModel.argtypes = [
+            # name: baseDescriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_get_state(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_GetState
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_get_state
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_GetState
+        """
+        self.lib.RI_SDK_exec_RServoDrive_GetState.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: state; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_rotate_by_pulse(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_RotateByPulse
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_rotate_by_pulse
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulse
+        """
+        self.lib.RI_SDK_exec_RServoDrive_RotateByPulse.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: pulse; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_rotate_by_pulse_over_time(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_RotateByPulseOverTime
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_rotate_by_pulse_over_time
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulseOverTime
+        """
+        self.lib.RI_SDK_exec_RServoDrive_RotateByPulseOverTime.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: pulse; object type: int (тип C)
+            ctypes.c_int,
+            # name: timeout; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_rotate_with_relative_speed(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_rotate_with_relative_speed
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
+        """
+        self.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: direction; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_rotate_with_relative_speed_over_time(
+        self,
+    ) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_rotate_with_relative_speed_over_time
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
+        """
+        self.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: direction; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: timeout; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_r_servo_drive_stop(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_RServoDrive_Stop
+
+        Обращение и документация:
+        >>> self.exec_r_servo_drive_stop
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Stop
+        """
+        self.lib.RI_SDK_exec_RServoDrive_Stop.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_custom_device_init(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_CustomDeviceInit
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_custom_device_init
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit
+        """
+        self.lib.RI_SDK_exec_ServoDrive_CustomDeviceInit.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: maxImpulse; object type: int (тип C)
+            ctypes.c_int,
+            # name: minImpulse; object type: int (тип C)
+            ctypes.c_int,
+            # name: maxSpeed; object type: int (тип C)
+            ctypes.c_int,
+            # name: rangeAngle; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_Extend
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Extend
+        """
+        self.lib.RI_SDK_exec_ServoDrive_Extend.argtypes = [
+            # name: exec; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_extend_to_model(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_ExtendToModel
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_extend_to_model
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_ExtendToModel
+        """
+        self.lib.RI_SDK_exec_ServoDrive_ExtendToModel.argtypes = [
+            # name: baseDescriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_get_current_angle(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_GetCurrentAngle
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_get_current_angle
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetCurrentAngle
+        """
+        self.lib.RI_SDK_exec_ServoDrive_GetCurrentAngle.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: angle; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_get_state(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_GetState
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_get_state
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState
+        """
+        self.lib.RI_SDK_exec_ServoDrive_GetState.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: state; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_min_step_rotate(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_MinStepRotate
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_min_step_rotate
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate
+        """
+        self.lib.RI_SDK_exec_ServoDrive_MinStepRotate.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: direction; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_rotate(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_Rotate
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_rotate
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Rotate
+        """
+        self.lib.RI_SDK_exec_ServoDrive_Rotate.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: direction; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_rotate_with_relative_speed(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_rotate_with_relative_speed
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
+        """
+        self.lib.RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: direction; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_set_position_to_mid_working_range(
+        self,
+    ) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_set_position_to_mid_working_range
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
+        """
+        self.lib.RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_stop(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_Stop
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_stop
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Stop
+        """
+        self.lib.RI_SDK_exec_ServoDrive_Stop.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_turn(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_Turn
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_turn
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Turn
+        """
+        self.lib.RI_SDK_exec_ServoDrive_Turn.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: angle; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_turn_by_duty_cycle(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_TurnByDutyCycle
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_turn_by_duty_cycle
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle
+        """
+        self.lib.RI_SDK_exec_ServoDrive_TurnByDutyCycle.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: steps; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_turn_by_pulse(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_TurnByPulse
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_turn_by_pulse
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse
+        """
+        self.lib.RI_SDK_exec_ServoDrive_TurnByPulse.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: pulse; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_exec_servo_drive_turn_with_relative_speed(self) -> None:
+        """
+        Инициализация метода RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
+
+        Обращение и документация:
+        >>> self.exec_servo_drive_turn_with_relative_speed
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
+        """
+        self.lib.RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: angle; object type: int (тип C)
+            ctypes.c_int,
+            # name: speed; object type: int (тип C)
+            ctypes.c_int,
+            # name: async; object type: bool (тип C)
+            ctypes.c_bool,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_executor_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_executor_Extend
+
+        Обращение и документация:
+        >>> self.executor_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_Extend
+        """
+        self.lib.RI_SDK_executor_Extend.argtypes = [
+            # name: basic; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_executor_state(self) -> None:
+        """
+        Инициализация метода RI_SDK_executor_State
+
+        Обращение и документация:
+        >>> self.executor_state
+
+        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_State
+        """
+        self.lib.RI_SDK_executor_State.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: state; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_current(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_Current
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_current
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Current
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_Current.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: current; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_custom_device_init(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_CustomDeviceInit
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_custom_device_init
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_CustomDeviceInit
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_CustomDeviceInit.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: lsbBus; object type: float (тип C)
+            ctypes.c_float,
+            # name: lsbShunt; object type: float (тип C)
+            ctypes.c_float,
+            # name: shuntResist; object type: float (тип C)
+            ctypes.c_float,
+            # name: regVoltageShunt; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: regVoltageBus; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_Extend
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Extend
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_Extend.argtypes = [
+            # name: sensor; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_extend_to_model(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_ExtendToModel
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_extend_to_model
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ExtendToModel
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_ExtendToModel.argtypes = [
+            # name: base; object type: int (тип C)
+            ctypes.c_int,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_power(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_Power
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_power
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Power
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_Power.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: power; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_read_reg_bytes(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_ReadRegBytes
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_read_reg_bytes
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ReadRegBytes
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_ReadRegBytes.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: len; object type: int (тип C)
+            ctypes.c_int,
+            # name: readBytesLen; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_sense(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_Sense
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_sense
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Sense
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_Sense.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: voltage; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: voltageShunt; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: current; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: power; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_voltage(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_Voltage
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_voltage
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Voltage
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_Voltage.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: voltage; object type: float (тип C)
+            ctypes.c_float,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_voltage_shunt(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_VoltageShunt
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_voltage_shunt
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_VoltageShunt.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: voltageShunt; object type: *float (тип C)
+            ctypes.POINTER(ctypes.c_float),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sensor_voltage_sensor_write_reg_bytes(self) -> None:
+        """
+        Инициализация метода RI_SDK_sensor_VoltageSensor_WriteRegBytes
+
+        Обращение и документация:
+        >>> self.sensor_voltage_sensor_write_reg_bytes
+
+        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_WriteRegBytes
+        """
+        self.lib.RI_SDK_sensor_VoltageSensor_WriteRegBytes.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: len; object type: int (тип C)
+            ctypes.c_int,
+            # name: wroteBytesLen; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_close(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_Close
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_close
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Close
+        """
+        self.lib.RI_SDK_sigmod_PWM_Close.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_extend(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_Extend
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_extend
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Extend
+        """
+        self.lib.RI_SDK_sigmod_PWM_Extend.argtypes = [
+            # name: connector; object type: int (тип C)
+            ctypes.c_int,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_extend_to_model(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_ExtendToModel
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_extend_to_model
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ExtendToModel
+        """
+        self.lib.RI_SDK_sigmod_PWM_ExtendToModel.argtypes = [
+            # name: baseDescriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: modelName; object type: char[] (тип C)
+            ctypes.c_char_p,
+            # name: descriptor; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_get_freq(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_GetFreq
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_get_freq
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetFreq
+        """
+        self.lib.RI_SDK_sigmod_PWM_GetFreq.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: freq; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_get_port_duty_cycle(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_GetPortDutyCycle
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_get_port_duty_cycle
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortDutyCycle
+        """
+        self.lib.RI_SDK_sigmod_PWM_GetPortDutyCycle.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: on; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: off; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_get_port_freq(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_GetPortFreq
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_get_port_freq
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortFreq
+        """
+        self.lib.RI_SDK_sigmod_PWM_GetPortFreq.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: freq; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_get_resolution(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_GetResolution
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_get_resolution
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetResolution
+        """
+        self.lib.RI_SDK_sigmod_PWM_GetResolution.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: resolution; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_read_byte(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_ReadByte
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_read_byte
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadByte
+        """
+        self.lib.RI_SDK_sigmod_PWM_ReadByte.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: value; object type: *long long unsigned (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_read_reg_bytes(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_ReadRegBytes
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_read_reg_bytes
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadRegBytes
+        """
+        self.lib.RI_SDK_sigmod_PWM_ReadRegBytes.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: len; object type: int (тип C)
+            ctypes.c_int,
+            # name: readBytesLen; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_reset_all(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_ResetAll
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_reset_all
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetAll
+        """
+        self.lib.RI_SDK_sigmod_PWM_ResetAll.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_reset_port(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_ResetPort
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_reset_port
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetPort
+        """
+        self.lib.RI_SDK_sigmod_PWM_ResetPort.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_set_freq(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_SetFreq
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_set_freq
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetFreq
+        """
+        self.lib.RI_SDK_sigmod_PWM_SetFreq.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: freq; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_set_port_duty_cycle(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_SetPortDutyCycle
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_set_port_duty_cycle
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle
+        """
+        self.lib.RI_SDK_sigmod_PWM_SetPortDutyCycle.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: on; object type: int (тип C)
+            ctypes.c_int,
+            # name: off; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_set_port_freq(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_SetPortFreq
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_set_port_freq
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortFreq
+        """
+        self.lib.RI_SDK_sigmod_PWM_SetPortFreq.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: port; object type: int (тип C)
+            ctypes.c_int,
+            # name: freq; object type: int (тип C)
+            ctypes.c_int,
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_write_byte(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_WriteByte
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_write_byte
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteByte
+        """
+        self.lib.RI_SDK_sigmod_PWM_WriteByte.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: value; object type: *long long unsigned (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
+
+    def setup_arg_types_for_sigmod_pwm_write_reg_bytes(self) -> None:
+        """
+        Инициализация метода RI_SDK_sigmod_PWM_WriteRegBytes
+
+        Обращение и документация:
+        >>> self.sigmod_pwm_write_reg_bytes
+
+        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteRegBytes
+        """
+        self.lib.RI_SDK_sigmod_PWM_WriteRegBytes.argtypes = [
+            # name: descriptor; object type: int (тип C)
+            ctypes.c_int,
+            # name: reg; object type: uint8_t (тип C)
+            ctypes.c_uint8,
+            # name: buf; object type: *long long unsigned[len] (тип C)
+            ctypes.POINTER(ctypes.c_ulonglong),
+            # name: len; object type: int (тип C)
+            ctypes.c_int,
+            # name: wroteBytesLen; object type: *int (тип C)
+            ctypes.POINTER(ctypes.c_int),
+            # name: errorText; object type: char[1000] (тип C)
+            ctypes.c_char_p,
+        ]
