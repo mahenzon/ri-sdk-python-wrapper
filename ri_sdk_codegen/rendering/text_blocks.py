@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import textwrap
+from collections.abc import Sequence
 from functools import cached_property, partial
 from typing import Callable, Literal
 
@@ -22,6 +25,32 @@ class DescriptionBlock(BaseModel):
     type: DescriptionBlockType = "block"
 
     separator: str = Field("\n", exclude=True)
+
+    @classmethod
+    def from_table_rows(
+        cls,
+        rows: Sequence[Sequence[str]],
+        first_row_is_header: bool = False,
+    ) -> DescriptionBlock:
+        """
+        Create pretty table?
+
+        :param rows:
+        :param first_row_is_header:
+        :return:
+        """
+        paragraphs = [
+            # a
+            " | ".join(row)
+            # b
+            for row in rows
+        ]
+        if first_row_is_header and paragraphs:
+            paragraphs[0] = "# " + paragraphs[0]
+        return DescriptionBlock(
+            values=paragraphs,
+            type="list-block",
+        )
 
     @classmethod
     def get_initial_indent(cls) -> str:
