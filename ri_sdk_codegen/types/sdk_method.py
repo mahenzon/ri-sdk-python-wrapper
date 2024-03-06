@@ -24,6 +24,31 @@ class MethodSDK(BaseModel):
         exclude=True,
     )
 
+    @cached_property
+    def params_by_names(self) -> dict[str, MethodParamSDK]:
+        return {param.name: param for param in self.params}
+
+    @cached_property
+    def len_params_to_be_replaced(self) -> dict[str, MethodParamSDK]:
+        return {
+            # example "len": buff_param
+            param_options.auto_len: self.params_by_names[param_name]
+            for param_name, param_options in self.options.params.items()
+            if param_options.auto_len
+        }
+
+    def is_auto_len_param(self, param: MethodParamSDK) -> bool:
+        return param.name in self.len_params_to_be_replaced
+
+    def param_to_take_len_from(self, len_param: MethodParamSDK) -> MethodParamSDK:
+        if len_param.name in self.len_params_to_be_replaced:
+            return self.len_params_to_be_replaced[len_param.name]
+        msg = (
+            f"Cannot find len of what param is {len_param!r}"
+            f" on method {self.name!r}, {self!r}"
+        )
+        raise ValueError(msg)
+
     def is_receive_type(self, param: MethodParamSDK) -> bool:
         if param.name not in self.options.params:
             return param.is_pointer
@@ -59,6 +84,8 @@ class MethodSDK(BaseModel):
                 not param.is_service_param
                 # check if is not receive type
                 and not self.is_receive_type(param)
+                # wrapper call, skip auto param
+                and not self.is_auto_len_param(param)
             )
         ]
 
