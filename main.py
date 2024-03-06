@@ -67,8 +67,10 @@ def main() -> None:
         method_return_types_init_template_path=codegen_params.method_return_types_init_filepath,
         sdk_output_file_path=codegen_params.output_py_script,
         sdk_return_types_output_path=codegen_params.ri_sdk_python_types_dir,
+        methods_options_filepath=codegen_params.methods_options_filepath,
         sort_by_name=codegen_params.sort_methods,
         remove_existing_types=codegen_params.remove_existing_types,
+        remove_unknown_methods_cache=codegen_params.remove_unknown_methods_cache,
     )
 
     if codegen_params.parse_docs:
