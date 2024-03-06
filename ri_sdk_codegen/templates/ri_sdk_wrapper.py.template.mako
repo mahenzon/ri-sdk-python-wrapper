@@ -78,6 +78,7 @@ ${receiver_var_comment(param)}
 
         # Код ошибки. Вернётся 0, или будет выброшено исключение
         error_code = self.call_sdk_method(
+            # передаём SDK метод, он будет вызван внутри (плюс обработка ошибки)
             self.lib.${sdk_method.name},
         % for param in sdk_method.func_sdk_call_args:
             ${comment_ctype_param(param)}
