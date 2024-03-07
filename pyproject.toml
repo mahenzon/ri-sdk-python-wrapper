@@ -100,7 +100,14 @@ packages = [
 
 [tool.black]
 line-length = 89
-target-version = ["py39"]
+target-version = [
+    "py37",
+    "py38",
+    "py39",
+    "py310",
+    "py311",
+    "py312",
+]
 
 [tool.ruff]
 line-length = 89
