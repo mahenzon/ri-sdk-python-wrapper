@@ -4,7 +4,6 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 
 ### TODO:
 
-- GitHub Actions (lint)
 - add badges to README:
   - PyPI
   - MyPy
