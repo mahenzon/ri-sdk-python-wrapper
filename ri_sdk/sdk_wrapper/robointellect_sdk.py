@@ -5,9 +5,11 @@ Do not edit manually.
 
 import ctypes
 
-from ri_sdk import types, utils
+from ri_sdk import loggers, types, utils
 
 from .robointellect_base_sdk import RoboIntellectBaseSDK
+
+log = loggers.wrapper
 
 
 class RoboIntellectSDK(RoboIntellectBaseSDK):
@@ -29,11 +31,13 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Установка типов аргументов всех методов.
         :return:
         """
+        log.debug("Setup args types for all known SDK methods")
         for name in dir(self):
             if not name.startswith("setup_arg_types_"):
                 continue
             method = getattr(self, name)
             method()
+        log.debug("Inited args types for all known SDK methods")
 
     def create_basic(
         self,

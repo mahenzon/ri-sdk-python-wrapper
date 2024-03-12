@@ -3,6 +3,7 @@ from __future__ import annotations
 import ctypes
 from typing import TYPE_CHECKING, Protocol, TypeVar, Union
 
+from ri_sdk import loggers
 from ri_sdk.exceptions import MethodCallError
 
 if TYPE_CHECKING:
@@ -31,6 +32,9 @@ ArgsType = Union[
 ]
 
 
+log = loggers.wrapper
+
+
 class RoboIntellectBaseSDK:
     def __init__(
         self,
@@ -40,6 +44,7 @@ class RoboIntellectBaseSDK:
         :param lib: RI SDK library .dll or .so
         """
         self.lib = lib
+        log.debug("Initialized RI SDK")
 
     @classmethod
     def process_result(
@@ -58,6 +63,7 @@ class RoboIntellectBaseSDK:
         if not error_code:
             return
 
+        log.debug("Non-zero error code %s for method %r", error_code, method_name)
         raise MethodCallError(
             error_code=error_code,
             error_message=error_text_c.raw,
