@@ -127,7 +127,10 @@ dependencies = [
     "pytest-cov",
 ]
 [tool.hatch.envs.test.scripts]
-run-coverage = "pytest --cov-config=pyproject.toml --cov=ri_sdk --cov=tests {args}"
+cov = [
+    "pytest --cov-config=pyproject.toml --cov=ri_sdk --cov=tests {args}",
+    "coverage html -d coverage/{matrix:python}",
+]
 run = "run-coverage --no-cov {args}"
 
 [[tool.hatch.envs.test.matrix]]
