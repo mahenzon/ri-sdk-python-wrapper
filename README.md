@@ -118,8 +118,20 @@ Add `-v` flag for verbose output.
 
 ## Testing
 
-Run
+Run tests
 
 ```shell
 hatch run test:run
+```
+
+Run coverage
+
+```shell
+hatch run test:cov
+```
+
+Run coverage and export html report
+
+```shell
+hatch run test:cov-html
 ```
