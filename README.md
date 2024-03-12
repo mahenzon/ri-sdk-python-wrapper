@@ -16,7 +16,6 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
   - Ruff
   - Black
     - Coverage
-- Lower required Python version to 3.7
 - Add some tests coverage
 
 ### Install
