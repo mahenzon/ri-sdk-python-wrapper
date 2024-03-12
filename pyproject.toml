@@ -235,6 +235,13 @@ extend-ignore = [
     "ERA001",
     "RUF002",
 ]
+"ri_sdk/contrib/lib_finder.py" = [
+    "RUF002",
+]
+"examples/*.py" = [
+    "RUF002",
+    "RUF003",
+]
 
 [tool.ruff.lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
