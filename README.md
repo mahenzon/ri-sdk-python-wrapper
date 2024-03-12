@@ -11,6 +11,7 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
   - MyPy
   - Ruff
   - Black
+- coverage for ri_sdk_codegen
 
 ### Install
 

@@ -36,6 +36,8 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+    env:
+      PY_VER: ${{matrix.python-version}}
 
     steps:
       - name: Checkout code
@@ -52,11 +54,12 @@ jobs:
           pip install hatch
 
       - name: Run tests against Python ${{matrix.python-version}}
-        run: |
-          VER=${{matrix.python-version}}
-          hatch run test.py${VER/./}:run -v
+        run: hatch run test.py${PY_VER/./}:cov-xml -v
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/${PY_VER/./}/coverage.xml
+          flags: unittests
+          name: py-${{ matrix.python-version }}
