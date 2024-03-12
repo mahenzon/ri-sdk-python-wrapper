@@ -34,4 +34,7 @@ repos:
       - id: mypy
         language: system
         pass_filenames: false
-        args: ["."]
+        args:
+          - "--config-file"
+          - "pyproject.toml"
+          - "."
