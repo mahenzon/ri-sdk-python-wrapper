@@ -8,7 +8,6 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 - add coverage
 - GitHub Actions (lint)
 - create usage examples for robohand
-- add `get_lib` to contrib
 - add badges to README:
   - PyPI
   - MyPy
