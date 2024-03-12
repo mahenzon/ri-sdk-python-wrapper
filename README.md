@@ -10,7 +10,6 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 - create usage examples for robohand
 - add `get_lib` to contrib
 - add logging
-- add multi-python testing
 - add badges to README:
   - PyPI
   - MyPy
@@ -123,3 +122,12 @@ Each stage can be used separately:
 - `--generate-sdk`
 
 Add `-v` flag for verbose output.
+
+
+## Testing
+
+Run
+
+```shell
+hatch run test:run
+```
