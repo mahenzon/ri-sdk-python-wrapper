@@ -2,6 +2,8 @@
 
 Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 
+[![codecov](https://img.shields.io/codecov/c/github/mahenzon/ri-sdk-python-wrapper?token=K736Q6JF26&style=for-the-badge&logo=codecov)](https://codecov.io/gh/mahenzon/ri-sdk-python-wrapper)
+
 ### TODO:
 
 - add badges to README:
@@ -9,7 +11,6 @@ Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
   - MyPy
   - Ruff
   - Black
-  - Coverage
 
 ### Install
 
