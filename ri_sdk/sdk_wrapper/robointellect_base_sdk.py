@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import ctypes
-from typing import TYPE_CHECKING, Protocol, TypeVar, Union
+from typing import TYPE_CHECKING, Union
 
 from ri_sdk import loggers
 from ri_sdk.exceptions import MethodCallError
 
 if TYPE_CHECKING:
+    from typing import Protocol, TypeVar
+
     ErrorBufferType = TypeVar("ErrorBufferType", bound=ctypes.Array[ctypes.c_char])
 
     class MethodProtocol(Protocol):

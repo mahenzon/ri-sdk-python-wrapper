@@ -2,19 +2,19 @@
 name = "ri-sdk"
 description = "RI SDK Pythonic Wrapper"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.7"
 license = "MIT"
 dynamic = ["version"]
 authors = [
-  { name = "Suren Khorenyan", email = "surenkhorenyan@gmail.com" },
+    { name = "Suren Khorenyan", email = "surenkhorenyan@gmail.com" },
 ]
 maintainers = [
-  { name = "Suren Khorenyan", email = "surenkhorenyan@gmail.com" },
+    { name = "Suren Khorenyan", email = "surenkhorenyan@gmail.com" },
 ]
 keywords = [
-  "RI SDK",
-  "RoboIntellect",
-  "RoboHand",
+    "RI SDK",
+    "RoboIntellect",
+    "RoboHand",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -31,6 +31,7 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -90,7 +91,7 @@ path = "ri_sdk/__about__.py"
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "/ri_sdk",
+    "/ri_sdk",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -120,7 +121,7 @@ select = [
     "F",
     "I",
     "S",
-#    "D",
+    # "D",
     "D201",
     "D202",
     "A",
@@ -180,38 +181,38 @@ exclude = [
 unfixable = ["B"]
 
 extend-ignore = [
-    "S702",  # not relevant, Mako templates allow HTML
+    "S702", # not relevant, Mako templates allow HTML
     #    and JavaScript rendering by default and are inherently open to XSS attacks
 
-#    "D401",
-#    "D403",
-#    "D400",
-#    "D415",
-#    "D100",  # Missing docstring in public module
-#    "D101",  # Missing docstring in public class
-#    "D102",  # Missing docstring in public method
-#    "D103",  # Missing docstring in public function
-#    "D104",  # Missing docstring in public package
-#    "D105",  # Missing docstring in magic method
-#    "D106",  # Missing docstring in public nested class
-#    "D107",  # Missing docstring in `__init__`
-#    "D200",  # One-line docstring should fit on one line
-#    "D203",  # 1 blank line required before class docstring
-#    "D210",  # No whitespaces allowed surrounding docstring text
-#    "D212",  # Multi-line docstring summary should start at the first line
-#    "D301",  # Use r""" if any backslashes in a docstring
-#    "D404",  #  First word of the docstring should not be "This"
-    "PLR0913",  # Too many arguments to function call
-    "ANN101",  #  Missing type annotation for `self` in method
-    "ANN102",  #  Missing type annotation for `cls` in classmethod
-#    "A003",  # Class attribute `type` is shadowing a Python builtin
-#    "ARG001",  # Unused function argument: `{name}`
-#    "ARG002",  # Unused method argument: `{name}`
-#    "ARG003",  # Unused class method argument: `{name}`
-#    "RUF001",  # String contains ambiguous unicode character {confusable} (did you mean {representant}?)
-#    "RUF002",  # Docstring contains ambiguous unicode character {confusable} (did you mean {representant}?)
-#    "RUF003",  # Comment contains ambiguous unicode character {confusable} (did you mean {representant}?)
-#    "PT006",  # pytest parametrize tuple args
+    #    "D401",
+    #    "D403",
+    #    "D400",
+    #    "D415",
+    #    "D100",  # Missing docstring in public module
+    #    "D101",  # Missing docstring in public class
+    #    "D102",  # Missing docstring in public method
+    #    "D103",  # Missing docstring in public function
+    #    "D104",  # Missing docstring in public package
+    #    "D105",  # Missing docstring in magic method
+    #    "D106",  # Missing docstring in public nested class
+    #    "D107",  # Missing docstring in `__init__`
+    #    "D200",  # One-line docstring should fit on one line
+    #    "D203",  # 1 blank line required before class docstring
+    #    "D210",  # No whitespaces allowed surrounding docstring text
+    #    "D212",  # Multi-line docstring summary should start at the first line
+    #    "D301",  # Use r""" if any backslashes in a docstring
+    #    "D404",  #  First word of the docstring should not be "This"
+    "PLR0913", # Too many arguments to function call
+    "ANN101", #  Missing type annotation for `self` in method
+    "ANN102", #  Missing type annotation for `cls` in classmethod
+    #    "A003",  # Class attribute `type` is shadowing a Python builtin
+    #    "ARG001",  # Unused function argument: `{name}`
+    #    "ARG002",  # Unused method argument: `{name}`
+    #    "ARG003",  # Unused class method argument: `{name}`
+    #    "RUF001",  # String contains ambiguous unicode character {confusable} (did you mean {representant}?)
+    #    "RUF002",  # Docstring contains ambiguous unicode character {confusable} (did you mean {representant}?)
+    #    "RUF003",  # Comment contains ambiguous unicode character {confusable} (did you mean {representant}?)
+    #    "PT006",  # pytest parametrize tuple args
 
     # warning: The following rules may cause conflicts when used with the formatter:
     #    `COM812`, `ISC001`. To avoid unexpected behavior,
