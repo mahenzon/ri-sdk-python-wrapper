@@ -38,3 +38,5 @@ repos:
           - "--config-file"
           - "pyproject.toml"
           - "."
+          - "--exclude"
+          - "tests"
