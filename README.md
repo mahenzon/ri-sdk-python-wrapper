@@ -2,15 +2,17 @@
 
 Parse RI SDK docs (https://docs.robointellect.ru/) and autogen Python wrapper.
 
+
+[![PyPI - Version](https://img.shields.io/pypi/v/ri-sdk?style=for-the-badge&logo=pypi)](https://pypi.org/project/ri-sdk/)
+[![PyPI - Status](https://img.shields.io/pypi/status/ri-sdk?style=for-the-badge)](https://pypi.org/project/ri-sdk/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ri-sdk?style=for-the-badge&logo=python)](https://pypi.org/project/ri-sdk/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge)](https://docs.astral.sh/ruff/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000?style=for-the-badge)](https://black.readthedocs.io/)
+[![mypy](https://img.shields.io/badge/mypy-checked-1F5082?style=for-the-badge)](https://mypy.readthedocs.io/)
 [![codecov](https://img.shields.io/codecov/c/github/mahenzon/ri-sdk-python-wrapper?token=K736Q6JF26&style=for-the-badge&logo=codecov)](https://codecov.io/gh/mahenzon/ri-sdk-python-wrapper)
 
 ### TODO:
 
-- add badges to README:
-  - PyPI
-  - MyPy
-  - Ruff
-  - Black
 - coverage for ri_sdk_codegen
 
 ### Install
