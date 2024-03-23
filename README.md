@@ -24,6 +24,12 @@ pip install ri-sdk
 ### Run
 
 
+#### Other examples
+- GUI Control (PyQt / PySide) example: https://github.com/mahenzon/robohand-gui-control
+
+
+#### Minimal example
+
 Full example at [examples/robohand-example.py](https://github.com/mahenzon/ri-sdk-python-wrapper/blob/master/examples/robohand-example.py).
 
 Another example with RoboHand class at [examples/robohand-class-example.py](https://github.com/mahenzon/ri-sdk-python-wrapper/blob/master/examples/robohand-class-example.py).
@@ -95,7 +101,11 @@ ri_sdk.destroy_sdk(is_force=True)
 
 ### Notes
 
-Docs typo? sensor_voltage_sensor_read_reg_bytes read length is output type... but it's not
+#### Features to implement
+
+- TODO: handy angle control (like in adafruit-servokit)
+- TODO: code tests coverage
+
 
 ## Codegen
 
