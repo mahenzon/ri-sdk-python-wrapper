@@ -38,6 +38,8 @@ log = loggers.wrapper
 
 
 class RoboIntellectBaseSDK:
+    error_string_buffer_size = 1000
+
     def __init__(
         self,
         lib: ctypes.CDLL,
@@ -89,7 +91,7 @@ class RoboIntellectBaseSDK:
         """
         # error_text_c - Текст ошибки. Передается как параметр
         # если происходит ошибка, метод записывает текст в этот параметр
-        error_text_c = ctypes.create_string_buffer(1000)
+        error_text_c = ctypes.create_string_buffer(self.error_string_buffer_size)
         # Код ошибки. Получаем по результату вызова метода
         error_code = method(*args, error_text_c)
         self.process_result(
