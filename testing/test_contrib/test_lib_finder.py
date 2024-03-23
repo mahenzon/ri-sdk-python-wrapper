@@ -1,5 +1,3 @@
-from unittest import mock
-
 import pytest
 
 from ri_sdk.contrib import get_lib
@@ -14,8 +12,8 @@ def lib_filepath(tmpdir):
 
 class TestGetLib:
     @pytest.mark.parametrize("platform_name", ["Darwin"])
-    @mock.patch("ri_sdk.contrib.lib_finder.platform", autospec=True)
-    def test_get_lib_unsupported_platform(self, mock_platform, platform_name):
+    def test_get_lib_unsupported_platform(self, platform_name, mocker):
+        mock_platform = mocker.patch("ri_sdk.contrib.lib_finder.platform", autospec=True)
         mock_platform.system.return_value = platform_name
         with pytest.raises(
             RuntimeError,
@@ -23,8 +21,8 @@ class TestGetLib:
         ):
             get_lib()
 
-    @mock.patch("ri_sdk.contrib.lib_finder.cdll", autospec=True)
-    def test_get_predefined_lib(self, mock_cdll, lib_filepath):
+    def test_get_predefined_lib(self, lib_filepath, mocker):
+        mock_cdll = mocker.patch("ri_sdk.contrib.lib_finder.cdll", autospec=True)
         res = get_lib(library_filepath=lib_filepath)
         assert res is mock_cdll.LoadLibrary.return_value
         mock_cdll.LoadLibrary.assert_called_once_with(str(lib_filepath))
