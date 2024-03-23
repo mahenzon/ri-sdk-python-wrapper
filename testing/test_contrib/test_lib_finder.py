@@ -13,8 +13,10 @@ def lib_filepath(tmpdir):
 class TestGetLib:
     @pytest.mark.parametrize("platform_name", ["Darwin"])
     def test_get_lib_unsupported_platform(self, platform_name, mocker):
-        mock_platform = mocker.patch("ri_sdk.contrib.lib_finder.platform", autospec=True)
-        mock_platform.system.return_value = platform_name
+        mocker.patch(
+            "ri_sdk.contrib.lib_finder.platform.system",
+            return_value=platform_name,
+        )
         with pytest.raises(
             RuntimeError,
             match=f"Unsupported platform {platform_name!r}",
