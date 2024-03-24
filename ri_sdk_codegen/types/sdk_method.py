@@ -7,8 +7,8 @@ from ri_sdk_codegen.rendering.text_blocks import DescriptionBlock
 from ri_sdk_codegen.types.options_override import MethodOptions, ParamOptions
 from ri_sdk_codegen.types.sdk_method_param import MethodParamSDK
 from ri_sdk_codegen.utils import (
-    method_name_to_snake_case,
     method_name_to_upper_camel_case,
+    ri_sdk_method_name_wo_prefix,
 )
 
 
@@ -113,7 +113,7 @@ class MethodSDK(BaseModel):
 
     @cached_property
     def py_method_name(self) -> str:
-        return method_name_to_snake_case(self.name).removeprefix("ri_sdk_")
+        return ri_sdk_method_name_wo_prefix(self.name)
 
     @cached_property
     def py_module_name(self) -> str:
