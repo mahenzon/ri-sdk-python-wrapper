@@ -1,10 +1,13 @@
+import inspect
+
 import pytest
 
 from ri_sdk import RoboIntellectSDK
-from ri_sdk_codegen.codegen_params import RI_SDK_CODEGEN_METHODS_CACHE_DIR
-from ri_sdk_codegen.rendering.render_configs import SETUP_ARGS_METHOD_NAME_PREFIX
-from ri_sdk_codegen.utils.case_converter import ri_sdk_method_name_wo_prefix
-from testing.conftest import ALL_SETUP_NAMES, LOWER_THAN_39
+from testing.conftest import (
+    ALL_METHOD_CALL_NAMES,
+    ALL_SETUP_METHODS_NAMES,
+    RI_SDK_METHOD_NAMES,
+)
 
 
 @pytest.fixture()
@@ -18,34 +21,27 @@ def sdk(sdk_lib):
 
 
 @pytest.fixture()
-def ri_sdk_method_names():
-    return [
-        # as string
-        path.name
-        # refer cached names
-        for path in RI_SDK_CODEGEN_METHODS_CACHE_DIR.iterdir()
-        # validate it's RI SDK method
-        if path.is_dir() and path.name.startswith("RI_SDK_")
-    ]
+def sdk_method(request, sdk):
+    name = request.param
+    method = getattr(sdk.lib, name)
+    method.__name__ = name
+    # successful result status code
+    method.return_value = 0
+    return method
 
 
 class TestSetupArgsRoboIntellectSDK:
-    def test_setup_all_methods_args_types(
-        self,
-        mocker,
-        sdk,
-        ri_sdk_method_names,
-    ):
+    def test_setup_all_methods_args_types(self, mocker, sdk):
         # watch for cls methods
         spy_methods = [
             # spy for each
             mocker.spy(sdk, name)
             # in known
-            for name in ALL_SETUP_NAMES
+            for name in ALL_SETUP_METHODS_NAMES
         ]
 
         # prepare methods args types prop (set None)
-        for ri_sdk_method_name in ri_sdk_method_names:
+        for ri_sdk_method_name in RI_SDK_METHOD_NAMES:
             method = getattr(sdk.lib, ri_sdk_method_name)
             method.argtypes = None
 
@@ -57,17 +53,15 @@ class TestSetupArgsRoboIntellectSDK:
             meth.assert_called_once()
 
         # assert argtypes prop is configured
-        for ri_sdk_method_name in ri_sdk_method_names:
+        for ri_sdk_method_name in RI_SDK_METHOD_NAMES:
             method = getattr(sdk.lib, ri_sdk_method_name)
             assert hasattr(method, "argtypes")
             assert isinstance(method.argtypes, list)
             assert len(method.argtypes) > 0
 
-    @pytest.mark.skipif(LOWER_THAN_39, reason="no removeprefix in py < 3.9")
-    def test_sdk_has_all_setup_methods_args(self, sdk, ri_sdk_method_names):
-        for sdk_method in ri_sdk_method_names:
-            name = ri_sdk_method_name_wo_prefix(sdk_method)
-            assert hasattr(sdk, f"{SETUP_ARGS_METHOD_NAME_PREFIX}{name}")
+    @pytest.mark.parametrize("setup_method_name", ALL_SETUP_METHODS_NAMES)
+    def test_sdk_has_all_setup_methods_args(self, sdk, setup_method_name):
+        assert hasattr(sdk, setup_method_name)
 
     def test_auto_setup_all_methods_args_types_on_init(self, mocker, sdk_lib):
         spy_setup_all_methods_args_types = mocker.spy(
@@ -77,3 +71,31 @@ class TestSetupArgsRoboIntellectSDK:
         sdk = RoboIntellectSDK(sdk_lib, setup_methods_args=True)
         # check called w/ sdk self
         spy_setup_all_methods_args_types.assert_called_once_with(sdk)
+
+
+class TestCallMethodsRoboIntellectSDK:
+    @pytest.mark.parametrize(
+        ("method_name", "sdk_method"),
+        zip(ALL_METHOD_CALL_NAMES, RI_SDK_METHOD_NAMES),
+        indirect=["sdk_method"],
+    )
+    def test_call_sdk_method(
+        self,
+        sdk,
+        method_name,
+        sdk_method,
+    ):
+        method = getattr(sdk, method_name)
+        # get method return type using inspect
+        return_type = inspect.signature(method).return_annotation
+
+        # create values from args types, only for those who don't have defaults
+        # noinspection PyUnresolvedReferences
+        args_values = {
+            name: param.annotation()
+            for name, param in inspect.signature(method).parameters.items()
+            if param.default is inspect._empty
+        }
+        result = method(**args_values)
+        assert isinstance(result, return_type)
+        sdk_method.assert_called_once()
