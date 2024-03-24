@@ -1,7 +1,9 @@
+import ctypes
+
 import pytest
 
 from ri_sdk.exceptions import MethodCallError
-from ri_sdk.sdk_wrapper.robointellect_base_sdk import RoboIntellectBaseSDK, ctypes
+from ri_sdk.sdk_wrapper.robointellect_base_sdk import RoboIntellectBaseSDK
 
 
 @pytest.fixture()
@@ -26,7 +28,12 @@ def mock_create_string_buffer(mocker):
 
 
 class TestRoboIntellectBaseSDK:
-    def test_call_sdk_method(self, sdk, sdk_method, mock_create_string_buffer):
+    def test_call_sdk_method(
+        self,
+        sdk,
+        sdk_method,
+        mock_create_string_buffer,
+    ):
         return_code = 0
         sdk_method.return_value = return_code
 
