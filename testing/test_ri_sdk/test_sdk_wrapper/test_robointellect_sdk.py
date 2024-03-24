@@ -4,7 +4,7 @@ from ri_sdk import RoboIntellectSDK
 from ri_sdk_codegen.codegen_params import RI_SDK_CODEGEN_METHODS_CACHE_DIR
 from ri_sdk_codegen.rendering.render_configs import SETUP_ARGS_METHOD_NAME_PREFIX
 from ri_sdk_codegen.utils.case_converter import ri_sdk_method_name_wo_prefix
-from testing.conftest import LOWER_THAN_39
+from testing.conftest import ALL_SETUP_NAMES, LOWER_THAN_39
 
 
 @pytest.fixture()
@@ -15,15 +15,6 @@ def sdk_lib(mocker):
 @pytest.fixture()
 def sdk(sdk_lib):
     return RoboIntellectSDK(sdk_lib)
-
-
-@pytest.fixture()
-def all_setup_names():
-    return [
-        name
-        for name in dir(RoboIntellectSDK)
-        if name.startswith(SETUP_ARGS_METHOD_NAME_PREFIX)
-    ]
 
 
 @pytest.fixture()
@@ -43,7 +34,6 @@ class TestSetupArgsRoboIntellectSDK:
         self,
         mocker,
         sdk,
-        all_setup_names,
         ri_sdk_method_names,
     ):
         # watch for cls methods
@@ -51,7 +41,7 @@ class TestSetupArgsRoboIntellectSDK:
             # spy for each
             mocker.spy(sdk, name)
             # in known
-            for name in all_setup_names
+            for name in ALL_SETUP_NAMES
         ]
 
         # prepare methods args types prop (set None)
