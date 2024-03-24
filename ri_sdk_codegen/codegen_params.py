@@ -8,6 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 RI_SDK_CODEGEN_DIR = BASE_DIR / ".ri_sdk_codegen"
 RI_SDK_PYTHON_CODE_SRC_DIR = BASE_DIR / "ri_sdk"
 RI_SDK_PYTHON_TYPES_DIR = RI_SDK_PYTHON_CODE_SRC_DIR / TYPES_MODULE_NAME
+RI_SDK_CODEGEN_METHODS_CACHE_DIR = RI_SDK_CODEGEN_DIR / "methods"
 
 ALL_RI_SDK_PAGES_FILENAME = "ri_sdk_pages.txt"
 RI_SDK_PAGES_FILEPATH = RI_SDK_CODEGEN_DIR / ALL_RI_SDK_PAGES_FILENAME
@@ -119,7 +120,7 @@ class CodegenParams:
         MAKO_TEMPLATE_RI_SDK_METHOD_RETURN_TYPES_INIT_FILEPATH
     )
     ri_sdk_codegen_dir: Path = RI_SDK_CODEGEN_DIR
-    ri_sdk_codegen_methods_cache_dir: Path = RI_SDK_CODEGEN_DIR / "methods"
+    ri_sdk_codegen_methods_cache_dir: Path = RI_SDK_CODEGEN_METHODS_CACHE_DIR
     ri_sdk_python_code_src_dir: Path = RI_SDK_PYTHON_CODE_SRC_DIR
     ri_sdk_python_types_dir: Path = RI_SDK_PYTHON_TYPES_DIR
     methods_options_filepath: Path = RI_SDK_CODEGEN_DIR / "options.yaml"
