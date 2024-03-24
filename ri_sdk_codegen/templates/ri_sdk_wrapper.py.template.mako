@@ -14,6 +14,9 @@ from ri_sdk_codegen.rendering.render_helpers import (
     method_description,
     comment_ctype_param,
 )
+from ri_sdk_codegen.rendering.render_configs import (
+    SETUP_ARGS_METHOD_NAME_PREFIX,
+)
 %>
 import ctypes
 
@@ -102,7 +105,7 @@ ${receiver_var_comment(param)}
 % endfor
 % for sdk_method in sdk_methods:
 
-    def setup_arg_types_for_${sdk_method.py_method_name}(self) -> None:
+    def ${SETUP_ARGS_METHOD_NAME_PREFIX}${sdk_method.py_method_name}(self) -> None:
         ${'"""'}
         Инициализация метода ${sdk_method.name}
 
