@@ -34,7 +34,7 @@ repos:
       - id: mypy
         exclude: testing
         additional_dependencies:
-          - "pydantic>=2.6.3"
-          - "types-pyyaml>=6.0.12.12"
-          - "types-requests>=2.31.0.20240218"
-          - "types-beautifulsoup4>=4.12.0.20240229"
+          - "pydantic>=2.8.2"
+          - "types-pyyaml>=6.0.12.20240311"
+          - "types-requests>=2.32.0.20240712"
+          - "types-beautifulsoup4>=4.12.0.20240511"
