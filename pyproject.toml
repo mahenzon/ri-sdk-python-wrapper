@@ -64,28 +64,28 @@ package-mode = false
 python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.2.0"
-ruff = "^0.3.2"
-pre-commit = "^3.6.1"
+black = "^24.4.2"
+ruff = "^0.5.3"
+pre-commit = "^3.7.1"
 beautifulsoup4 = "^4.12.3"
-requests = "^2.31.0"
-mako = "^1.3.2"
-pydantic = "^2.6.3"
+requests = "^2.32.3"
+mako = "^1.3.5"
+pydantic = "^2.8.2"
 pyyaml = "^6.0.1"
-hatch = "^1.9.3"
+hatch = "^1.12.0"
 
 [tool.poetry.group.types.dependencies]
-mypy = "^1.9.0"
-types-pyyaml = "^6.0.12.12"
-types-requests = "^2.31.0.20240218"
-types-beautifulsoup4 = "^4.12.0.20240229"
+mypy = "^1.11.0"
+types-pyyaml = "^6.0.12.20240311"
+types-requests = "^2.32.0.20240712"
+types-beautifulsoup4 = "^4.12.0.20240511"
 
 
 [tool.poetry.group.tests.dependencies]
-pytest = "^8.1.1"
+pytest = "^8.2.2"
 pytest-cov = "^4.1.0"
 pytest-mock = "^3.14.0"
-coverage = { extras = ["toml"], version = "^7.4.3" }
+coverage = { extras = ["toml"], version = "^7.6.0" }
 
 [tool.coverage.run]
 branch = false
@@ -262,6 +262,7 @@ extend-ignore = [
     #    "RUF002",  # Docstring contains ambiguous unicode character {confusable} (did you mean {representant}?)
     #    "RUF003",  # Comment contains ambiguous unicode character {confusable} (did you mean {representant}?)
     #    "PT006",  # pytest parametrize tuple args
+     "UP037",  # quoted-annotation (UP037)
 
     # warning: The following rules may cause conflicts when used with the formatter:
     #    `COM812`, `ISC001`. To avoid unexpected behavior,

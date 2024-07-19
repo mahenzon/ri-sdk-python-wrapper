@@ -33,7 +33,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         """
         log.debug("Setup args types for all known SDK methods")
         for name in dir(self):
-            if not name.startswith("setup_arg_types_"):
+            if not name.startswith("setup_arg_types_for_"):
                 continue
             method = getattr(self, name)
             method()
@@ -48,7 +48,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Этот компонент не имеет своих собственных методов. Его можно
         расширить до компонента уровня группы
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic
 
         :returns: Результат типа CreateBasicResult
         :raises ValueError: если полученный код ошибки не ноль
@@ -95,7 +95,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         5. led - светодиод
         6. voltage_sensor - датчик тока, напряжения и мощности
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent
 
         :param group: Тип компонента ("executor", "connector",
             "sensor")
@@ -144,7 +144,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
             (i2c адаптер, ШИМ модулятор)
         3. sensor - датчики (Датчик напряжения и силы тока)
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateGroupComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateGroupComponent
 
         :param group: Тип компонента ("executor", "connector",
             "sensor")
@@ -193,7 +193,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         5. светодиоды: ky016
         6. датчик тока, напряжения и мощности: ina219
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateModelComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateModelComponent
 
         :param group: Тип компонента ("executor", "connector",
             "sensor")
@@ -240,7 +240,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Доступны следующие группы компонентов:
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-destroy-functions/RI_SDK_DestroyComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-destroy-functions/RI_SDK_DestroyComponent
 
         :param descriptor: Дескриптор компонента, который будет
             удален
@@ -270,7 +270,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Доступны следующие группы компонентов:
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-end-functions/RI_SDK_DestroySDK
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-end-functions/RI_SDK_DestroySDK
 
         :param is_force: Признак полного очищения реестра
         :returns: Результат типа DestroySDKResult
@@ -298,7 +298,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Метод получает все доступные модели для устройства
         (modelList) по его названию (deviceType)
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_Device_ModelList
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-start-functions/RI_SDK_Device_ModelList
 
         :param device_type: Тип устройства : servodrive, rservodrive,
             i2c_adapter, pwm, led, voltage_sensor
@@ -330,7 +330,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Инициализацию необходимо выполнять в самом начале выполнения
         программы. Иначе остальные функции будут возвращать ошибку.
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_InitSDK
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-start-functions/RI_SDK_InitSDK
 
         :param log_level: Уровень глубины логирования (0 - только
             верхний уровень, 1, 2, 3 - более подробная трассировка)
@@ -366,7 +366,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Эту функцию необходимо вызывать перед вызовом функций
         управления соответствующим светодиодом.
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController
 
         :param descriptor: Дескриптор светодиода, который будет
             подключаться к ШИМ
@@ -420,7 +420,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         необходимо перед вызовом функции RI_SDK_LinkPWMToController
         вызвать функцию RI_SDK_connector_i2c_SetBus.
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkPWMToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkPWMToController
 
         :param descriptor: Дескриптор ШИМ, который будет подключаться
             к i2c адаптеру
@@ -461,7 +461,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Эту функцию необходимо вызывать перед вызовом функций
         управления соответствующим сервоприводом вращения.
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController
 
         :param descriptor: Дескриптор сервопривода вращения, который
             будет подключаться к ШИМ
@@ -502,7 +502,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Эту функцию необходимо вызывать перед вызовом функций
         управления соответствующим сервоприводом.
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkServodriveToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkServodriveToController
 
         :param descriptor: Дескриптор сервопривода, который будет
             подключаться к ШИМ
@@ -544,7 +544,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         управления соответствующим датчиком тока, напряжения и
         мощности.
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController
 
         :param descriptor: Дескриптор датчика тока, напряжения и
             мощности, который будет подключаться к i2c адаптеру
@@ -579,7 +579,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Расширяет базовый компонент с дескриптором  basic.
         Записывает в параметр descriptor дескриптор нового компонента
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/RI_SDK_Sensor_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/RI_SDK_Sensor_Extend
 
         :param basic: Базовый компонент
         :returns: Результат типа SensorExtendResult
@@ -612,7 +612,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Расширяет базовый компонент с дескриптором  basic.
         Записывает в параметр descriptor дескриптор нового компонента
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/RI_SDK_connector_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/RI_SDK_connector_Extend
 
         :param basic: Указатель на базовый компонент
         :returns: Результат типа ConnectorExtendResult
@@ -652,7 +652,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Для того, чтобы продолжить использовать функции чтения/записи
         необходимо вновь открыть соединение по этому адресу
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Close
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Close
 
         :param descriptor: Дескриптор компонента, у которого будет
             закрыто соединение
@@ -689,7 +689,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Для того, чтобы продолжить использовать функции чтения/записи
         необходимо вновь открыть соединение по нужному адресу
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll
 
         :param descriptor: Дескриптор компонента, у которого будут
             закрыты все соединения
@@ -718,7 +718,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         connectorDescriptor,  записывает в параметр descriptor
         дескриптор нового компонента (i2c адаптера)
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend
 
         :param connector_descriptor: Дескриптор компонента группы
             коннекторов
@@ -756,7 +756,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Доступные модели i2c адаптера: cp2112, ch341
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ExtendToModel
 
         :param base_descriptor: Дескриптор компонента i2c адаптера
         :param model_name: Модель компонента ("ch341", "cp2112")
@@ -797,7 +797,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         делать перед тем, как производить чтение/запись по этому
         адресу
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open
 
         :param descriptor: Дескриптор компонента, у которого будет
             открыто соединение
@@ -831,7 +831,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Читает с i2c адаптера один байт по адресу addr и записывает
         их в value
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadByte
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться чтение
@@ -871,7 +871,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Читает с i2c адаптера len байтов по адресу addr и записывает
         их в buf
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadBytes
 
         :param descriptor: Дескриптор компонента, с которого будет
             производиться чтение
@@ -954,7 +954,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
             (RI_SDK_connector_i2c_Close или
             RI_SDK_connector_i2c_CloseAll).
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus
 
         :param descriptor: Дескриптор компонента, у которого будет
             открыто соединение
@@ -1011,7 +1011,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         выполнении функций чтения/записи для данного i2c адаптера
         программа будет ожидать, пока линия освободится.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State
 
         :param descriptor: Дескриптор компонента
         :returns: Результат типа ConnectorI2cStateResult
@@ -1047,7 +1047,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Записывает байт из value через  i2c адаптера по адресу addr
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteByte
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться запись
@@ -1085,7 +1085,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Длина массива байт buf должна быть раной len
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteBytes
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться запись
@@ -1131,7 +1131,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Записывает в параметр descriptor дескриптор нового компонента
         (светодиод)
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Extend
 
         :param executor: Компонент группы, который будет расширятся
         :returns: Результат типа ExecRGBLEDExtendResult
@@ -1170,7 +1170,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         компонента (компонент конкретной модели светодиода)
         Доступные модели сервопривода: ky016
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_ExtendToModel
 
         :param base_descriptor: Дескриптор компонента светодиода,
             который будет расширятся
@@ -1220,16 +1220,17 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         async устанавливает режим выполнения команды - асинхронный
         или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         *При значении qty = 0 операция выполняется до тех пор, пока
         не придет другая команда или команда остановки
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithFrequency
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithFrequency
 
         :param descriptor: Дескриптор компонента светодиода
         :param r: Значение яркости для красного цвета (0 -255)
@@ -1288,16 +1289,17 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         синего цвета соответственно. Параметр async устанавливает
         режим выполнения команды - асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         *При значении qty = 0 операция выполняется до тех пор, пока
         не придет другая команда или команда остановки
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithPause
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithPause
 
         :param descriptor: Дескриптор компонента светодиода
         :param r: Значение яркости для красного цвета (0 -255)
@@ -1362,16 +1364,17 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         устанавливает режим выполнения команды - асинхронный или
         синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         *При значении qty = 0 операция выполняется до тех пор, пока
         не придет другая команда или команда остановки
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker
 
         :param descriptor: Дескриптор компонента светодиода
         :param r: Значение максимальной яркости для красного цвета (0
@@ -1423,7 +1426,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         синего цветов у сервопривода с дескриптором descriptor и
         записывает эти значения в  r, g, b.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor
 
         :param descriptor: Дескриптор компонента светодиода
         :returns: Результат типа ExecRGBLEDGetColorResult
@@ -1480,7 +1483,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
             мигания
         4. 4 - Мерцание. Светодиод выполняет команду мерцания.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetState
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetState
 
         :param descriptor: Дескриптор компонента светодиода
         :returns: Результат типа ExecRGBLEDGetStateResult
@@ -1524,16 +1527,17 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         свечения.Параметр async устанавливает режим выполнения
         команды - асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         *При значении duration = 0 операция выполняется до тех пор,
         пока не придет другая команда или команда остановки
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse
 
         :param descriptor: Дескриптор компонента светодиода
         :param r: Значение яркости для красного цвета (0 -255)
@@ -1578,7 +1582,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         выполнение выполняемой в данный момент  команды. Светодиод
         прекращает свечение и затухает.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop
 
         :param descriptor: Дескриптор компонента светодиода
         :returns: Результат типа ExecRGBLEDStopResult
@@ -1620,7 +1624,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         с сервоприводом вращения, модель которого не поддерживается
         библиотекой.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_CustomDeviceInit
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_CustomDeviceInit
 
         :param descriptor: Дескриптор компонента сервопривода,
             который будет инициализирован
@@ -1667,7 +1671,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Записывает в параметр descriptor дескриптор нового компонента
         (Сервопривода вращения)
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend
 
         :param executor: Компонент группы, который будет расширятся
         :returns: Результат типа ExecRServoDriveExtendResult
@@ -1708,7 +1712,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Доступные модели сервопривода: mg996r
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel
 
         :param base_descriptor: Дескриптор компонента сервопривода
             вращения, который будет расширятся
@@ -1756,7 +1760,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         1 - Компонент выполняет действие. Сервопривод в данный момент
         осуществляет движение.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_GetState
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_GetState
 
         :param descriptor: Дескриптор компонента сервопривода
         :returns: Результат типа ExecRServoDriveGetStateResult
@@ -1822,14 +1826,14 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         можно инициализировать сервопривод с откалиброванными
         характеристиками.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды.
-        Т.е. поток выполнения программы остановится в этой функции и
-        будет ожидать команды на завершении вращения.
-        При асинхронном режиме выполнение функции осуществляется
-        параллельно дальнейшей работе программы.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulse
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulse
 
         :param descriptor: Дескриптор сервопривода
         :param pulse: Значение импульса (мкс)
@@ -1899,22 +1903,17 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         можно инициализировать сервопривод с откалиброванными
         характеристиками.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. Вращение
-        выполняется до истечения таймаута, т.к. функцию остановки
-        невозможно (в том же потоке) вызвать раньше завершения
-        текущей команды.
-        При асинхронном режиме ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
-        И если после функции вращения для используемого сервопривода
-        будет вызвана следующая команда, то вращение будет прервано
-        до истечения таймаута.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         Если таймаут задан равным нулю, то будет вызвана функция
         вращения по импульсу, а таймаут меньше нуля вызовет ошибку.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulseOverTime
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulseOverTime
 
         :param descriptor: Дескриптор сервопривода
         :param pulse: Значение импульса (микросекунды)
@@ -1967,14 +1966,14 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         0 - по часовой стрелке
         1 - против часовой стрелки
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды.
-        Т.е. поток выполнения программы остановится в этой функции и
-        будет ожидать команды на завершении вращения.
-        При асинхронном режиме выполнение функции осуществляется
-        параллельно дальнейшей работе программы.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
 
         :param descriptor: Дескриптор сервопривода
         :param direction: Направление движения
@@ -2031,23 +2030,18 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         0 - по часовой стрелке
         1 - против часовой стрелки
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. Вращение
-        выполняется до истечения таймаута, т.к. функцию остановки
-        невозможно (в том же потоке) вызвать раньше завершения
-        текущей команды.
-        При асинхронном режиме ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
-        И если после функции вращения для используемого сервопривода
-        будет вызвана следующая команда, то вращение будет прервано
-        до истечения таймаута.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         Если таймаут задан равным нулю, то будет вызвана функция
         вращения с заданным процентом от максимальной скорости, а
         таймаут меньше нуля вызовет ошибку.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
 
         :param descriptor: Дескриптор сервопривода
         :param direction: Направление движения
@@ -2089,7 +2083,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Дает команду сервоприводу вращения с дескриптором descriptor
         остановить движение, если оно производится в данный момент.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Stop
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Stop
 
         :param descriptor: Дескриптор компонента сервопривода
             вращения
@@ -2132,7 +2126,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         с сервоприводом, модель которого не поддерживается
         библиотекой.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit
 
         :param descriptor: Дескриптор компонента сервопривода,
             который будет инициализирован
@@ -2179,7 +2173,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Записывает в параметр descriptor дескриптор нового компонента
         (Сервопривода)
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Extend
 
         :param executor: Компонент группы, который будет расширятся
         :returns: Результат типа ExecServoDriveExtendResult
@@ -2221,7 +2215,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Доступные модели сервопривода: mg90s, a0090, mg996, corona
         ds929mg, corona sb9039, corona ds843mg, corona ds238mg
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_ExtendToModel
 
         :param base_descriptor: Базовый дескриптор компонента
             сервопривода, который будет расширяться
@@ -2261,7 +2255,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Получает значение угла поворота у сервопривода с дескриптором
         descriptor и записывает его в angle
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetCurrentAngle
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetCurrentAngle
 
         :param descriptor: Дескриптор компонента сервопривода
         :returns: Результат типа ExecServoDriveGetCurrentAngleResult
@@ -2303,7 +2297,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         1 - Компонент выполняет действие. Сервопривод в данный момент
         осуществляет движение.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState
 
         :param descriptor: Дескриптор компонента сервопривода
         :returns: Результат типа ExecServoDriveGetStateResult
@@ -2344,11 +2338,12 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Параметр async устанавливает режим выполнения команды -
         асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         Направления движения:
         0 - по часовой стрелке
@@ -2358,7 +2353,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         первое движение он может совершить только на положительный
         угол.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate
 
         :param descriptor: Дескриптор сервопривода
         :param direction: Направление движения
@@ -2405,11 +2400,12 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Параметр async устанавливает режим выполнения команды -
         асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         Направления движения:
         0 - по часовой стрелке
@@ -2419,7 +2415,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         первое движение он может совершить только на положительный
         угол.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Rotate
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Rotate
 
         :param descriptor: Дескриптор сервопривода
         :param direction: Направление движения
@@ -2468,11 +2464,12 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Параметр async устанавливает режим выполнения команды -
         асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         Направления движения:
         0 - по часовой стрелке
@@ -2482,7 +2479,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         первое движение он может совершить только на положительный
         угол.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
 
         :param descriptor: Дескриптор компонента сервопривода
         :param direction: Направление движения
@@ -2522,7 +2519,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         повернуться в середину рабочего диапазона с максимальной
         скоростью.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
 
         :param descriptor: Дескриптор компонента сервопривода
         :returns: Результат типа ExecServoDriveSetPositionToMidWorkingRangeResult
@@ -2551,7 +2548,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Дает команду сервоприводу с дескриптором descriptor
         остановить движение, если оно производится в данный момент.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Stop
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Stop
 
         :param descriptor: Дескриптор компонента сервопривода
         :returns: Результат типа ExecServoDriveStopResult
@@ -2586,17 +2583,18 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Параметр async устанавливает режим выполнения команды -
         асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию.
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         *Изначально у серопривода положение 0 градусов.  Поэтому
         первое движение он может совершить только на положительный
         угол.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Turn
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Turn
 
         :param descriptor: Дескриптор сервопривода
         :param angle: Угол поворота в градусах. Если угол
@@ -2660,7 +2658,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         равна 50 Гц, значение скважности должно попадать в промежуток
         от 55 до 554 шагов включительно.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle
 
         :param descriptor: Дескриптор компонента сервопривода
         :param steps: Количество шагов для шим преобразователя
@@ -2698,7 +2696,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         градусов (от 0 до 219)
         Максимальный импульс - 2711 мкс
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse
 
         :param descriptor: Дескриптор компонента сервопривода
         :param pulse: Значение импульса (микросекунды)
@@ -2738,17 +2736,18 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Параметр async устанавливает режим выполнения команды -
         асинхронный или синхронный.
 
-        При синхронном режиме, программа, которая вызвала данную
-        функцию, ожидает завершение выполнения команды. При
-        асинхронном режиме этого ожидания не происходит, и выполнение
-        команды осуществляется параллельно дальнейшей работе
-        программы, вызвавшей данную функцию
+        При синхронном режиме программа, которая вызвала данную
+        функцию, сначала ожидает её выполнение,
+        а потом продолжает вызовы других команд. При асинхронном
+        режиме функция вызывается, но ожидания её завершения не
+        происходит. Другие команды могут перекрыть её выполнение и
+        функция не отработает.
 
         *Изначально у серопривода положение 0 градусов.  Поэтому
         первое движение он может совершить только на положительный
         угол.
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
 
         :param descriptor: Дескриптор сервопривода
         :param angle: Угол поворота в градусах. Если угол
@@ -2787,7 +2786,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Расширяет базовый компонент с дескриптором  basic.
         Записывает в параметр descriptor дескриптор нового компонента
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/RI_SDK_executor_Extend
 
         :param basic: Базовый компонент
         :returns: Результат типа ExecutorExtendResult
@@ -2831,7 +2830,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         4. 3 - Компонент выполняет мигание (только для светодиода)
         5. 4 - Компонент выполняет мерцание (только для светодиода)
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_State
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/RI_SDK_executor_State
 
         :param descriptor: Дескриптор компонента группы исполнителей
         :returns: Результат типа ExecutorStateResult
@@ -2868,7 +2867,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         подключен датчик. Записывает полученное значение в переменную
         current
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Current
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Current
 
         :param descriptor: Дескриптор компонента датчика тока,
             напряжения и мощности
@@ -2923,7 +2922,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         с датчиком тока, напряжения и мощности, модель которого не
         поддерживается библиотекой.
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_CustomDeviceInit
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_CustomDeviceInit
 
         :param descriptor: Дескриптор компонента датчика тока,
             напряжения и мощности
@@ -2974,7 +2973,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         компонента датчика тока, напряжения и мощности. Записывает
         новый дескриптор в descriptor
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Extend
 
         :param sensor: Компонент группы, который будет расширятся
         :returns: Результат типа SensorVoltageSensorExtendResult
@@ -3017,7 +3016,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Доступные модели сервопривода: ina219
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ExtendToModel
 
         :param base: Компонент датчика тока, напряжения и мощности,
             который будет расширятся
@@ -3060,7 +3059,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         подключен датчик. Записывает полученное значение в переменную
         power
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Power
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Power
 
         :param descriptor: Дескриптор компонента датчика тока,
             напряжения и мощности
@@ -3099,7 +3098,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         мощности с дескриптором descriptor.  Записывает прочитанные
         байты в буфер buf.
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ReadRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ReadRegBytes
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться чтение
@@ -3152,7 +3151,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         цепи, напряжение на шунте и мощность. Записывает полученные
         значения в переменные voltage, voltageShunt, current и power
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Sense
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Sense
 
         :param descriptor: Дескриптор компонента датчика тока,
             напряжения и мощности
@@ -3207,7 +3206,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         подключен датчик. Записывает полученное значение в переменную
         voltage
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Voltage
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Voltage
 
         :param descriptor: Дескриптор датчик тока, напряжения и
             мощности
@@ -3242,7 +3241,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         дескриптором descriptor измерить напряжение на шунте.
         Записывает полученное значение в переменную voltageShunt
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt
 
         :param descriptor: Дескриптор компонента датчика тока,
             напряжения и мощности
@@ -3282,7 +3281,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         датчика тока, напряжения и мощности с дескриптором
         descriptor.
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_WriteRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_WriteRegBytes
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться запись
@@ -3327,7 +3326,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Закрывает текущее соединение с i2c адаптером у ШИМ модулятора
         с дескриптором descriptor
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Close
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Close
 
         :param descriptor: Дескриптор компонента ШИМ
         :returns: Результат типа SigmodPWMCloseResult
@@ -3357,7 +3356,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         connector,  Записывает в параметр descriptor дескриптор
         нового компонента (ШИМ модулятора)
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Extend
 
         :param connector: Коннектор компонента группы, который будет
             расширятся
@@ -3399,7 +3398,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         Доступные модели ШИМ: pca9685
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ExtendToModel
 
         :param base_descriptor: Дескриптор компонента ШИМ, который
             будет расширятся
@@ -3439,7 +3438,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Записывает в параметр freq значение частоты для ШИМ
         модулятора с дескриптором descriptor
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetFreq
 
         :param descriptor: Дескриптор компонента ШИМ
         :returns: Результат типа SigmodPWMGetFreqResult
@@ -3478,7 +3477,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         количество тактов до перевода выхода в состояние логического
         «0» в off
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortDutyCycle
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortDutyCycle
 
         :param descriptor: Дескриптор компонента ШИМ
         :param port: Порт, для которого читается частота
@@ -3526,7 +3525,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         *Не поддерживается для модели pca9685
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortFreq
 
         :param descriptor: Дескриптор компонента ШИМ
         :param port: Порт, для которого читается частота
@@ -3564,7 +3563,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Записывает в параметр resolution значение разрешения для ШИМ
         модулятора с дескриптором descriptor
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetResolution
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetResolution
 
         :param descriptor: Дескриптор компонента ШИМ
         :returns: Результат типа SigmodPWMGetResolutionResult
@@ -3601,7 +3600,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         дескриптором descriptor.  Записывает прочитанный байт в
         value.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadByte
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться чтение
@@ -3643,7 +3642,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         дескриптором descriptor.  Записывает прочитанные байты в
         буфер buf.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadRegBytes
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться чтение
@@ -3691,7 +3690,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Устанавливает скважность равное 0 на всех портах у ШИМ
         модулятора с дескриптором descriptor.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetAll
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetAll
 
         :param descriptor: Дескриптор компонента ШИМ
         :returns: Результат типа SigmodPWMResetAllResult
@@ -3719,7 +3718,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Устанавливает скважность равное 0 на порту port  у ШИМ
         модулятора с дескриптором descriptor.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetPort
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetPort
 
         :param descriptor: Дескриптор компонента ШИМ
         :param port: Порт, на котором будет сброшено соединение
@@ -3752,7 +3751,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Устанавливает новое значение частоты равное
         freq для ШИМ модулятора с дескриптором descriptor.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetFreq
 
         :param descriptor: Дескриптор компонента ШИМ
         :param freq: Частота ШИМ
@@ -3799,7 +3798,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         разрешение,тем плавнее будет меняться мощность на управляемом
         устройстве.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle
 
         :param descriptor: Дескриптор компонента ШИМ
         :param port: Порт, для которого читается частота
@@ -3843,7 +3842,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
 
         *Не поддерживается для модели pca9685
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortFreq
 
         :param descriptor: Дескриптор компонента ШИМ
         :param port: Порт, для которого устанавливается частота
@@ -3880,7 +3879,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Производит запись одного байта со значением value по регистру
         reg для ШИМ модулятора с дескриптором descriptor
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteByte
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться запись
@@ -3918,7 +3917,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Производит запись len байт из массива buf по регистру reg для
         ШИМ модулятора с дескриптором descriptor.
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteRegBytes
 
         :param descriptor: Дескриптор компонента, в котором будет
             производиться запись
@@ -3960,7 +3959,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.create_basic
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateBasic
         """
         self.lib.RI_SDK_CreateBasic.argtypes = [
             # name: descriptor; object type: *int (тип C)
@@ -3976,7 +3975,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.create_device_component
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateDeviceComponent
         """
         self.lib.RI_SDK_CreateDeviceComponent.argtypes = [
             # name: group; object type: char[] (тип C)
@@ -3996,7 +3995,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.create_group_component
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateGroupComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateGroupComponent
         """
         self.lib.RI_SDK_CreateGroupComponent.argtypes = [
             # name: group; object type: char[] (тип C)
@@ -4014,7 +4013,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.create_model_component
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-create-functions/RI_SDK_CreateModelComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-create-functions/RI_SDK_CreateModelComponent
         """
         self.lib.RI_SDK_CreateModelComponent.argtypes = [
             # name: group; object type: char[] (тип C)
@@ -4036,7 +4035,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.destroy_component
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-destroy-functions/RI_SDK_DestroyComponent
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-destroy-functions/RI_SDK_DestroyComponent
         """
         self.lib.RI_SDK_DestroyComponent.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4052,7 +4051,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.destroy_sdk
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-end-functions/RI_SDK_DestroySDK
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-end-functions/RI_SDK_DestroySDK
         """
         self.lib.RI_SDK_DestroySDK.argtypes = [
             # name: isForce; object type: bool (тип C)
@@ -4068,7 +4067,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.device_model_list
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_Device_ModelList
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-start-functions/RI_SDK_Device_ModelList
         """
         self.lib.RI_SDK_Device_ModelList.argtypes = [
             # name: deviceType; object type: char[] (тип C)
@@ -4086,7 +4085,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.init_sdk
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-start-functions/RI_SDK_InitSDK
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-start-functions/RI_SDK_InitSDK
         """
         self.lib.RI_SDK_InitSDK.argtypes = [
             # name: logLevel; object type: int (тип C)
@@ -4102,7 +4101,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.link_led_to_controller
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkLedToController
         """
         self.lib.RI_SDK_LinkLedToController.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4126,7 +4125,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.link_pwm_to_controller
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkPWMToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkPWMToController
         """
         self.lib.RI_SDK_LinkPWMToController.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4146,7 +4145,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.link_r_servodrive_to_controller
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkRServodriveToController
         """
         self.lib.RI_SDK_LinkRServodriveToController.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4166,7 +4165,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.link_servodrive_to_controller
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkServodriveToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkServodriveToController
         """
         self.lib.RI_SDK_LinkServodriveToController.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4186,7 +4185,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.link_voltage_sensor_to_controller
 
-        https://docs.robointellect.ru/docs/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController
+        https://docs.robointellect.ru/docs/main/risdk/api-basic/api-link-functions/RI_SDK_LinkVoltageSensorToController
         """
         self.lib.RI_SDK_LinkVoltageSensorToController.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4206,7 +4205,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/RI_SDK_Sensor_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/RI_SDK_Sensor_Extend
         """
         self.lib.RI_SDK_Sensor_Extend.argtypes = [
             # name: basic; object type: int (тип C)
@@ -4224,7 +4223,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/RI_SDK_connector_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/RI_SDK_connector_Extend
         """
         self.lib.RI_SDK_connector_Extend.argtypes = [
             # name: basic; object type: int (тип C)
@@ -4242,7 +4241,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_close
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Close
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Close
         """
         self.lib.RI_SDK_connector_i2c_Close.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4260,7 +4259,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_close_all
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_CloseAll
         """
         self.lib.RI_SDK_connector_i2c_CloseAll.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4276,7 +4275,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Extend
         """
         self.lib.RI_SDK_connector_i2c_Extend.argtypes = [
             # name: connectorDescriptor; object type: int (тип C)
@@ -4294,7 +4293,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_extend_to_model
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ExtendToModel
         """
         self.lib.RI_SDK_connector_i2c_ExtendToModel.argtypes = [
             # name: baseDescriptor; object type: int (тип C)
@@ -4314,7 +4313,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_open
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_Open
         """
         self.lib.RI_SDK_connector_i2c_Open.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4332,7 +4331,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_read_byte
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadByte
         """
         self.lib.RI_SDK_connector_i2c_ReadByte.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4352,7 +4351,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_read_bytes
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_ReadBytes
         """
         self.lib.RI_SDK_connector_i2c_ReadBytes.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4376,7 +4375,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_set_bus
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_SetBus
         """
         self.lib.RI_SDK_connector_i2c_SetBus.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4398,7 +4397,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_state
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_State
         """
         self.lib.RI_SDK_connector_i2c_State.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4416,7 +4415,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_write_byte
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteByte
         """
         self.lib.RI_SDK_connector_i2c_WriteByte.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4436,7 +4435,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.connector_i2c_write_bytes
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-i2c-adapter/RI_SDK_connector_i2c_WriteBytes
         """
         self.lib.RI_SDK_connector_i2c_WriteBytes.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4460,7 +4459,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Extend
         """
         self.lib.RI_SDK_exec_RGB_LED_Extend.argtypes = [
             # name: exec; object type: int (тип C)
@@ -4478,7 +4477,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_extend_to_model
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_ExtendToModel
         """
         self.lib.RI_SDK_exec_RGB_LED_ExtendToModel.argtypes = [
             # name: baseDescriptor; object type: int (тип C)
@@ -4498,7 +4497,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_flashing_with_frequency
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithFrequency
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithFrequency
         """
         self.lib.RI_SDK_exec_RGB_LED_FlashingWithFrequency.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4526,7 +4525,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_flashing_with_pause
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithPause
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_FlashingWithPause
         """
         self.lib.RI_SDK_exec_RGB_LED_FlashingWithPause.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4556,7 +4555,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_flicker
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Flicker
         """
         self.lib.RI_SDK_exec_RGB_LED_Flicker.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4584,7 +4583,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_get_color
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor
         """
         self.lib.RI_SDK_exec_RGB_LED_GetColor.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4606,7 +4605,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_get_state
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetState
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetState
         """
         self.lib.RI_SDK_exec_RGB_LED_GetState.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4624,7 +4623,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_single_pulse
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_SinglePulse
         """
         self.lib.RI_SDK_exec_RGB_LED_SinglePulse.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4650,7 +4649,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_rgb_led_stop
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_Stop
         """
         self.lib.RI_SDK_exec_RGB_LED_Stop.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4666,7 +4665,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_custom_device_init
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_CustomDeviceInit
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_CustomDeviceInit
         """
         self.lib.RI_SDK_exec_RServoDrive_CustomDeviceInit.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4690,7 +4689,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Extend
         """
         self.lib.RI_SDK_exec_RServoDrive_Extend.argtypes = [
             # name: exec; object type: int (тип C)
@@ -4708,7 +4707,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_extend_to_model
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_ExtendToModel
         """
         self.lib.RI_SDK_exec_RServoDrive_ExtendToModel.argtypes = [
             # name: baseDescriptor; object type: int (тип C)
@@ -4728,7 +4727,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_get_state
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_GetState
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_GetState
         """
         self.lib.RI_SDK_exec_RServoDrive_GetState.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4746,7 +4745,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_rotate_by_pulse
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulse
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulse
         """
         self.lib.RI_SDK_exec_RServoDrive_RotateByPulse.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4766,7 +4765,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_rotate_by_pulse_over_time
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulseOverTime
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateByPulseOverTime
         """
         self.lib.RI_SDK_exec_RServoDrive_RotateByPulseOverTime.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4788,7 +4787,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_rotate_with_relative_speed
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed
         """
         self.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeed.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4812,7 +4811,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_rotate_with_relative_speed_over_time
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime
         """
         self.lib.RI_SDK_exec_RServoDrive_RotateWithRelativeSpeedOverTime.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4836,7 +4835,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_r_servo_drive_stop
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Stop
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive-rotate/RI_SDK_exec_RServoDrive_Stop
         """
         self.lib.RI_SDK_exec_RServoDrive_Stop.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4852,7 +4851,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_custom_device_init
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_CustomDeviceInit
         """
         self.lib.RI_SDK_exec_ServoDrive_CustomDeviceInit.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4876,7 +4875,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Extend
         """
         self.lib.RI_SDK_exec_ServoDrive_Extend.argtypes = [
             # name: exec; object type: int (тип C)
@@ -4894,7 +4893,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_extend_to_model
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_ExtendToModel
         """
         self.lib.RI_SDK_exec_ServoDrive_ExtendToModel.argtypes = [
             # name: baseDescriptor; object type: int (тип C)
@@ -4914,7 +4913,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_get_current_angle
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetCurrentAngle
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetCurrentAngle
         """
         self.lib.RI_SDK_exec_ServoDrive_GetCurrentAngle.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4932,7 +4931,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_get_state
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_GetState
         """
         self.lib.RI_SDK_exec_ServoDrive_GetState.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4950,7 +4949,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_min_step_rotate
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_MinStepRotate
         """
         self.lib.RI_SDK_exec_ServoDrive_MinStepRotate.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4972,7 +4971,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_rotate
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Rotate
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Rotate
         """
         self.lib.RI_SDK_exec_ServoDrive_Rotate.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -4994,7 +4993,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_rotate_with_relative_speed
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed
         """
         self.lib.RI_SDK_exec_ServoDrive_RotateWithRelativeSpeed.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5018,7 +5017,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_set_position_to_mid_working_range
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange
         """
         self.lib.RI_SDK_exec_ServoDrive_SetPositionToMidWorkingRange.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5034,7 +5033,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_stop
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Stop
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Stop
         """
         self.lib.RI_SDK_exec_ServoDrive_Stop.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5050,7 +5049,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_turn
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Turn
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_Turn
         """
         self.lib.RI_SDK_exec_ServoDrive_Turn.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5072,7 +5071,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_turn_by_duty_cycle
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByDutyCycle
         """
         self.lib.RI_SDK_exec_ServoDrive_TurnByDutyCycle.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5090,7 +5089,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_turn_by_pulse
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnByPulse
         """
         self.lib.RI_SDK_exec_ServoDrive_TurnByPulse.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5108,7 +5107,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.exec_servo_drive_turn_with_relative_speed
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/api-servodrive/RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed
         """
         self.lib.RI_SDK_exec_ServoDrive_TurnWithRelativeSpeed.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5130,7 +5129,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.executor_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/RI_SDK_executor_Extend
         """
         self.lib.RI_SDK_executor_Extend.argtypes = [
             # name: basic; object type: int (тип C)
@@ -5148,7 +5147,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.executor_state
 
-        https://docs.robointellect.ru/docs/risdk/api-executor/RI_SDK_executor_State
+        https://docs.robointellect.ru/docs/main/risdk/api-executor/RI_SDK_executor_State
         """
         self.lib.RI_SDK_executor_State.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5166,7 +5165,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_current
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Current
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Current
         """
         self.lib.RI_SDK_sensor_VoltageSensor_Current.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5184,7 +5183,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_custom_device_init
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_CustomDeviceInit
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_CustomDeviceInit
         """
         self.lib.RI_SDK_sensor_VoltageSensor_CustomDeviceInit.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5210,7 +5209,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Extend
         """
         self.lib.RI_SDK_sensor_VoltageSensor_Extend.argtypes = [
             # name: sensor; object type: int (тип C)
@@ -5228,7 +5227,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_extend_to_model
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ExtendToModel
         """
         self.lib.RI_SDK_sensor_VoltageSensor_ExtendToModel.argtypes = [
             # name: base; object type: int (тип C)
@@ -5248,7 +5247,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_power
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Power
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Power
         """
         self.lib.RI_SDK_sensor_VoltageSensor_Power.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5266,7 +5265,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_read_reg_bytes
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ReadRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_ReadRegBytes
         """
         self.lib.RI_SDK_sensor_VoltageSensor_ReadRegBytes.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5290,7 +5289,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_sense
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Sense
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Sense
         """
         self.lib.RI_SDK_sensor_VoltageSensor_Sense.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5314,7 +5313,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_voltage
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Voltage
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Voltage
         """
         self.lib.RI_SDK_sensor_VoltageSensor_Voltage.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5332,7 +5331,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_voltage_shunt
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_Shunt
         """
         self.lib.RI_SDK_sensor_VoltageSensor_VoltageShunt.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5350,7 +5349,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sensor_voltage_sensor_write_reg_bytes
 
-        https://docs.robointellect.ru/docs/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_WriteRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-sensor/api-current-sensor/RI_SDK_sensor_VoltageSensor_WriteRegBytes
         """
         self.lib.RI_SDK_sensor_VoltageSensor_WriteRegBytes.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5374,7 +5373,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_close
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Close
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Close
         """
         self.lib.RI_SDK_sigmod_PWM_Close.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5390,7 +5389,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_extend
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Extend
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_Extend
         """
         self.lib.RI_SDK_sigmod_PWM_Extend.argtypes = [
             # name: connector; object type: int (тип C)
@@ -5408,7 +5407,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_extend_to_model
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ExtendToModel
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ExtendToModel
         """
         self.lib.RI_SDK_sigmod_PWM_ExtendToModel.argtypes = [
             # name: baseDescriptor; object type: int (тип C)
@@ -5428,7 +5427,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_get_freq
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetFreq
         """
         self.lib.RI_SDK_sigmod_PWM_GetFreq.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5446,7 +5445,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_get_port_duty_cycle
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortDutyCycle
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortDutyCycle
         """
         self.lib.RI_SDK_sigmod_PWM_GetPortDutyCycle.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5468,7 +5467,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_get_port_freq
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetPortFreq
         """
         self.lib.RI_SDK_sigmod_PWM_GetPortFreq.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5488,7 +5487,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_get_resolution
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetResolution
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_GetResolution
         """
         self.lib.RI_SDK_sigmod_PWM_GetResolution.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5506,7 +5505,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_read_byte
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadByte
         """
         self.lib.RI_SDK_sigmod_PWM_ReadByte.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5526,7 +5525,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_read_reg_bytes
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ReadRegBytes
         """
         self.lib.RI_SDK_sigmod_PWM_ReadRegBytes.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5550,7 +5549,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_reset_all
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetAll
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetAll
         """
         self.lib.RI_SDK_sigmod_PWM_ResetAll.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5566,7 +5565,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_reset_port
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetPort
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_ResetPort
         """
         self.lib.RI_SDK_sigmod_PWM_ResetPort.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5584,7 +5583,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_set_freq
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetFreq
         """
         self.lib.RI_SDK_sigmod_PWM_SetFreq.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5602,7 +5601,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_set_port_duty_cycle
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortDutyCycle
         """
         self.lib.RI_SDK_sigmod_PWM_SetPortDutyCycle.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5624,7 +5623,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_set_port_freq
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortFreq
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_SetPortFreq
         """
         self.lib.RI_SDK_sigmod_PWM_SetPortFreq.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5644,7 +5643,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_write_byte
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteByte
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteByte
         """
         self.lib.RI_SDK_sigmod_PWM_WriteByte.argtypes = [
             # name: descriptor; object type: int (тип C)
@@ -5664,7 +5663,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         Обращение и документация:
         >>> self.sigmod_pwm_write_reg_bytes
 
-        https://docs.robointellect.ru/docs/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteRegBytes
+        https://docs.robointellect.ru/docs/main/risdk/api-connector/api-pwm/RI_SDK_sigmod_PWM_WriteRegBytes
         """
         self.lib.RI_SDK_sigmod_PWM_WriteRegBytes.argtypes = [
             # name: descriptor; object type: int (тип C)

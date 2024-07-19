@@ -80,7 +80,8 @@ class Codegen:
         """
         methods = []
         for page in urls:
-            if not (url := page.strip()):
+            url = page.strip()
+            if not url:
                 continue
             log.info("Parse page %s", url)
             method = DocPageCrawler(
