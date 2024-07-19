@@ -1,6 +1,6 @@
 {
   "name": "RI_SDK_exec_RGB_LED_GetColor",
-  "url": "https://docs.robointellect.ru/docs/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor",
+  "url": "https://docs.robointellect.ru/docs/main/risdk/api-executor/api-led/RI_SDK_exec_RGB_LED_GetColor",
   "description_blocks": [
     {
       "values": [
