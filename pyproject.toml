@@ -262,6 +262,7 @@ extend-ignore = [
     #    "RUF002",  # Docstring contains ambiguous unicode character {confusable} (did you mean {representant}?)
     #    "RUF003",  # Comment contains ambiguous unicode character {confusable} (did you mean {representant}?)
     #    "PT006",  # pytest parametrize tuple args
+     "UP037",  # quoted-annotation (UP037)
 
     # warning: The following rules may cause conflicts when used with the formatter:
     #    `COM812`, `ISC001`. To avoid unexpected behavior,
