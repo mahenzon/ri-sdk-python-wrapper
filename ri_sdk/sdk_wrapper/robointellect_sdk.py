@@ -33,7 +33,7 @@ class RoboIntellectSDK(RoboIntellectBaseSDK):
         """
         log.debug("Setup args types for all known SDK methods")
         for name in dir(self):
-            if not name.startswith("setup_arg_types_"):
+            if not name.startswith("setup_arg_types_for_"):
                 continue
             method = getattr(self, name)
             method()
